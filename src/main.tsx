@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Root from "./routes/root";
+import Root from "./routes/Root";
 import ErrorPage from "./error-page";
 import Dashboard from "./routes/dashboard";
-import Login from "./routes/login";
+import Login from "./routes/Login";
 
 const router = createBrowserRouter([
   {
@@ -14,14 +14,19 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/dashboard",
-        element: <Dashboard />,
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "/dashboard",
+            element: <Dashboard />,
+          },
+        ],
+      },
+      {
+        path: "/login",
+        element: <Login />,
       },
     ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
   },
 ]);
 
