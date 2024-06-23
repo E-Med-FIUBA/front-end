@@ -1,8 +1,4 @@
-import {
-  Navigate,
-  createBrowserRouter,
-} from "react-router-dom";
-import ErrorPage from "./ErrorPage";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import {
   ProtectedRoute,
   Dashboard,
@@ -10,6 +6,7 @@ import {
   Login,
   Root,
   Header,
+  ErrorPage,
 } from "./routes";
 
 const router = createBrowserRouter([

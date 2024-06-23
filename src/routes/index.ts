@@ -4,3 +4,4 @@ export { default as Root } from "./Root";
 export { default as Login } from "./Unprotected/Login";
 export { default as Dashboard } from "./Protected/Dashboard";
 export { default as Header } from "./Protected/Header";
+export { default as ErrorPage } from "./ErrorPage";

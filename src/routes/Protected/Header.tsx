@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import AvatarDropdown from "./AvatarDropdown";
+import { AvatarDropdown } from "@/features/header";
 
 export default function Header() {
   return (
