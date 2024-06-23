@@ -7,7 +7,6 @@ export default function UnprotectedRoute() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       navigate("/dashboard", { replace: true });
     }
