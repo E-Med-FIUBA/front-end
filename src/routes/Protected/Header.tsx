@@ -7,7 +7,6 @@ import {
   SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -45,9 +44,9 @@ const MobileNavMenu = () => {
           <Link to="/prescriptions">Prescripciones</Link>
           <Link to="#">Medicamentos</Link>
           <Link to="#">Historial</Link>
-          <Link to="/logout">Cerrar sesión</Link>
           <Link to="/profile">Perfil</Link>
           <Link to="/settings">Configuración</Link>
+          <Link to="/logout">Cerrar sesión</Link>
         </SheetDescription>
       </SheetContent>
     </Sheet>
