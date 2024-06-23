@@ -1,7 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import ErrorPage from "./ErrorPage";
 import {
   ProtectedRoute,
@@ -13,7 +17,6 @@ import {
 
 const router = createBrowserRouter([
   {
-    path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
@@ -34,6 +37,10 @@ const router = createBrowserRouter([
             element: <Login />,
           },
         ],
+      },
+      {
+        path: "/",
+        element: <Navigate to="/dashboard" replace />,
       },
     ],
   },
