@@ -1,13 +1,17 @@
+import { useAuth } from "@/hooks";
+import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 export default function ProtectedRoute() {
-  //   const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const isAuthenticated = false;
-  
-  if (!isAuthenticated) {
-    navigate("/login", { replace: true });
-  }
+
+  useEffect(() => {
+    console.log(user);
+    if (!user) {
+      navigate("/login", { replace: true });
+    }
+  }, [user, navigate]);
 
   return <Outlet />;
 }

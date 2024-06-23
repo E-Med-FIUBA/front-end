@@ -1,9 +1,12 @@
+import { AuthProvider } from "@/hooks";
 import { Outlet } from "react-router-dom";
 
 export default function Root() {
   return (
-    <div id="detail">
-      <Outlet />
+    <div>
+      <AuthProvider>
+        <Outlet />
+      </AuthProvider>
     </div>
   );
 }
