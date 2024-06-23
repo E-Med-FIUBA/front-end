@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
+import AvatarDropdown from "./AvatarDropdown";
 
 export default function Header() {
   return (
@@ -20,10 +20,7 @@ export default function Header() {
           <Link to="#">Historial</Link>
         </div>
         <div className="flex flex-1 justify-end">
-          <Avatar>
-            <AvatarImage src="#" alt="Medico" />
-            <AvatarFallback>MS</AvatarFallback>
-          </Avatar>
+          <AvatarDropdown />
         </div>
       </nav>
     </header>
