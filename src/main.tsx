@@ -2,10 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Root from "./routes/Root";
-import ErrorPage from "./error-page";
-import Dashboard from "./routes/dashboard";
-import Login from "./routes/Login";
+import ErrorPage from "./ErrorPage";
+import {
+  ProtectedRoute,
+  Dashboard,
+  UnprotectedRoute,
+  Login,
+  Root,
+} from "./routes";
 
 const router = createBrowserRouter([
   {
@@ -23,8 +27,13 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/login",
-        element: <Login />,
+        element: <UnprotectedRoute />,
+        children: [
+          {
+            path: "/login",
+            element: <Login />,
+          },
+        ],
       },
     ],
   },
