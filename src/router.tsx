@@ -7,6 +7,7 @@ import {
   Root,
   Header,
   ErrorPage,
+  Prescriptions,
 } from "./routes";
 
 const router = createBrowserRouter([
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
               {
                 path: "/dashboard",
                 element: <Dashboard />,
+              },
+              {
+                path: "/prescriptions",
+                element: <Prescriptions />,
               },
             ],
           },
