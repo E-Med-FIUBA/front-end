@@ -12,16 +12,30 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+const navLinks = [
+  { label: "Pacientes", to: "#" },
+  { label: "Prescripciones", to: "/prescriptions" },
+  { label: "Medicamentos", to: "#" },
+  { label: "Historial", to: "#" },
+];
+
+const dropdownLinks = [
+  { label: "Perfil", to: "/profile" },
+  { label: "Configuración", to: "/settings" },
+  { label: "Cerrar sesión", to: "/logout" },
+];
+
 const NavMenu = () => (
   <div className="hidden md:flex items-center w-full">
     <div className="flex gap-6">
-      <Link to="#">Pacientes</Link>
-      <Link to="/prescriptions">Prescripciones</Link>
-      <Link to="#">Medicamentos</Link>
-      <Link to="#">Historial</Link>
+      {navLinks.map((link) => (
+        <Link key={link.to} to={link.to}>
+          {link.label}
+        </Link>
+      ))}
     </div>
     <div className="flex flex-1 justify-end">
-      <AvatarDropdown />
+      <AvatarDropdown dropdownLinks={dropdownLinks} />
     </div>
   </div>
 );
@@ -40,13 +54,16 @@ const MobileNavMenu = () => {
           <SheetClose />
         </SheetHeader>
         <SheetDescription className="flex flex-col gap-4">
-          <Link to="#">Pacientes</Link>
-          <Link to="/prescriptions">Prescripciones</Link>
-          <Link to="#">Medicamentos</Link>
-          <Link to="#">Historial</Link>
-          <Link to="/profile">Perfil</Link>
-          <Link to="/settings">Configuración</Link>
-          <Link to="/logout">Cerrar sesión</Link>
+          {navLinks.map((link) => (
+            <Link key={link.to} to={link.to}>
+              {link.label}
+            </Link>
+          ))}
+          {dropdownLinks.map((link) => (
+            <Link key={link.to} to={link.to}>
+              {link.label}
+            </Link>
+          ))}
         </SheetDescription>
       </SheetContent>
     </Sheet>

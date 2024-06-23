@@ -10,7 +10,11 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function AvatarDropdown() {
+export default function AvatarDropdown({
+  dropdownLinks,
+}: {
+  dropdownLinks: { label: string; to: string }[];
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -19,22 +23,17 @@ export default function AvatarDropdown() {
             <AvatarImage src="https://via.placeholder.com/150" />
             <AvatarFallback>MS</AvatarFallback>
           </Avatar>
-          <ChevronDown className="w-auto h-5" color="#828282"
-          />
+          <ChevronDown className="w-auto h-5" color="#828282" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" asChild>
-          <Link to="#">Perfil</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer" asChild>
-          <Link to="#">Configuración</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer" asChild>
-          <Link to="#">Cerrar Sesión</Link>
-        </DropdownMenuItem>
+        {dropdownLinks.map((link) => (
+          <DropdownMenuItem key={link.to} className="cursor-pointer" asChild>
+            <Link to={link.to}>{link.label}</Link>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
