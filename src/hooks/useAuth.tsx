@@ -2,13 +2,16 @@ import { createContext, useCallback, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from ".";
 
-export interface User {
-  token: string;
+export interface UserData {
+  token: {
+    value: string;
+    expires: number;
+  };
 }
 
 export interface AuthContextType {
-  user?: User;
-  login: (data: User) => void;
+  user?: UserData;
+  login: (data: UserData) => void;
   logout: () => void;
 }
 
@@ -24,7 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // call this function when you want to authenticate the user
   const login = useCallback(
-    async (data: User) => {
+    async (data: UserData) => {
       setUser(data);
       navigate("/dashboard");
     },
