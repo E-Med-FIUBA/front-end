@@ -13,6 +13,7 @@ import {
   UnprotectedRoute,
   Login,
   Root,
+  Header,
 } from "./routes";
 
 const router = createBrowserRouter([
@@ -24,8 +25,13 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            path: "/dashboard",
-            element: <Dashboard />,
+            element: <Header />,
+            children: [
+              {
+                path: "/dashboard",
+                element: <Dashboard />,
+              },
+            ],
           },
         ],
       },
