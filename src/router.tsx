@@ -22,11 +22,11 @@ const router = createBrowserRouter([
             element: <Header />,
             children: [
               {
-                path: "/dashboard",
+                path: "dashboard",
                 element: <Dashboard />,
               },
               {
-                path: "/prescriptions",
+                path: "prescriptions",
                 element: <Prescriptions />,
               },
             ],
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/",
-        element: <Navigate to="/dashboard" replace />,
+        element: <Navigate to="dashboard" replace />,
       },
     ],
   },

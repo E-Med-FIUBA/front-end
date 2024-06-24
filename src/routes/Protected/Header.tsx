@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { AvatarDropdown } from "@/features/header";
 import { Button } from "@/components";
 import { Menu } from "lucide-react";
@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/sheet";
 
 const navLinks = [
-  { label: "Pacientes", to: "#" },
+  { label: "Pacientes", to: "/patients" },
   { label: "Prescripciones", to: "/prescriptions" },
-  { label: "Medicamentos", to: "#" },
-  { label: "Historial", to: "#" },
+  { label: "Medicamentos", to: "/medicines" },
+  { label: "Historial", to: "/history" },
 ];
 
 const dropdownLinks = [
@@ -29,9 +29,19 @@ const NavMenu = () => (
   <div className="hidden md:flex items-center w-full">
     <div className="flex gap-6">
       {navLinks.map((link) => (
-        <Link key={link.to} to={link.to}>
+        <NavLink
+          key={link.to}
+          to={link.to}
+          className={({ isActive, isPending, isTransitioning }) =>
+            [
+              isPending ? "opacity-50" : "",
+              isActive ? "font-bold" : "",
+              isTransitioning ? "text-blue-500" : "",
+            ].join(" ")
+          }
+        >
           {link.label}
-        </Link>
+        </NavLink>
       ))}
     </div>
     <div className="flex flex-1 justify-end">
@@ -55,14 +65,14 @@ const MobileNavMenu = () => {
         </SheetHeader>
         <SheetDescription className="flex flex-col gap-4">
           {navLinks.map((link) => (
-            <Link key={link.to} to={link.to}>
+            <NavLink key={link.to} to={link.to}>
               {link.label}
-            </Link>
+            </NavLink>
           ))}
           {dropdownLinks.map((link) => (
-            <Link key={link.to} to={link.to}>
+            <NavLink key={link.to} to={link.to}>
               {link.label}
-            </Link>
+            </NavLink>
           ))}
         </SheetDescription>
       </SheetContent>
