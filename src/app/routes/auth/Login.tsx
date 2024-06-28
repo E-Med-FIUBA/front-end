@@ -1,7 +1,8 @@
-import { Button, Input } from "@/components";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 
-export default function Login() {
+export function LoginRoute() {
   return (
     <div className="container lg:max-w-5xl h-svh flex justify-around items-center">
       <div className="hidden lg:block w-1/4">

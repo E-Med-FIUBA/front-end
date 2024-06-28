@@ -1,4 +1,4 @@
-import { Input, InputProps } from ".";
+import { Input, InputProps } from "./input";
 
 export interface LabeledInputProps extends InputProps {
   label: string;
