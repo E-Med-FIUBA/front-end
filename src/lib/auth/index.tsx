@@ -15,7 +15,7 @@ export interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  user: undefined,
+  user: undefined, // TODO: Change this to a function that makes a request to the server to get the user data
   login: () => {},
   logout: () => {},
 });
