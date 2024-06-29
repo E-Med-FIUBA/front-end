@@ -25,7 +25,6 @@ export function LoginForm() {
     control,
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(schema),
-    mode: "onSubmit",
   });
 
   const onValid: SubmitHandler<LoginFormInputs> = (data) => {
