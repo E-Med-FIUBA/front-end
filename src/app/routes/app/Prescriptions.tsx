@@ -1,10 +1,10 @@
-import { patients } from "@/testing/mocks/patients";
+import { patientsMock } from "@/testing/mocks/patients";
 
 export function PrescriptionsRoute() {
   return (
     <div className="container">
       <ul>
-        {patients.map((patient) => (
+        {patientsMock.map((patient) => (
           <li key={patient.id}>
             {patient.firstName} {patient.lastName}
           </li>

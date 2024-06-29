@@ -1,4 +1,4 @@
-export const patients = [
+export const patientsMock = [
     {
       id: 1,
       firstName: "John",
