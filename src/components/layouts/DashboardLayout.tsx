@@ -14,16 +14,16 @@ import { Button } from "@/components/ui/button";
 import { AvatarDropdown } from "@/features/header";
 
 const navLinks = [
-    { label: "Pacientes", to: "/patients" },
-    { label: "Prescripciones", to: "/prescriptions" },
-    { label: "Medicamentos", to: "/medicines" },
-    { label: "Historial", to: "/history" },
+    { label: "Pacientes", to: "/app/patients" },
+    { label: "Prescripciones", to: "/app/prescriptions" },
+    { label: "Medicamentos", to: "/app/medicines" },
+    { label: "Historial", to: "/app/history" },
   ];
   
   const dropdownLinks = [
-    { label: "Perfil", to: "/profile" },
-    { label: "Configuración", to: "/settings" },
-    { label: "Cerrar sesión", to: "/logout" },
+    { label: "Perfil", to: "/app/profile" },
+    { label: "Configuración", to: "/app/settings" },
+    { label: "Cerrar sesión", to: "/app/logout" },
   ];
 
 const NavMenu = () => (
@@ -87,7 +87,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     <div>
       <header className="h-16 border-b">
         <nav className="container h-full flex items-center md:gap-20">
-          <Link to="/dashboard" className="flex h-full items-center gap-2">
+          <Link to="/app/dashboard" className="flex h-full items-center gap-2">
             <img
               src="https://via.placeholder.com/150"
               alt="logo"
