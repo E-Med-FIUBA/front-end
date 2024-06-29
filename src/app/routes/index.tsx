@@ -4,6 +4,7 @@ import ProtectedRoute from "@/lib/auth/ProtectedRoute";
 import Root from "./app/Root";
 import ErrorPage from "./ErrorPage";
 import UnprotectedRoute from "@/lib/auth/UnprotectedRoute";
+import { NotFoundRoute } from "./NotFound";
 
 export const createRouter = () =>
   createBrowserRouter([
@@ -55,5 +56,9 @@ export const createRouter = () =>
           },
         },
       ],
+    },
+    {
+      path: "*",
+      element: <NotFoundRoute />,
     },
   ]);
