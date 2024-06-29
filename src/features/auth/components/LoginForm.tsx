@@ -5,6 +5,8 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@/hooks/useAuth";
+import { userDataMock } from "@/testing/mocks/userData";
 
 const schema = z.object({
   email: z.string().email({
@@ -18,28 +20,23 @@ const schema = z.object({
 type LoginFormInputs = z.infer<typeof schema>;
 
 export function LoginForm() {
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
-    formState: { errors, },
-    control,
+    formState: { errors },
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(schema),
   });
 
   const onValid: SubmitHandler<LoginFormInputs> = (data) => {
-    console.log(data);
-    console.log(control);
-  };
-
-  const onInvalid = (errors: any) => {
-    console.error(errors);
+    login(userDataMock);
   };
 
   return (
     <form
       className="grid gap-2 w-full max-w-80"
-      onSubmit={handleSubmit(onValid, onInvalid)}
+      onSubmit={handleSubmit(onValid)}
     >
       <Input
         type="text"
