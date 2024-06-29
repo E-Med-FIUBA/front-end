@@ -1,6 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { LoginForm } from "@/features/auth/components/LoginForm";
 
 export function LoginRoute() {
   return (
@@ -8,14 +6,7 @@ export function LoginRoute() {
       <div className="hidden lg:block w-1/4">
         <img src="/vite.svg" alt="Doctor" className="w-full" />
       </div>
-      <form className="grid gap-2 w-full max-w-80">
-        <Input type="text" placeholder="Correo electronico" />
-        <Input type="text" placeholder="Correo electronico" />
-        <Button type="submit">Login</Button>
-        <Button type="button" asChild>
-          <Link to="/register">Register</Link>
-        </Button>
-      </form>
+      <LoginForm />
     </div>
   );
 }
