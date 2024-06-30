@@ -5,11 +5,5 @@ export default function AppProvider({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div>
-      <AuthProvider>
-        {children}
-      </AuthProvider>
-    </div>
-  );
+  return <AuthProvider>{children}</AuthProvider>;
 }

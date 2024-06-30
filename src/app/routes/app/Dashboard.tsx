@@ -1,7 +1,9 @@
+import { ContentLayout } from "@/components/layouts/ContentLayout";
+
 export function DashboardRoute() {
   return (
-    <div className="container">
+    <ContentLayout title="Dashboard">
       <h1>Dashboard</h1>
-    </div>
+    </ContentLayout>
   );
 }
