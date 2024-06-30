@@ -3,15 +3,14 @@ import { Menu } from "lucide-react";
 
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { AvatarDropdown } from "@/features/header";
+import { cn } from "@/utils/cn";
 
 const navLinks = [
   { label: "Pacientes", to: "/app/patients" },
@@ -26,79 +25,79 @@ const dropdownLinks = [
   { label: "Cerrar sesión", to: "/app/logout" },
 ];
 
-const NavMenu = () => (
-  <div className="hidden md:flex items-center w-full">
-    <div className="flex gap-6">
-      {navLinks.map((link) => (
+const SideNav = () => {
+  return (
+    <nav className="flex flex-col items-center gap-4 px-2">
+      <div className="flex h-16 shrink-0 items-center px-4">
+        <Link to="/app/dashboard" className="flex h-full items-center gap-2">
+          <img
+            src="https://via.placeholder.com/150"
+            alt="logo"
+            className="max-h-full py-2"
+          />
+          <h1 className="text-2xl font-bold text-nowrap">E-Med</h1>
+        </Link>
+      </div>
+      {navLinks.map((item) => (
         <NavLink
-          key={link.to}
-          to={link.to}
-          className={({ isActive, isPending, isTransitioning }) =>
-            [
-              isPending ? "opacity-50" : "",
-              isActive ? "font-bold" : "",
-              isTransitioning ? "text-blue-500" : "",
-            ].join(" ")
+          key={item.to}
+          to={item.to}
+          className={({ isActive }) =>
+            cn(
+              !isActive && "hover:bg-muted",
+              "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
+              isActive && "bg-gray-900 text-white"
+            )
           }
         >
-          {link.label}
+          {item.label}
         </NavLink>
       ))}
-    </div>
-    <div className="flex flex-1 justify-end">
-      <AvatarDropdown dropdownLinks={dropdownLinks} />
-    </div>
-  </div>
-);
+    </nav>
+  );
+};
 
 const MobileNavMenu = () => {
   return (
     <Sheet>
-      <SheetTrigger asChild className="flex-1 justify-end md:hidden">
-        <Button className="p-2" variant="ghost">
+      <SheetTrigger asChild className="md:hidden">
+        <Button className="p-2" variant="outline">
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent side="left" className="p-0">
         <SheetHeader>
-          <SheetTitle>Menú</SheetTitle>
-          <SheetClose />
+          <SheetTitle hidden>Menu</SheetTitle>
         </SheetHeader>
-        <SheetDescription className="flex flex-col gap-4">
-          {navLinks.map((link) => (
-            <NavLink key={link.to} to={link.to}>
-              {link.label}
-            </NavLink>
-          ))}
-          {dropdownLinks.map((link) => (
-            <NavLink key={link.to} to={link.to}>
-              {link.label}
-            </NavLink>
-          ))}
-        </SheetDescription>
+        <SideNav />
       </SheetContent>
     </Sheet>
   );
 };
 
+const SideBar = () => {
+  return (
+    <aside className="hidden w-60 flex-col border-r bg-background md:flex">
+      <SideNav />
+    </aside>
+  );
+};
+
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col bg-muted/60 w-full">
-      <header className="h-16 border-b bg-white">
-        <nav className="container h-full flex items-center md:gap-20">
-          <Link to="/app/dashboard" className="flex h-full items-center gap-2">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="logo"
-              className="max-h-full py-2"
-            />
-            <h1 className="text-2xl font-bold text-nowrap">E-Med</h1>
-          </Link>
-          <NavMenu />
+    <div className="min-h-svh flex bg-muted/60 w-full">
+      <SideBar />
+      <div className="flex-1 flex flex-col">
+        <header className="flex items-center md:gap-20 h-16 border-b bg-white px-2">
           <MobileNavMenu />
-        </nav>
-      </header>
-      <main className="flex-1">{children}</main>
+          <div className="flex-1 flex justify-end">
+          <AvatarDropdown
+            dropdownLinks={dropdownLinks}
+          />
+          </div>
+        </header>
+        <main className="flex-1">{children}</main>
+      </div>
     </div>
   );
 }
