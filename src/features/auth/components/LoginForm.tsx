@@ -9,12 +9,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { userDataMock } from "@/testing/mocks/userData";
 
 const schema = z.object({
-  email: z.string().email({
-    message: "Correo electronico invalido",
-  }),
-  password: z.string().min(6, {
-    message: "La contraseña debe tener al menos 6 caracteres",
-  }),
+  email: z.string(),
+  password: z.string(),
 });
 
 type LoginFormInputs = z.infer<typeof schema>;
@@ -41,13 +37,11 @@ export function LoginForm() {
       <Input
         type="text"
         placeholder="Correo electronico"
-        error={errors.email}
         {...register("email")}
       />
       <Input
         type="password"
         placeholder="Contraseña"
-        error={errors.password}
         {...register("password")}
       />
       <Button type="submit">Iniciar sesion</Button>

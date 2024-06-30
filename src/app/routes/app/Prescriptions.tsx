@@ -1,15 +1,12 @@
-import { patientsMock } from "@/testing/mocks/patients";
+import { ContentLayout } from "@/components/layouts/ContentLayout";
+import { PrescriptionForm } from "@/features/prescriptions/components/PrescriptionForm";
 
 export function PrescriptionsRoute() {
   return (
-    <div className="container">
-      <ul>
-        {patientsMock.map((patient) => (
-          <li key={patient.id}>
-            {patient.firstName} {patient.lastName}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ContentLayout title="Prescripciones">
+      <div className="flex h-full items-center justify-center">
+        <PrescriptionForm />
+      </div>
+    </ContentLayout>
   );
 }
