@@ -1,5 +1,6 @@
 import { ContentLayout } from "@/components/layouts/ContentLayout";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { patientsMock } from "@/testing/mocks/patients";
 
 const Patient = (patient: { firstName: string; lastName: string }) => (
@@ -22,15 +23,19 @@ const Patient = (patient: { firstName: string; lastName: string }) => (
 export function PatientsRoute() {
   return (
     <ContentLayout title="Pacientes">
-      <ul className="flex flex-col gap-2 w-80">
-        {patientsMock.map((patient) => (
-          <Patient
-            key={patient.id}
-            firstName={patient.firstName}
-            lastName={patient.lastName}
-          />
-        ))}
-      </ul>
+      <div className="flex h-full justify-start bg-background rounded-md shadow">
+        <ul className="flex flex-col gap-2 w-80 border-r">
+          <ScrollArea>
+            {patientsMock.map((patient) => (
+              <Patient
+                key={patient.id}
+                firstName={patient.firstName}
+                lastName={patient.lastName}
+              />
+            ))}
+          </ScrollArea>
+        </ul>
+      </div>
     </ContentLayout>
   );
 }

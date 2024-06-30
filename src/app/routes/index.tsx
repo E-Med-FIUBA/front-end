@@ -55,6 +55,27 @@ export const createRouter = () =>
             return { Component: PrescriptionsRoute };
           },
         },
+        {
+          path: "/app/patients",
+          lazy: async () => {
+            const { PatientsRoute } = await import("./app/Patients");
+            return { Component: PatientsRoute };
+          },
+        },
+        {
+          path: "/app/medicines",
+          lazy: async () => {
+            const { PrescriptionsRoute } = await import("./app/Prescriptions");
+            return { Component: PrescriptionsRoute };
+          },
+        },
+        {
+          path: "/app/history",
+          lazy: async () => {
+            const { PrescriptionsRoute } = await import("./app/Prescriptions");
+            return { Component: PrescriptionsRoute };
+          },
+        },
       ],
     },
     {
