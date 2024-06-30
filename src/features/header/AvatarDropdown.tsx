@@ -18,12 +18,14 @@ export default function AvatarDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-200  rounded-full p-1 transition-colors duration-200 ease-in-out">
+        <div className="flex items-center gap-2 cursor-pointer border rounded-full p-1">
           <Avatar>
-            <AvatarImage src="https://via.placeholder.com/150" />
+            <AvatarImage 
+            src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg"
+            className="object-cover hover:brightness-75 transition-all duration-200"
+             />
             <AvatarFallback>MS</AvatarFallback>
           </Avatar>
-          <ChevronDown className="w-auto h-5" color="#828282" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
