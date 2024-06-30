@@ -13,16 +13,16 @@ import { AvatarDropdown } from "@/features/header";
 import { cn } from "@/utils/cn";
 
 const navLinks = [
-  { label: "Pacientes", to: "/app/patients" },
-  { label: "Prescripciones", to: "/app/prescriptions" },
-  { label: "Medicamentos", to: "/app/medicines" },
-  { label: "Historial", to: "/app/history" },
+  { label: "Pacientes", to: "/patients" },
+  { label: "Prescripciones", to: "/prescriptions" },
+  { label: "Medicamentos", to: "/medicines" },
+  { label: "Historial", to: "/history" },
 ];
 
 const dropdownLinks = [
-  { label: "Perfil", to: "/app/profile" },
-  { label: "Configuración", to: "/app/settings" },
-  { label: "Cerrar sesión", to: "/app/logout" },
+  { label: "Perfil", to: "/profile" },
+  { label: "Configuración", to: "/settings" },
+  { label: "Cerrar sesión", to: "/logout" },
 ];
 
 const SideNav = () => {
