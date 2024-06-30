@@ -46,7 +46,7 @@ const SideNav = () => {
             cn(
               !isActive && "hover:bg-muted",
               "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
-              isActive && "bg-gray-900 text-white"
+              isActive && "bg-primary text-white"
             )
           }
         >
@@ -85,10 +85,10 @@ const SideBar = () => {
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-svh flex bg-muted/60 w-full">
+    <div className="min-h-svh flex bg-muted/60 dark:bg-muted/20 w-full">
       <SideBar />
       <div className="flex-1 flex flex-col">
-        <header className="flex items-center md:gap-20 h-16 border-b bg-white px-2">
+        <header className="flex items-center md:gap-20 h-16 border-b bg-background px-2">
           <MobileNavMenu />
           <div className="flex-1 flex justify-end">
           <AvatarDropdown
