@@ -32,7 +32,7 @@ export function PrescriptionForm() {
       onSubmit={() => {
         console.log("hola");
       }}
-      className="w-full max-w-80"
+      className="w-full max-w-96 mx-2"
     >
       {({ register, formState }) => (
         <>
