@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,13 +17,19 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const onValid: SubmitHandler<LoginFormInputs> = (data) => {
     login(userDataMock);
+    navigate("/dashboard");
   };
 
   return (
-    <Form className="grid gap-2 w-full max-w-80" onSubmit={onValid} schema={loginSchema}>
+    <Form
+      className="grid gap-2 w-full max-w-80"
+      onSubmit={onValid}
+      schema={loginSchema}
+    >
       {({ register }) => (
         <>
           <Input

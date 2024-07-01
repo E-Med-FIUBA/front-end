@@ -9,7 +9,7 @@ export default function UnprotectedRoute({
   const { user } = useAuth();
 
   if (user) {
-    return <Navigate to="/app/dashboard" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
