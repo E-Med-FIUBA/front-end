@@ -22,7 +22,6 @@ const navLinks = [
 const dropdownLinks = [
   { label: "Perfil", to: "/profile" },
   { label: "Configuración", to: "/settings" },
-  { label: "Cerrar sesión", to: "/logout" },
 ];
 
 const SideNav = () => {
@@ -91,9 +90,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         <header className="flex items-center md:gap-20 h-16 border-b bg-background px-2">
           <MobileNavMenu />
           <div className="flex-1 flex justify-end">
-          <AvatarDropdown
-            dropdownLinks={dropdownLinks}
-          />
+            <AvatarDropdown dropdownLinks={dropdownLinks} />
           </div>
         </header>
         <main className="flex-1">{children}</main>
