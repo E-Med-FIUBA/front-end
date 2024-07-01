@@ -16,7 +16,6 @@ export const createRouter = () =>
       },
     },
     {
-      path: "/auth",
       element: (
         <UnprotectedRoute>
           <Outlet />
@@ -24,10 +23,17 @@ export const createRouter = () =>
       ),
       children: [
         {
-          path: "/auth/login",
+          path: "/login",
           lazy: async () => {
             const { LoginRoute } = await import("./auth/Login");
             return { Component: LoginRoute };
+          },
+        },
+        {
+          path: "/register",
+          lazy: async () => {
+            const { RegisterRoute } = await import("./auth/Register");
+            return { Component: RegisterRoute };
           },
         },
       ],
