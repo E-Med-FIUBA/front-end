@@ -21,7 +21,7 @@ export default function AvatarDropdown({
 
   const handleLogout = () => {
     logout();
-    navigate("/auth/login");
+    navigate("/login");
   };
 
   return (
