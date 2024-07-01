@@ -7,7 +7,14 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { userDataMock } from "@/testing/mocks/userData";
 import { Form } from "@/components/ui/Form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { AuthFormFooter } from "./AuthFormFooter";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -52,12 +59,14 @@ export function LoginForm() {
                 {...register("password")}
               />
               <Button type="submit">Iniciar sesion</Button>
-              <Button type="button" variant="outline" asChild>
-                <Link to="/register">Crear cuenta nueva</Link>
-              </Button>
             </>
           )}
         </Form>
+        <AuthFormFooter
+          to="/register"
+          text="No tienes una cuenta?"
+          linkText="Registrate aqui"
+        />
       </CardContent>
     </Card>
   );

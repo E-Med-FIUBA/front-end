@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { AuthFormFooter } from "./AuthFormFooter";
 
 const registerSchema = z.object({
   firstName: z.string().min(1, "El nombre es obligatorio"),
@@ -77,12 +78,11 @@ export function RegisterForm() {
             </>
           )}
         </Form>
-        <div className="mt-4 text-sm flex gap-1 justify-center">
-          <span>Ya tienes una cuenta?</span>
-          <Link to="/login" className="underline">
-            Iniciar sesion
-          </Link>
-        </div>
+        <AuthFormFooter
+          to="/login"
+          text="Ya tienes una cuenta?"
+          linkText="Inicia sesion"
+        />
       </CardContent>
     </Card>
   );
