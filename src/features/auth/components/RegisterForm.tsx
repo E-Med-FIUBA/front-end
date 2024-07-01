@@ -21,6 +21,14 @@ const registerSchema = z.object({
   lastName: z.string().min(1, "El apellido es obligatorio"),
   email: z.string().email({ message: "Correo electronico invalido" }),
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+  registration: z.string().min(1, "La matricula es obligatoria"),
+  dni: z.coerce
+    .number({
+      message: "El DNI debe ser un numero",
+    })
+    .int()
+    .min(1000000, "El DNI debe tener al menos 7 digitos")
+    .max(99999999, "El DNI debe tener como maximo 8 digitos"),
 });
 
 type RegisterFormInputs = z.infer<typeof registerSchema>;
@@ -71,6 +79,19 @@ export function RegisterForm() {
                 placeholder="Contraseña"
                 {...register("password")}
                 error={formState.errors.email}
+              />
+              <Input
+                type="text"
+                placeholder="Matricula"
+                {...register("registration")}
+                error={formState.errors.registration}
+              />
+              <Input
+                type="number"
+                placeholder="DNI"
+                {...register("dni")}
+                error={formState.errors.dni}
+                hideArrows
               />
               <Button type="submit" className="w-full">
                 Crear cuenta
