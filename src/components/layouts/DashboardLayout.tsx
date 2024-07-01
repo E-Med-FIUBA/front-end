@@ -29,7 +29,7 @@ const SideNav = () => {
   return (
     <nav className="flex flex-col items-center gap-4 px-2">
       <div className="flex h-16 shrink-0 items-center px-4">
-        <Link to="/app/dashboard" className="flex h-full items-center gap-2">
+        <Link to="/dashboard" className="flex h-full items-center gap-2">
           <img
             src="https://via.placeholder.com/150"
             alt="logo"
@@ -46,7 +46,7 @@ const SideNav = () => {
             cn(
               !isActive && "hover:bg-muted",
               "group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium",
-              isActive && "bg-primary text-white"
+              isActive && "bg-primary text-primary-foreground"
             )
           }
         >
