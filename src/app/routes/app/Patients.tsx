@@ -23,7 +23,7 @@ const Patient = (patient: { firstName: string; lastName: string }) => (
 export function PatientsRoute() {
   return (
     <ContentLayout title="Pacientes">
-      <div className="flex h-full justify-start bg-card rounded-md shadow">
+      <div className="flex h-full justify-start bg-card rounded-md border">
         <ul className="flex flex-col gap-2 w-80 border-r">
           <ScrollArea>
             {patientsMock.map((patient) => (
