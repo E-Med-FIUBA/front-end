@@ -2,7 +2,8 @@ import { ContentLayout } from "@/components/layouts/ContentLayout";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { patientsMock } from "@/testing/mocks/patients";
-import { Outlet } from "react-router-dom";
+import { cn } from "@/utils/cn";
+import { Outlet, useLocation } from "react-router-dom";
 
 const Patient = (patient: { firstName: string; lastName: string }) => (
   <li className="flex items-center gap-4 p-2 hover:bg-muted/60 dark:hover:bg-muted/20">
@@ -21,9 +22,18 @@ const Patient = (patient: { firstName: string; lastName: string }) => (
   </li>
 );
 
-const PatientList = () => (
+const PatientList = ({
+  showPatientsMobile,
+}: {
+  showPatientsMobile?: boolean;
+}) => (
   <ScrollArea
-    className="h-full bg-card rounded-md border flex flex-col gap-2 col-span-1"
+    className={cn(
+      "h-full bg-card rounded-md border col-span-1",
+      showPatientsMobile
+        ? "flex flex-col gap-2"
+        : "hidden xl:flex flex-col gap-2"
+    )}
     type="always"
   >
     <ul>
@@ -39,10 +49,14 @@ const PatientList = () => (
 );
 
 export function PatientsLayout() {
+  const location = useLocation();
+
+  const showPatientsMobile = location.pathname === "/patients";
+
   return (
     <ContentLayout title="Pacientes">
       <div className="block xl:grid h-full grid-cols-4 gap-4">
-        <PatientList />
+        <PatientList showPatientsMobile={showPatientsMobile} />
         <Outlet />
       </div>
     </ContentLayout>
