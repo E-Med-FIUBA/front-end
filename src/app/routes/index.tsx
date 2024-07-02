@@ -69,7 +69,7 @@ export const createRouter = () =>
           },
           children: [
             {
-              path: "/patients/:id",
+              path: "/patients/:patientId",
               lazy: async () => {
                 const { PatientDetailsRoute } = await import(
                   "./app/patients/PatientDetails"

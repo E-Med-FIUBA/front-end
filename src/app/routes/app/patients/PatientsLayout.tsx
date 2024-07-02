@@ -1,24 +1,31 @@
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+
 import { ContentLayout } from "@/components/layouts/ContentLayout";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { patientsMock } from "@/testing/mocks/patients";
+import { Patient } from "@/types/api";
 import { cn } from "@/utils/cn";
-import { Outlet, useLocation } from "react-router-dom";
 
-const Patient = (patient: { firstName: string; lastName: string }) => (
-  <li className="flex items-center gap-4 p-2 hover:bg-muted/60 dark:hover:bg-muted/20">
-    <Avatar>
-      <AvatarFallback>
-        {patient.firstName[0]}
-        {patient.lastName[0]}
-      </AvatarFallback>
-    </Avatar>
-    <div>
-      <h3 className="text-lg font-semibold">
-        {patient.firstName} {patient.lastName}
-      </h3>
-      <p className="text-sm">DNI: 12345678</p>
-    </div>
+const PatientListItem = ({ patient }: { patient: Patient }) => (
+  <li>
+    <NavLink
+      to={`/patients/${patient.id}`}
+      className="flex items-center gap-4 p-2 hover:bg-muted/60 dark:hover:bg-muted/20 w-full"
+    >
+      <Avatar>
+        <AvatarFallback>
+          {patient.firstName[0]}
+          {patient.lastName[0]}
+        </AvatarFallback>
+      </Avatar>
+      <div>
+        <h3 className="text-lg font-semibold">
+          {patient.firstName} {patient.lastName}
+        </h3>
+        <p className="text-sm">DNI: 12345678</p>
+      </div>
+    </NavLink>
   </li>
 );
 
@@ -38,11 +45,7 @@ const PatientList = ({
   >
     <ul>
       {patientsMock.map((patient) => (
-        <Patient
-          key={patient.id}
-          firstName={patient.firstName}
-          lastName={patient.lastName}
-        />
+        <PatientListItem key={patient.id} patient={patient} />
       ))}
     </ul>
   </ScrollArea>
