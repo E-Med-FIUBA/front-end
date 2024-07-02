@@ -20,21 +20,31 @@ const Patient = (patient: { firstName: string; lastName: string }) => (
   </li>
 );
 
+const PatientList = () => (
+  <ScrollArea
+    className="h-full bg-card rounded-md border flex flex-col gap-2 col-span-1"
+    type="always"
+  >
+    <ul>
+      {patientsMock.map((patient) => (
+        <Patient
+          key={patient.id}
+          firstName={patient.firstName}
+          lastName={patient.lastName}
+        />
+      ))}
+    </ul>
+  </ScrollArea>
+);
+
 export function PatientsRoute() {
   return (
     <ContentLayout title="Pacientes">
-      <div className="flex h-full justify-start bg-card rounded-md border">
-        <ul className="flex flex-col gap-2 w-80 border-r">
-          <ScrollArea>
-            {patientsMock.map((patient) => (
-              <Patient
-                key={patient.id}
-                firstName={patient.firstName}
-                lastName={patient.lastName}
-              />
-            ))}
-          </ScrollArea>
-        </ul>
+      <div className="block xl:grid h-full grid-cols-4 gap-4">
+        <PatientList />
+        <div className="hidden xl:flex h-full bg-card rounded-md border col-span-3 justify-center items-center">
+          No hay paciente seleccionado
+        </div>
       </div>
     </ContentLayout>
   );
