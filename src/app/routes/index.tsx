@@ -61,11 +61,32 @@ export const createRouter = () =>
           },
         },
         {
-          path: "/patients",
           lazy: async () => {
-            const { PatientsRoute } = await import("./app/Patients");
-            return { Component: PatientsRoute };
+            const { PatientsLayout } = await import(
+              "./app/patients/PatientsLayout"
+            );
+            return { Component: PatientsLayout };
           },
+          children: [
+            {
+              path: "/patients/:id",
+              lazy: async () => {
+                const { PatientDetailsRoute } = await import(
+                  "./app/patients/PatientDetails"
+                );
+                return { Component: PatientDetailsRoute };
+              },
+            },
+            {
+              path: "/patients",
+              lazy: async () => {
+                const { NoPatientRoute } = await import(
+                  "./app/patients/NoPatient"
+                );
+                return { Component: NoPatientRoute };
+              },
+            },
+          ],
         },
         {
           path: "/medicines",

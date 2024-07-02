@@ -2,6 +2,7 @@ import { ContentLayout } from "@/components/layouts/ContentLayout";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { patientsMock } from "@/testing/mocks/patients";
+import { Outlet } from "react-router-dom";
 
 const Patient = (patient: { firstName: string; lastName: string }) => (
   <li className="flex items-center gap-4 p-2 hover:bg-muted/60 dark:hover:bg-muted/20">
@@ -37,14 +38,12 @@ const PatientList = () => (
   </ScrollArea>
 );
 
-export function PatientsRoute() {
+export function PatientsLayout() {
   return (
     <ContentLayout title="Pacientes">
       <div className="block xl:grid h-full grid-cols-4 gap-4">
         <PatientList />
-        <div className="hidden xl:flex h-full bg-card rounded-md border col-span-3 justify-center items-center">
-          No hay paciente seleccionado
-        </div>
+        <Outlet />
       </div>
     </ContentLayout>
   );
