@@ -6,26 +6,48 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { patientsMock } from "@/testing/mocks/patients";
 import { Patient } from "@/types/api";
 import { cn } from "@/utils/cn";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Trash } from "lucide-react";
 
 const PatientListItem = ({ patient }: { patient: Patient }) => (
   <li>
-    <NavLink
-      to={`/patients/${patient.id}`}
-      className="flex items-center gap-4 p-2 hover:bg-muted/60 dark:hover:bg-muted/20 w-full"
-    >
-      <Avatar>
-        <AvatarFallback>
-          {patient.firstName[0]}
-          {patient.lastName[0]}
-        </AvatarFallback>
-      </Avatar>
-      <div>
-        <h3 className="text-lg font-semibold">
-          {patient.firstName} {patient.lastName}
-        </h3>
-        <p className="text-sm">DNI: 12345678</p>
-      </div>
-    </NavLink>
+    <ContextMenu>
+      <ContextMenuTrigger className="flex items-center justify-center rounded-md">
+        <NavLink
+          to={`/patients/${patient.id}`}
+          className="flex items-center gap-4 p-2 hover:bg-muted/60 dark:hover:bg-muted/20 w-full select-none"
+          draggable={false}
+        >
+          <Avatar>
+            <AvatarFallback>
+              {patient.firstName[0]}
+              {patient.lastName[0]}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <h3 className="text-lg font-semibold">
+              {patient.firstName} {patient.lastName}
+            </h3>
+            <p className="text-sm">DNI: 12345678</p>
+          </div>
+        </NavLink>
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-64">
+        <ContextMenuItem inset>Crear receta</ContextMenuItem>
+        <ContextMenuItem inset>Ver historial</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem inset className="text-destructive font-medium">
+          <Trash size={18} className="absolute left-2" />
+          Eliminar a {patient.firstName} {patient.lastName}
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   </li>
 );
 
