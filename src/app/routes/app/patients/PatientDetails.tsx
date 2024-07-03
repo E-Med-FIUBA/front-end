@@ -26,7 +26,8 @@ export function PatientDetailsRoute() {
         <p className="text-sm mt-2">Ultima actualización: 01/01/2021</p>
         <p className="text-sm text-muted-foreground mt-2">patient@mail.com</p>
       </div>
-        <ScrollArea className="bg-card rounded-md border p-2 flex-[1_1_0]">
+      <ScrollArea className="bg-card rounded-md border flex-[1_1_0]">
+        <div className="p-2">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non
             arcu eget tortor convallis blandit eu id nulla. Vestibulum quam leo,
@@ -90,7 +91,8 @@ export function PatientDetailsRoute() {
             Vivamus maximus urna vel arcu sagittis, non gravida nulla placerat.
             Nunc sit amet vestibulum magna
           </p>
-        </ScrollArea>
+        </div>
+      </ScrollArea>
     </div>
   );
 }
