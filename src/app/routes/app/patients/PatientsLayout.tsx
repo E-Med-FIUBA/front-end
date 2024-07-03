@@ -36,7 +36,7 @@ const PatientList = ({
 }) => (
   <ScrollArea
     className={cn(
-      "h-full bg-card rounded-md border col-span-1",
+      "h-full bg-card rounded-md border col-span-4 xl:col-span-1",
       showPatientsMobile
         ? "flex flex-col gap-2"
         : "hidden xl:flex flex-col gap-2"
@@ -58,7 +58,7 @@ export function PatientsLayout() {
 
   return (
     <ContentLayout title="Pacientes">
-      <div className="block xl:grid h-full grid-cols-4 gap-4">
+      <div className="grid h-full grid-cols-4 gap-4">
         <PatientList showPatientsMobile={showPatientsMobile} />
         <Outlet />
       </div>
