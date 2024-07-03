@@ -8,7 +8,7 @@ type ContentLayoutProps = {
 export const ContentLayout = ({ children, title }: ContentLayoutProps) => {
   return (
     <>
-      <div className="py-6 h-full flex flex-col gap-6">
+      <div className="py-6 h-full flex flex-col gap-2">
         <div className="mx-auto container px-4 sm:px-6 md:px-8">
           <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
         </div>
