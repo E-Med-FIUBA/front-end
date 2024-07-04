@@ -65,7 +65,7 @@ const prescriptionSchema = z.object({
 
 export function PrescriptionForm() {
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-lg">
       <CardHeader>
         <CardTitle className="text-xl">Crear prescripcion</CardTitle>
         <CardDescription>
@@ -73,28 +73,16 @@ export function PrescriptionForm() {
           por correo electronico
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="">
         <Form
           schema={prescriptionSchema}
           onSubmit={() => {
             console.log("hola");
           }}
-          className="w-full max-w-sm grid gap-2"
+          className="w-full grid grid-cols-2 gap-2"
         >
           {({ register, formState }) => (
             <>
-              <Input
-                type="text"
-                placeholder="Correo electronico"
-                {...register("email")}
-                error={formState.errors.email}
-              />
-              <Input
-                type="text"
-                placeholder="DNI"
-                {...register("dni")}
-                error={formState.errors.dni}
-              />
               <Input
                 type="text"
                 placeholder="Nombre"
@@ -107,8 +95,34 @@ export function PrescriptionForm() {
                 {...register("lastName")}
                 error={formState.errors.lastName}
               />
-
+              <Input
+                type="text"
+                placeholder="Correo electronico"
+                {...register("email")}
+                error={formState.errors.email}
+                containerClassName="col-span-2"
+              />
+              <Input
+                type="text"
+                placeholder="DNI"
+                {...register("dni")}
+                error={formState.errors.dni}
+                containerClassName="col-span-2"
+              />
               <DatePicker />
+
+              <Select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Selecciona el sexo del paciente" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Sexo del paciente</SelectLabel>
+                    <SelectItem value="osde">Masculino</SelectItem>
+                    <SelectItem value="sm">Femenino</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
               <Select>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecciona una obra social" />
@@ -122,28 +136,28 @@ export function PrescriptionForm() {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecciona el sexo del paciente" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Sexo del paciente</SelectLabel>
-                    <SelectItem value="osde">Masculino</SelectItem>
-                    <SelectItem value="sm">Femenino</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
               <Combobox
                 values={[
-                  { label: "Pastillas", value: "pills" },
-                  { label: "Jarabe", value: "syrup" },
-                  { label: "Inyeccion", value: "injection" },
+                  { label: "Ibuprofeno", value: "ibuprofeno" },
+                  { label: "Paracetamol", value: "paracetamol" },
                 ]}
                 placeholder="Seleccione un medicamento"
                 emptyMessage="No se encontraron medicamentos"
               />
-
+              <Combobox
+                values={[
+                  {
+                    label: "Caja de 20 comprimidos",
+                    value: "caja de 20 comprimidos",
+                  },
+                  {
+                    label: "Caja de 10 comprimidos",
+                    value: "caja de 10 comprimidos",
+                  },
+                ]}
+                placeholder="Seleccione una presentacion"
+                emptyMessage="No se encontraron presentaciones para el medicamento seleccionado"
+              />
               <Input
                 type="number"
                 placeholder="Unidades"
@@ -151,8 +165,10 @@ export function PrescriptionForm() {
                 error={formState.errors.units}
                 hideArrows
               />
-              <Textarea placeholder="Escriba su diagnostico aqui" />
-              <Button type="submit">Enviar</Button>
+              <Textarea placeholder="Escriba su diagnostico aqui" className="col-span-2" />
+              <Button type="submit" className="col-span-2">
+                Enviar
+              </Button>
             </>
           )}
         </Form>
