@@ -1,6 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
+import SignatureCanvas from "react-signature-canvas";
+import { useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +17,36 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AuthFormFooter } from "./AuthFormFooter";
+import { Trash } from "lucide-react";
+
+const SignatureInput = () => {
+  const signatureRef = useRef<SignatureCanvas>(null);
+
+  const clearSignature = (e: React.MouseEvent) => {
+    e.preventDefault();
+    signatureRef.current?.clear();
+  };
+
+  return (
+    <div className="flex flex-col gap-4 relative border p-1 rounded-md">
+      <SignatureCanvas
+        penColor="black"
+        canvasProps={{
+          height: 300,
+          className: "sigCanvas w-full border bg-muted rounded-md",
+        }}
+        ref={signatureRef}
+      />
+      <Button
+        onClick={clearSignature}
+        className="absolute top-0 right-0 m-2 z-50 bg-transparent border border-background hover:bg-background hover:text-foreground"
+        size="icon"
+      >
+        <Trash />
+      </Button>
+    </div>
+  );
+};
 
 const registerSchema = z.object({
   firstName: z.string().min(1, "El nombre es obligatorio"),
@@ -93,6 +125,7 @@ export function RegisterForm() {
                 error={formState.errors.dni}
                 hideArrows
               />
+              <SignatureInput />
               <Button type="submit" className="w-full">
                 Crear cuenta
               </Button>
