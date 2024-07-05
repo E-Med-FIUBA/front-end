@@ -4,9 +4,7 @@ import { PrescriptionForm } from "@/features/prescriptions/components/Prescripti
 export function PrescriptionsRoute() {
   return (
     <ContentLayout title="Prescripciones">
-      <div className="flex h-full items-center justify-center bg-card rounded-md border">
         <PrescriptionForm />
-      </div>
     </ContentLayout>
   );
 }

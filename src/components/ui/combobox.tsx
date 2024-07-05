@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
@@ -19,15 +17,21 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-interface ComboboxItem {
+export type ComboboxItem = {
   label: string;
   value: string;
-}
+};
 
-export function Combobox({ values: items, placeholder, emptyMessage }: {
-    values: ComboboxItem[];
-    placeholder: string;
-    emptyMessage: string;
+export function Combobox({
+  items,
+  placeholder,
+  emptyMessage,
+  className,
+}: {
+  items: ComboboxItem[];
+  placeholder: string;
+  emptyMessage: string;
+  className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -39,11 +43,13 @@ export function Combobox({ values: items, placeholder, emptyMessage }: {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="justify-between"
+          className={cn("justify-between ", className)}
         >
-          {value
-            ? items.find((item) => item.value === value)?.label
-            : placeholder}
+          <span className="flex-1 overflow-hidden text-start text-ellipsis">
+            {value
+              ? items.find((item) => item.value === value)?.label
+              : placeholder}
+          </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

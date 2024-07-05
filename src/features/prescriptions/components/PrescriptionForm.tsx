@@ -1,4 +1,11 @@
+import { z } from "zod";
+
 import { Form } from "@/components/ui/Form";
+import { LabeledCombobox } from "@/components/ui/Form/LabeledCombobox";
+import { LabeledDatePicker } from "@/components/ui/Form/LabeledDatePicker";
+import { LabeledInput } from "@/components/ui/Form/LabeledInput";
+import { LabeledSelect } from "@/components/ui/Form/LabeledSelect";
+import { LabeledTextarea } from "@/components/ui/Form/LabeledTextArea";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,20 +14,6 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { Combobox } from "@/components/ui/combobox";
-import { DatePicker } from "@/components/ui/date-picker";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { z } from "zod";
 
 const prescriptionSchema = z.object({
   email: z.string().email({
@@ -65,87 +58,75 @@ const prescriptionSchema = z.object({
 
 export function PrescriptionForm() {
   return (
-    <Card className="w-full max-w-lg">
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-xl">Crear prescripcion</CardTitle>
         <CardDescription>
           Ingresa los datos del paciente para crear una prescripcion y enviarla
           por correo electronico
         </CardDescription>
       </CardHeader>
-      <CardContent className="">
+      <CardContent>
         <Form
           schema={prescriptionSchema}
           onSubmit={() => {
             console.log("hola");
           }}
-          className="w-full grid grid-cols-2 gap-2"
+          className="w-full grid grid-cols-3 gap-4"
         >
           {({ register, formState }) => (
             <>
-              <Input
+              <LabeledInput
                 type="text"
-                placeholder="Nombre"
+                label="Nombre"
+                placeholder="Juan"
                 {...register("firstName")}
                 error={formState.errors.firstName}
               />
-              <Input
+              <LabeledInput
                 type="text"
-                placeholder="Apellido"
+                label="Apellido/s"
+                placeholder="Lopez Perez"
                 {...register("lastName")}
                 error={formState.errors.lastName}
+                containerClassName="col-span-2"
               />
-              <Input
+
+              <LabeledInput
                 type="text"
-                placeholder="Correo electronico"
+                label="Correo electronico"
+                placeholder="juan.perez@email.com"
                 {...register("email")}
                 error={formState.errors.email}
-                containerClassName="col-span-2"
+                containerClassName="col-span-3"
               />
-              <Input
+
+              <LabeledInput
                 type="text"
-                placeholder="DNI"
+                label="DNI"
+                placeholder="12345678"
                 {...register("dni")}
                 error={formState.errors.dni}
-                containerClassName="col-span-2"
               />
-              <DatePicker />
+              <LabeledDatePicker
+                label="Fecha de nacimiento"
+                containerClassName="col-span-1 w-full"
+              />
+              <LabeledSelect
+                label="Sexo"
+                id="sex"
+                items={["Masculino", "Femenino", "Otro"]}
+              />
 
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecciona el sexo del paciente" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Sexo del paciente</SelectLabel>
-                    <SelectItem value="osde">Masculino</SelectItem>
-                    <SelectItem value="sm">Femenino</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecciona una obra social" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Obras Sociales</SelectLabel>
-                    <SelectItem value="osde">OSDE</SelectItem>
-                    <SelectItem value="sm">Swiss Medical</SelectItem>
-                    <SelectItem value="galeno">Galeno</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Combobox
-                values={[
+              <LabeledCombobox
+                label="Medicamento"
+                items={[
                   { label: "Ibuprofeno", value: "ibuprofeno" },
                   { label: "Paracetamol", value: "paracetamol" },
                 ]}
-                placeholder="Seleccione un medicamento"
-                emptyMessage="No se encontraron medicamentos"
               />
-              <Combobox
-                values={[
+              <LabeledCombobox
+                label="Presentacion"
+                items={[
                   {
                     label: "Caja de 20 comprimidos",
                     value: "caja de 20 comprimidos",
@@ -155,18 +136,33 @@ export function PrescriptionForm() {
                     value: "caja de 10 comprimidos",
                   },
                 ]}
-                placeholder="Seleccione una presentacion"
-                emptyMessage="No se encontraron presentaciones para el medicamento seleccionado"
               />
-              <Input
+              <LabeledInput
                 type="number"
+                label="Unidades"
                 placeholder="Unidades"
                 {...register("units")}
                 error={formState.errors.units}
                 hideArrows
               />
-              <Textarea placeholder="Escriba su diagnostico aqui" className="col-span-2" />
-              <Button type="submit" className="col-span-2">
+              <LabeledSelect
+                label="Obra social"
+                id="insurance"
+                items={["OSDE", "Swiss Medical", "Galeno"]}
+              />
+              <LabeledInput
+                type="text"
+                label="Numero de afiliado"
+                placeholder="1-234567-8"
+                containerClassName="col-span-2"
+              />
+              <LabeledTextarea
+                label="Diagnostico"
+                placeholder="Escriba su diagnostico aqui"
+                containerClassName="col-span-3"
+                disableResize
+              />
+              <Button type="submit" className="col-span-3">
                 Enviar
               </Button>
             </>
