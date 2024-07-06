@@ -1,27 +1,26 @@
-import { Input, InputProps } from "@/components/ui/input";
 import { FieldWrapper, FieldWrapperPassThroughProps } from "./FormFieldWrapper";
 import { FieldPath, FieldValues } from "react-hook-form";
+import { Textarea, TextareaProps } from "../textarea";
 
-interface FormInputProps<
+interface FormTextareaProps<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>
 > extends FieldWrapperPassThroughProps<TFieldValues, TName>,
-    InputProps {
+    TextareaProps {
   name: TName;
 }
 
-export const FormInput = <
+export const FormTextarea = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
   className,
-  type,
   label,
   control,
   name,
   description,
   ...props
-}: FormInputProps<TFieldValues, TName>) => {
+}: FormTextareaProps<TFieldValues, TName>) => {
   return (
     <FieldWrapper
       control={control}
@@ -29,7 +28,7 @@ export const FormInput = <
       label={label}
       description={description}
     >
-      {(field) => <Input type={type} {...props} {...field} />}
+      {(field) => <Textarea {...props} {...field} />}
     </FieldWrapper>
   );
 };

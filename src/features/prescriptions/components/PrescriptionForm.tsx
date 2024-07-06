@@ -9,14 +9,24 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { FormInput } from "@/components/ui/Form/FormInput";
+import { FormSelect } from "@/components/ui/Form/FormSelect";
 import { Button } from "@/components/ui/button";
+import { Insurance } from "@/types/insurance.enum";
+import { Sex } from "@/types/sex.enum";
+import { FormTextarea } from "@/components/ui/Form/FormTextarea";
 
 const prescriptionSchema = z.object({
-  email: z.string().email({
-    message: "Correo electronico invalido",
-  }),
+  email: z
+    .string({
+      message: "El correo electronico es requerido",
+    })
+    .email({
+      message: "Correo electronico invalido",
+    }),
   dni: z.coerce
-    .number()
+    .number({
+      message: "El DNI debe ser un numero",
+    })
     .int({
       message: "El DNI debe ser un numero entero",
     })
@@ -26,12 +36,20 @@ const prescriptionSchema = z.object({
     .gt(1000000, {
       message: "El DNI debe ser mayor a 1.000.000",
     }),
-  firstName: z.string().min(3, {
-    message: "El nombre debe tener al menos 3 caracteres",
-  }),
-  lastName: z.string().min(3, {
-    message: "El apellido debe tener al menos 3 caracteres",
-  }),
+  firstName: z
+    .string({
+      message: "El nombre es requerido",
+    })
+    .min(3, {
+      message: "El nombre debe tener al menos 3 caracteres",
+    }),
+  lastName: z
+    .string({
+      message: "El apellido es requerido",
+    })
+    .min(3, {
+      message: "El apellido debe tener al menos 3 caracteres",
+    }),
   dateOfBirth: z.string().refine(
     (value) => {
       return !isNaN(Date.parse(value));
@@ -41,7 +59,9 @@ const prescriptionSchema = z.object({
     }
   ),
   units: z.coerce
-    .number()
+    .number({
+      message: "Las unidades deben ser un numero",
+    })
     .int({
       message: "Las unidades deben ser un numero entero",
     })
@@ -49,13 +69,27 @@ const prescriptionSchema = z.object({
       message: "Las unidades deben ser un numero positivo",
     }),
   afiliateNumber: z.coerce
-    .number()
+    .number({
+      message: "El numero de afiliado debe ser un numero",
+    })
     .int({
       message: "El numero de afiliado debe ser un numero entero",
     })
     .positive({
       message: "El numero de afiliado debe ser un numero positivo",
     }),
+  insurance: z.nativeEnum(Insurance, {
+    message: "La obra social es requerida",
+  }),
+  sex: z.nativeEnum(Sex, {
+    message: "El sexo es requerido",
+  }),
+  presentation: z.string({
+    message: "La presentacion es requerida",
+  }),
+  diagnosis: z.string({
+    message: "El diagnostico es requerido",
+  }),
 });
 
 export function PrescriptionForm() {
@@ -71,59 +105,92 @@ export function PrescriptionForm() {
       <CardContent>
         <Form
           schema={prescriptionSchema}
-          onSubmit={() => {
-            console.log("hola");
+          onSubmit={(data) => {
+            console.log(data);
           }}
           className="w-full grid grid-cols-3 gap-4"
         >
-          {({ register, formState }) => (
+          {({ control }) => (
             <>
-              {" "}
               <FormInput
-                id="firstName"
                 type="text"
                 label="Nombre"
-                registration={register("firstName")}
-                error={formState.errors.firstName}
+                control={control}
+                name={"firstName"}
               />
               <FormInput
-                id="lastName"
                 type="text"
                 label="Apellido/s"
-                registration={register("lastName")}
-                error={formState.errors.lastName}
+                control={control}
+                name={"lastName"}
               />
               <FormInput
-                id="email"
                 type="email"
                 label="Correo electronico"
-                registration={register("email")}
-                error={formState.errors.email}
+                control={control}
+                name={"email"}
               />
               <FormInput
-                id="dni"
                 type="number"
                 label="DNI"
-                registration={register("dni")}
-                error={formState.errors.dni}
-                hideArrows
-              />
-               <FormInput
-                id="units"
-                type="number"
-                label="Unidades"
-                registration={register("units")}
-                error={formState.errors.units}
+                control={control}
+                name={"dni"}
                 hideArrows
               />
               <FormInput
-                id="afiliateNumber"
                 type="number"
-                label="Numero de afiliado"
-                registration={register("afiliateNumber")}
-                error={formState.errors.afiliateNumber}
+                label="Unidades"
+                control={control}
+                name={"units"}
                 hideArrows
               />
+              <FormInput
+                type="number"
+                label="Numero de afiliado"
+                control={control}
+                name={"afiliateNumber"}
+                hideArrows
+              />
+              <FormSelect
+                control={control}
+                name="insurance"
+                label="Obra social"
+                items={[
+                  { value: Insurance.SwissMedical, label: "Swiss Medical" },
+                  { value: Insurance.OSDE, label: "OSDE" },
+                  { value: Insurance.Galeno, label: "Galeno" },
+                  { value: Insurance.Medicus, label: "Medicus" },
+                ]}
+                placeholder={"Selecciona una obra social"}
+              />
+              <FormSelect
+                control={control}
+                name="sex"
+                label="Sexo"
+                items={[
+                  { value: Sex.MALE, label: "Masculino" },
+                  { value: Sex.FEMALE, label: "Femenino" },
+                  { value: Sex.OTHER, label: "Otro" },
+                ]}
+                placeholder={"Selecciona el sexo del paciente"}
+              />
+              <FormSelect
+                control={control}
+                name="presentation"
+                label="Presentacion"
+                items={[
+                  { value: "20 comprimidos", label: "20 Comprimidos" },
+                  { value: "30 comprimidos", label: "30 Comprimidos" },
+                  { value: "40 comprimidos", label: "40 Comprimidos" },
+                ]}
+                placeholder={"Selecciona la presentacion del medicamento"}
+              />
+              <FormTextarea
+                control={control}
+                name="diagnosis"
+                label="Diagnostico"
+              />
+
               <Button type="submit" className="col-span-3">
                 Crear prescripcion
               </Button>
