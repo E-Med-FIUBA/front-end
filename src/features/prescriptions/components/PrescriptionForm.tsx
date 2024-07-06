@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Insurance } from "@/types/insurance.enum";
 import { Sex } from "@/types/sex.enum";
 import { FormTextarea } from "@/components/ui/Form/FormTextarea";
+import { FormCombobox } from "@/components/ui/Form/FormCombobox";
 
 const prescriptionSchema = z.object({
   email: z
@@ -89,6 +90,9 @@ const prescriptionSchema = z.object({
   }),
   diagnosis: z.string({
     message: "El diagnostico es requerido",
+  }),
+  medication: z.string({
+    message: "El medicamento es requerido",
   }),
 });
 
@@ -189,6 +193,19 @@ export function PrescriptionForm() {
                 control={control}
                 name="diagnosis"
                 label="Diagnostico"
+                disableResize
+              />
+              <FormCombobox
+                control={control}
+                name="medication"
+                label="Medicamento"
+                items={[
+                  { value: "ibuprofeno", label: "Ibuprofeno" },
+                  { value: "paracetamol", label: "Paracetamol" },
+                  { value: "amoxicilina", label: "Amoxicilina" },
+                ]}
+                placeholder={"Selecciona un medicamento"}
+                emptyMessage={"No se encontraron medicamentos"}
               />
 
               <Button type="submit" className="col-span-3">

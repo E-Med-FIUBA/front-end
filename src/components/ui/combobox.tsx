@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@/utils/cn";
@@ -22,19 +22,24 @@ export type ComboboxItem = {
   value: string;
 };
 
+export type ComboboxProps = {
+  items: ComboboxItem[];
+  placeholder: string;
+  emptyMessage: string;
+  className?: string;
+  value: string;
+  onChange: (value: string) => void;
+};
+
 export function Combobox({
   items,
   placeholder,
   emptyMessage,
   className,
-}: {
-  items: ComboboxItem[];
-  placeholder: string;
-  emptyMessage: string;
-  className?: string;
-}) {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  value,
+  onChange,
+}: ComboboxProps) {
+  const [open, setOpen] = useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,7 +58,7 @@ export function Combobox({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
+      <PopoverContent className="p-0 popover-content-width-same-as-its-trigger">
         <Command>
           <CommandInput placeholder={placeholder} />
           <CommandList>
@@ -64,7 +69,7 @@ export function Combobox({
                   key={item.value}
                   value={item.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    onChange(currentValue);
                     setOpen(false);
                   }}
                 >
