@@ -15,6 +15,7 @@ import { Insurance } from "@/types/insurance.enum";
 import { Sex } from "@/types/sex.enum";
 import { FormTextarea } from "@/components/ui/Form/FormTextarea";
 import { FormCombobox } from "@/components/ui/Form/FormCombobox";
+import { DatePicker } from "@/components/ui/date-picker";
 
 const prescriptionSchema = z.object({
   email: z
@@ -207,7 +208,7 @@ export function PrescriptionForm() {
                 placeholder={"Selecciona un medicamento"}
                 emptyMessage={"No se encontraron medicamentos"}
               />
-
+              <DatePicker />
               <Button type="submit" className="col-span-3">
                 Crear prescripcion
               </Button>
