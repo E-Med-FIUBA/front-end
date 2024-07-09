@@ -59,8 +59,9 @@ const prescriptionSchema = z.object({
     })
     .refine(
       (value) => {
-        const date = parse(value, "dd/MM/yyyy", new Date());
-        return isValid(date);
+        const parsedFormatDesktop = parse(value, "dd/MM/yyyy", new Date());
+        const parsedFormatMobile = parse(value, "yyyy-MM-dd", new Date());
+        return isValid(parsedFormatDesktop) || isValid(parsedFormatMobile);
       },
       {
         message: "La fecha de nacimiento debe ser una fecha valida",

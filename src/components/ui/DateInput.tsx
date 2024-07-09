@@ -52,13 +52,22 @@ export function DateInput({
   };
 
   return (
-    <Input
-      type="text"
-      placeholder="DD/MM/YYYY"
-      maxLength={10}
-      {...props}
-      onChange={handleChange}
-      onBlur={handleOnBlur}
-    />
+    <>
+      <Input
+        type="text"
+        placeholder="DD/MM/YYYY"
+        maxLength={10}
+        {...props}
+        onChange={handleChange}
+        onBlur={handleOnBlur}
+        className="hidden md:block"
+      />
+      <Input
+        type="date"
+        className="md:hidden"
+        onChange={onChangeWrapper}
+        {...props}
+      />
+    </>
   );
 }
