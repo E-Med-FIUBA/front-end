@@ -5,8 +5,16 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { FieldWrapper, FieldWrapperPassThroughProps } from "./FormFieldWrapper";
+import { FieldWrapperPassThroughProps } from "./FormFieldWrapper";
 import { FieldPath, FieldValues } from "react-hook-form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "./Form";
 
 type FormSelectItem = {
   value: string;
@@ -33,26 +41,34 @@ export const FormSelect = <
   placeholder,
 }: FormSelectProps<TFieldValues, TName>) => {
   return (
-    <FieldWrapper
+    <FormField
       control={control}
       name={name}
-      label={label}
-      description={description}
-    >
-      {(field) => (
-        <Select onValueChange={field.onChange} defaultValue={field.value}>
-          <SelectTrigger>
-            <SelectValue placeholder={placeholder} />
-          </SelectTrigger>
-          <SelectContent>
-            {items.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      render={({ field }) => (
+        <FormItem>
+          {label && <FormLabel>{label}</FormLabel>}
+          <Select
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+            name={`${field.name}-internal-select`}
+          >
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              {items.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {description && <FormDescription>{description}</FormDescription>}
+          <FormMessage />
+        </FormItem>
       )}
-    </FieldWrapper>
+    />
   );
 };

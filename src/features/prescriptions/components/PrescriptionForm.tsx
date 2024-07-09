@@ -141,6 +141,7 @@ export function PrescriptionForm() {
                 label="Correo electronico"
                 control={control}
                 name={"email"}
+                autoComplete="email"
               />
               <FormInput
                 type="number"
