@@ -14,7 +14,6 @@ export const FormTextarea = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
-  className,
   label,
   control,
   name,

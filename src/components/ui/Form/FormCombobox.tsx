@@ -12,7 +12,6 @@ export const FormCombobox = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
-  className,
   label,
   control,
   name,

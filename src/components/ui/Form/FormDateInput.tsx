@@ -1,8 +1,9 @@
-import { Input, InputProps } from "@/components/ui/input";
+import { InputProps } from "@/components/ui/input";
 import { FieldWrapper, FieldWrapperPassThroughProps } from "./FormFieldWrapper";
 import { FieldPath, FieldValues } from "react-hook-form";
+import { DateInput } from "../DateInput";
 
-interface FormInputProps<
+interface FormDateInputProps<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>
 > extends FieldWrapperPassThroughProps<TFieldValues, TName>,
@@ -10,17 +11,16 @@ interface FormInputProps<
   name: TName;
 }
 
-export const FormInput = <
+export const FormDateInput = <
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
-  type,
   label,
   control,
   name,
   description,
   ...props
-}: FormInputProps<TFieldValues, TName>) => {
+}: FormDateInputProps<TFieldValues, TName>) => {
   return (
     <FieldWrapper
       control={control}
@@ -28,7 +28,7 @@ export const FormInput = <
       label={label}
       description={description}
     >
-      {(field) => <Input type={type} {...props} {...field} />}
+      {(field) => <DateInput {...props} {...field} />}
     </FieldWrapper>
   );
 };

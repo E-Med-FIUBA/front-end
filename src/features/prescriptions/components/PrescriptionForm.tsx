@@ -15,7 +15,8 @@ import { Insurance } from "@/types/insurance.enum";
 import { Sex } from "@/types/sex.enum";
 import { FormTextarea } from "@/components/ui/Form/FormTextarea";
 import { FormCombobox } from "@/components/ui/Form/FormCombobox";
-import { DatePicker } from "@/components/ui/date-picker";
+import { FormDateInput } from "@/components/ui/Form/FormDateInput";
+import { isValid, parse } from "date-fns";
 
 const prescriptionSchema = z.object({
   email: z
@@ -52,14 +53,19 @@ const prescriptionSchema = z.object({
     .min(3, {
       message: "El apellido debe tener al menos 3 caracteres",
     }),
-  dateOfBirth: z.string().refine(
-    (value) => {
-      return !isNaN(Date.parse(value));
-    },
-    {
-      message: "La fecha de nacimiento debe ser una fecha valida",
-    }
-  ),
+  dateOfBirth: z
+    .string({
+      message: "La fecha de nacimiento es requerida",
+    })
+    .refine(
+      (value) => {
+        const date = parse(value, "dd/MM/yyyy", new Date());
+        return isValid(date);
+      },
+      {
+        message: "La fecha de nacimiento debe ser una fecha valida",
+      }
+    ),
   units: z.coerce
     .number({
       message: "Las unidades deben ser un numero",
@@ -208,7 +214,11 @@ export function PrescriptionForm() {
                 placeholder={"Selecciona un medicamento"}
                 emptyMessage={"No se encontraron medicamentos"}
               />
-              <DatePicker />
+              <FormDateInput
+                name={"dateOfBirth"}
+                control={control}
+                label="Fecha de nacimiento"
+              />
               <Button type="submit" className="col-span-3">
                 Crear prescripcion
               </Button>
