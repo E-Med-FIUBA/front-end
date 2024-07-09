@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 
@@ -27,7 +27,7 @@ export function LoginForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const onValid: SubmitHandler<LoginFormInputs> = (data) => {
+  const onValid: SubmitHandler<LoginFormInputs> = (_data) => {
     login(userDataMock);
     navigate("/dashboard");
   };
