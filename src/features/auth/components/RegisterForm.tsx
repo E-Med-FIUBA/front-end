@@ -3,7 +3,6 @@ import { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { userDataMock } from "@/testing/mocks/userData";
 import { Form } from "@/components/ui/Form";
@@ -15,13 +14,35 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AuthFormFooter } from "./AuthFormFooter";
+import { FormInput } from "@/components/ui/Form/FormInput";
+import { FormSelect } from "@/components/ui/Form/FormSelect";
 
 const registerSchema = z.object({
-  firstName: z.string().min(1, "El nombre es obligatorio"),
-  lastName: z.string().min(1, "El apellido es obligatorio"),
-  email: z.string().email({ message: "Correo electronico invalido" }),
-  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
-  registration: z.string().min(1, "La matricula es obligatoria"),
+  firstName: z
+    .string({
+      message: "El nombre es obligatorio",
+    })
+    .min(1, "El nombre es obligatorio"),
+  lastName: z
+    .string({
+      message: "El apellido es obligatorio",
+    })
+    .min(1, "El apellido es obligatorio"),
+  email: z
+    .string({
+      message: "El correo electronico es obligatorio",
+    })
+    .email({ message: "Correo electronico invalido" }),
+  password: z
+    .string({
+      message: "La contraseña es obligatoria",
+    })
+    .min(6, "La contraseña debe tener al menos 6 caracteres"),
+  registration: z
+    .string({
+      message: "La matricula es obligatoria",
+    })
+    .min(1, "La matricula es obligatoria"),
   dni: z.coerce
     .number({
       message: "El DNI debe ser un numero",
@@ -29,6 +50,11 @@ const registerSchema = z.object({
     .int()
     .min(1000000, "El DNI debe tener al menos 7 digitos")
     .max(99999999, "El DNI debe tener como maximo 8 digitos"),
+  specialty: z
+    .string({
+      message: "La especialidad es obligatoria",
+    })
+    .min(1, "La especialidad es obligatoria"),
 });
 
 type RegisterFormInputs = z.infer<typeof registerSchema>;
@@ -52,46 +78,57 @@ export function RegisterForm() {
       </CardHeader>
       <CardContent>
         <Form onSubmit={onValid} schema={registerSchema} className="grid gap-4">
-          {({ register, formState }) => (
+          {({ control }) => (
             <>
               <div className="grid grid-cols-2 gap-4">
-                <Input
+                <FormInput
+                  control={control}
                   type="text"
                   placeholder="Nombre"
-                  {...register("firstName")}
-                  error={formState.errors.firstName}
+                  name="firstName"
                 />
-                <Input
+                <FormInput
+                  control={control}
                   type="text"
                   placeholder="Apellido/s"
-                  {...register("lastName")}
-                  error={formState.errors.lastName}
+                  name="lastName"
                 />
               </div>
-              <Input
+              <FormInput
+                control={control}
                 type="text"
                 placeholder="Correo electronico"
-                {...register("email")}
-                error={formState.errors.email}
+                name="email"
               />
-              <Input
+              <FormInput
+                control={control}
                 type="password"
                 placeholder="Contraseña"
-                {...register("password")}
-                error={formState.errors.email}
+                name="password"
               />
-              <Input
+              <FormInput
+                control={control}
                 type="text"
                 placeholder="Matricula"
-                {...register("registration")}
-                error={formState.errors.registration}
+                name="registration"
               />
-              <Input
+              <FormInput
+                control={control}
                 type="number"
                 placeholder="DNI"
-                {...register("dni")}
-                error={formState.errors.dni}
+                name="dni"
                 hideArrows
+              />
+              <FormSelect
+                control={control}
+                placeholder="Selecciona una especialidad"
+                name="specialty"
+                items={[
+                  { value: "cardiologo", label: "Cardiologo" },
+                  { value: "neurologo", label: "Neurologo" },
+                  { value: "pediatra", label: "Pediatra" },
+                  { value: "otorrino", label: "Otorrino" },
+                ]}
               />
               <Button type="submit" className="w-full">
                 Crear cuenta

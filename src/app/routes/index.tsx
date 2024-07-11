@@ -102,6 +102,13 @@ export const createRouter = () =>
             return { Component: PrescriptionsRoute };
           },
         },
+        {
+          path: "/settings",
+          lazy: async () => {
+            const { SettingsRoute } = await import("./app/Settings");
+            return { Component: SettingsRoute };
+          },
+        },
       ],
     },
     {

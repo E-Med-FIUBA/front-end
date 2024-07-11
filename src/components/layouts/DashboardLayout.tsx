@@ -20,7 +20,6 @@ const navLinks = [
 ];
 
 const dropdownLinks = [
-  { label: "Perfil", to: "/profile" },
   { label: "Configuración", to: "/settings" },
 ];
 

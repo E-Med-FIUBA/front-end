@@ -45,7 +45,6 @@ export default function AvatarDropdown({
             <Link to={link.to}>{link.label}</Link>
           </DropdownMenuItem>
         ))}
-        <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Button
             size="fit"
