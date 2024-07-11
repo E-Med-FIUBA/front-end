@@ -3,3 +3,10 @@ export type Patient = {
   firstName: string;
   lastName: string;
 };
+
+export type Prescription = {
+  id: number;
+  patientId: number;
+  medication: string;
+  dosage: string;
+};
