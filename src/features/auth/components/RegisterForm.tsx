@@ -3,7 +3,6 @@ import { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { userDataMock } from "@/testing/mocks/userData";
 import { Form } from "@/components/ui/Form";
