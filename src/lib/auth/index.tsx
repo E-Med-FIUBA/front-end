@@ -2,10 +2,7 @@ import { createContext, useCallback, useMemo } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export interface UserData {
-  token: {
-    value: string;
-    expires: number;
-  };
+  token: string;
 }
 
 export interface AuthContextType {

@@ -4,7 +4,6 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { userDataMock } from "@/testing/mocks/userData";
 import { Form } from "@/components/ui/Form";
 import {
   Card,
@@ -16,6 +15,8 @@ import {
 import { AuthFormFooter } from "./AuthFormFooter";
 import { FormInput } from "@/components/ui/Form/FormInput";
 import { FormSelect } from "@/components/ui/Form/FormSelect";
+import { ApiClient } from "@/lib/api-client";
+import { UserData } from "@/lib/auth";
 
 const registerSchema = z.object({
   firstName: z
@@ -38,7 +39,7 @@ const registerSchema = z.object({
       message: "La contraseña es obligatoria",
     })
     .min(6, "La contraseña debe tener al menos 6 caracteres"),
-  registration: z
+  license: z
     .string({
       message: "La matricula es obligatoria",
     })
@@ -63,8 +64,13 @@ export function RegisterForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const onValid: SubmitHandler<RegisterFormInputs> = (_data) => {
-    login(userDataMock);
+  const onValid: SubmitHandler<RegisterFormInputs> = async (data) => {
+    const res = await ApiClient.post<UserData>("/auth/register/doctor", {
+      ...data,
+      name: data.firstName,
+      dni: data.dni.toString(), // TODO: Change this to number
+    });
+    login(res);
     navigate("/dashboard");
   };
 
@@ -110,7 +116,7 @@ export function RegisterForm() {
                 control={control}
                 type="text"
                 placeholder="Matricula"
-                name="registration"
+                name="license"
               />
               <FormInput
                 control={control}
