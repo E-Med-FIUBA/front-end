@@ -69,7 +69,7 @@ export function RegisterForm() {
       ...data,
       name: data.firstName,
       dni: data.dni.toString(), // TODO: Change this to number
-    });
+    }); // TODO: Handle errors
     login(res);
     navigate("/dashboard");
   };

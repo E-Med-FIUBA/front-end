@@ -15,6 +15,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AuthFormFooter } from "./AuthFormFooter";
+import { UserData } from "@/lib/auth";
+import { ApiClient } from "@/lib/api-client";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -27,8 +29,9 @@ export function LoginForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const onValid: SubmitHandler<LoginFormInputs> = (_data) => {
-    login(userDataMock);
+  const onValid: SubmitHandler<LoginFormInputs> = async (data) => {
+    const res = await ApiClient.post<UserData>("/auth/login", data); // TODO: Handle errors
+    login(res);
     navigate("/dashboard");
   };
 
