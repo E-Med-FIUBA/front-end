@@ -8,6 +8,7 @@ import {
   FieldPath,
   FieldValues,
   FormProvider,
+  SubmitErrorHandler,
   SubmitHandler,
   UseFormProps,
   UseFormReturn,
@@ -169,7 +170,8 @@ const FormMessage = React.forwardRef<
 FormMessage.displayName = "FormMessage";
 
 type FormProps<TFormValues extends FieldValues, Schema> = {
-  onSubmit: SubmitHandler<TFormValues>;
+  onSubmitValid: SubmitHandler<TFormValues>;
+  onSubmitInvalid?: SubmitErrorHandler<TFormValues>;
   schema: Schema;
   className?: string;
   children: (methods: UseFormReturn<TFormValues>) => React.ReactNode;
@@ -182,7 +184,8 @@ const Form = <
   TFormValues extends FieldValues = z.infer<Schema>
 >({
   children,
-  onSubmit,
+  onSubmitValid,
+  onSubmitInvalid,
   className,
   options,
   id,
@@ -194,7 +197,7 @@ const Form = <
     <FormProvider {...form}>
       <form
         className={className}
-        onSubmit={form.handleSubmit(onSubmit, (errors) => {console.log(errors);})}
+        onSubmit={form.handleSubmit(onSubmitValid, onSubmitInvalid)}
         id={id}
       >
         {children(form)}

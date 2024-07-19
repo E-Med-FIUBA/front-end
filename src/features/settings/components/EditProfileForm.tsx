@@ -65,7 +65,7 @@ export function EditProfileForm() {
   return (
     <Form
       schema={editProfileSchema}
-      onSubmit={(data) => {
+      onSubmitValid={(data) => {
         console.log(data);
       }}
       className="max-w-sm mx-auto grid grid-cols-1 gap-4"

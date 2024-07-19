@@ -82,7 +82,7 @@ export function RegisterForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Form onSubmit={onValid} schema={registerSchema} className="grid gap-4">
+        <Form onSubmitValid={onValid} schema={registerSchema} className="grid gap-4">
           {({ control }) => (
             <>
               <div className="grid grid-cols-2 gap-4">

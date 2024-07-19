@@ -5,7 +5,6 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
-import { userDataMock } from "@/testing/mocks/userData";
 import { Form } from "@/components/ui/Form";
 import {
   Card,
@@ -46,7 +45,7 @@ export function LoginForm() {
       <CardContent>
         <Form
           className="grid gap-4 w-full"
-          onSubmit={onValid}
+          onSubmitValid={onValid}
           schema={loginSchema}
         >
           {({ register }) => (

@@ -117,7 +117,7 @@ export function PrescriptionForm() {
       <CardContent>
         <Form
           schema={prescriptionSchema}
-          onSubmit={(data) => {
+          onSubmitValid={(data) => {
             console.log(data);
           }}
           className="w-full grid grid-cols-3 gap-4"
