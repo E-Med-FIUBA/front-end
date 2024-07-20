@@ -1,0 +1,7 @@
+.Toastify__toast-theme--colored.Toastify__toast--default {
+  @apply bg-muted text-foreground;
+}
+
+.Toastify__progress-bar {
+  @apply bg-primary;
+}

@@ -15,8 +15,9 @@ import {
 import { AuthFormFooter } from "./AuthFormFooter";
 import { FormInput } from "@/components/ui/Form/FormInput";
 import { FormSelect } from "@/components/ui/Form/FormSelect";
-import { ApiClient } from "@/lib/api-client";
+import { ApiClient, ApiError } from "@/lib/api-client";
 import { UserData } from "@/lib/auth";
+import { toast } from "react-toastify";
 
 const registerSchema = z.object({
   firstName: z
@@ -65,12 +66,22 @@ export function RegisterForm() {
   const navigate = useNavigate();
 
   const onValid: SubmitHandler<RegisterFormInputs> = async (data) => {
-    const res = await ApiClient.post<UserData>("/auth/register/doctor", {
-      ...data,
-      name: data.firstName,
-    }); // TODO: Handle errors
-    login(res);
-    navigate("/dashboard");
+    try {
+      const res = await ApiClient.post<UserData>("/auth/register/doctor", {
+        ...data,
+        name: data.firstName,
+      }); // TODO: Handle errors
+      login(res);
+      navigate("/dashboard");
+    } catch (error) {
+      if (error instanceof ApiError) {
+        toast.error(error.message);
+      } else {
+        toast.error(
+          "El sistema se encuentra temporalmente fuera de servicio, aguarde unos minutos e intente nuevamente"
+        );
+      }
+    }
   };
 
   return (
@@ -82,7 +93,11 @@ export function RegisterForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Form onSubmitValid={onValid} schema={registerSchema} className="grid gap-4">
+        <Form
+          onSubmitValid={onValid}
+          schema={registerSchema}
+          className="grid gap-4"
+        >
           {({ control }) => (
             <>
               <div className="grid grid-cols-2 gap-4">

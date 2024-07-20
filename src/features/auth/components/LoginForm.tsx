@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/card";
 import { AuthFormFooter } from "./AuthFormFooter";
 import { UserData } from "@/lib/auth";
-import { ApiClient } from "@/lib/api-client";
+import { ApiClient, ApiError } from "@/lib/api-client";
+import { toast } from "react-toastify";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -29,9 +30,19 @@ export function LoginForm() {
   const navigate = useNavigate();
 
   const onValid: SubmitHandler<LoginFormInputs> = async (data) => {
-    const res = await ApiClient.post<UserData>("/auth/login", data); // TODO: Handle errors
-    login(res);
-    navigate("/dashboard");
+    try {
+      const res = await ApiClient.post<UserData>("/auth/login", data);
+      login(res);
+      navigate("/dashboard");
+    } catch (error) {
+      if (error instanceof ApiError) {
+        toast.error("Credenciales invalidas");
+      } else {
+        toast.error(
+          "El sistema se encuentra temporalmente fuera de servicio, aguarde unos minutos e intente nuevamente"
+        );
+      }
+    }
   };
 
   return (
