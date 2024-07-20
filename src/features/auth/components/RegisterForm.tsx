@@ -70,7 +70,7 @@ export function RegisterForm() {
       const res = await ApiClient.post<UserData>("/auth/register/doctor", {
         ...data,
         name: data.firstName,
-      }); // TODO: Handle errors
+      });
       login(res);
       navigate("/dashboard");
     } catch (error) {
