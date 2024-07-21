@@ -13,8 +13,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { Trash, UserPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
 import AddPatientModal from "@/features/patients/AddPatientModal";
 
 const PatientListItem = ({ patient }: { patient: Patient }) => (

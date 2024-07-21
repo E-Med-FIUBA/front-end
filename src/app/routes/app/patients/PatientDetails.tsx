@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useParams } from "react-router-dom";
 
 export function PatientDetailsRoute() {
-  let { patientId } = useParams();
+  const { patientId } = useParams();
 
   if (!patientId) {
     throw new Error("No patient id provided");

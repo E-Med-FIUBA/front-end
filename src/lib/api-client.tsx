@@ -27,7 +27,10 @@ export class ApiClient {
     return response.json();
   }
 
-  static async post<ReturnType>(url: string, data: any): Promise<ReturnType> {
+  static async post<ReturnType>(
+    url: string,
+    data: Record<string, unknown> | Array<unknown>
+  ): Promise<ReturnType> {
     const fullUrl = this.fullUrl(url);
     const response = await fetch(fullUrl, {
       method: "POST",
