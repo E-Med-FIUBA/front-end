@@ -34,6 +34,7 @@ type FieldWrapperProps<
   children: (
     field: ControllerRenderProps<TFieldValues, TName>
   ) => React.ReactNode;
+  className?: string;
 };
 
 export type FieldWrapperPassThroughProps<
@@ -47,13 +48,14 @@ export const FieldWrapper = <TFormValues extends FieldValues>({
   children,
   label,
   description,
+  className,
 }: FieldWrapperProps<TFormValues>) => {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={className}>
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>{children(field)}</FormControl>
           {description && <FormDescription>{description}</FormDescription>}

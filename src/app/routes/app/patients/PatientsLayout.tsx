@@ -13,7 +13,9 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { Trash } from "lucide-react";
+import { Trash, UserPlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import AddPatientModal from "@/features/patients/AddPatientModal";
 
 const PatientListItem = ({ patient }: { patient: Patient }) => (
   <li>
@@ -79,7 +81,7 @@ export function PatientsLayout() {
   const showPatientsMobile = location.pathname === "/patients";
 
   return (
-    <ContentLayout title="Pacientes">
+    <ContentLayout title="Pacientes" actions={<AddPatientModal />}>
       <div className="grid h-full grid-cols-4 gap-4">
         <PatientList showPatientsMobile={showPatientsMobile} />
         <Outlet />

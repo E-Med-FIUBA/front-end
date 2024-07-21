@@ -8,6 +8,7 @@ interface FormInputProps<
 > extends FieldWrapperPassThroughProps<TFieldValues, TName>,
     InputProps {
   name: TName;
+  containerClassName?: string;
 }
 
 export const FormInput = <
@@ -19,6 +20,7 @@ export const FormInput = <
   control,
   name,
   description,
+  containerClassName,
   ...props
 }: FormInputProps<TFieldValues, TName>) => {
   return (
@@ -27,6 +29,7 @@ export const FormInput = <
       name={name}
       label={label}
       description={description}
+      className={containerClassName}
     >
       {(field) => <Input type={type} {...props} {...field} />}
     </FieldWrapper>
