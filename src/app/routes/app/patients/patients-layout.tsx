@@ -1,4 +1,5 @@
 import { Trash } from 'lucide-react';
+import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -76,14 +77,26 @@ const PatientList = ({
 
 export function PatientsLayout() {
   const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [patient, setPatient] = useState<Patient | undefined>(undefined);
 
   const showPatientsMobile = location.pathname === '/patients';
 
   return (
-    <ContentLayout title="Pacientes" actions={<AddPatientModal />}>
+    <ContentLayout
+      title="Pacientes"
+      actions={
+        <AddPatientModal
+          open={isModalOpen}
+          setOpen={setIsModalOpen}
+          patient={patient}
+          setPatient={setPatient}
+        />
+      }
+    >
       <div className="grid h-full grid-cols-4 gap-4">
         <PatientList showPatientsMobile={showPatientsMobile} />
-        <Outlet />
+        <Outlet context={[setIsModalOpen, setPatient]} />
       </div>
     </ContentLayout>
   );

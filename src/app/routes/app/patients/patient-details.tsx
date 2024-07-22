@@ -1,10 +1,13 @@
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
+import PatientActions from '@/features/patients/patient-actions';
 import { patientsMock } from '@/testing/mocks/patients';
 
 export function PatientDetailsRoute() {
   const { patientId } = useParams();
+  const [setIsModalOpen, setPatient] =
+    useOutletContext<Array<React.Dispatch<React.SetStateAction<unknown>>>>();
 
   if (!patientId) {
     throw new Error('No patient id provided');
@@ -12,20 +15,30 @@ export function PatientDetailsRoute() {
 
   const patient = patientsMock[parseInt(patientId) - 1];
 
+  if (!patient) {
+    throw new Error('Patient not found');
+  }
+
   return (
     <div className="col-span-4 flex h-full flex-col gap-4 xl:col-span-3">
-      <div className="rounded-md border bg-card p-2">
-        <h2 className="text-xl font-semibold">
-          {patient.firstName} {patient.lastName}
-        </h2>
+      <div className="flex justify-between rounded-md border bg-card p-2">
+        <div>
+          <h2 className="text-xl font-semibold">
+            {patient.firstName} {patient.lastName}
+          </h2>
 
-        <p className="mt-2 text-sm">DNI: 12345678</p>
-        <p className="mt-2 text-sm">Edad: 25</p>
-        <p className="mt-2 text-sm">Fecha de nacimiento: 01/01/1996</p>
-        <p className="mt-2 text-sm">Sexo: Masculino</p>
-        <p className="mt-2 text-sm">Obra social: OSDE</p>
-        <p className="mt-2 text-sm">Ultima actualización: 01/01/2021</p>
-        <p className="mt-2 text-sm text-muted-foreground">patient@mail.com</p>
+          <p className="mt-2 text-sm">DNI: 12345678</p>
+          <p className="mt-2 text-sm">Edad: 25</p>
+          <p className="mt-2 text-sm">Fecha de nacimiento: 01/01/1996</p>
+          <p className="mt-2 text-sm">Sexo: Masculino</p>
+          <p className="mt-2 text-sm">Obra social: OSDE</p>
+          <p className="mt-2 text-sm">Ultima actualización: 01/01/2021</p>
+          <p className="mt-2 text-sm text-muted-foreground">patient@mail.com</p>
+        </div>
+        <PatientActions
+          setIsModalOpen={setIsModalOpen}
+          setPatient={() => setPatient(patient)}
+        />
       </div>
       <ScrollArea className="flex-[1_1_0] rounded-md border bg-card">
         <div className="p-2">

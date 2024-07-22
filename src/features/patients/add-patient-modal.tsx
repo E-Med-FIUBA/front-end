@@ -17,6 +17,7 @@ import { FormDateInput } from '@/components/ui/form/form-date-input';
 import { FormInput } from '@/components/ui/form/form-input';
 import { FormSelect } from '@/components/ui/form/form-select';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Patient } from '@/types/api';
 import { Insurance } from '@/types/insurance.enum';
 import { Sex } from '@/types/sex.enum';
 
@@ -87,9 +88,24 @@ const patientSchema = z.object({
   }),
 });
 
-export default function AddPatientModal() {
+export default function AddPatientModal({
+  patient,
+  open,
+  setOpen,
+  setPatient,
+}: {
+  patient?: Patient;
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  setPatient: (value: Patient | undefined) => void;
+}) {
+  const onOpenChangeWrapper = (value: boolean) => {
+    if (!value) setPatient(undefined);
+    setOpen(value);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChangeWrapper}>
       <DialogTrigger asChild>
         <Button variant="default" size="sm">
           <UserPlus size={18} className="mr-2" />
@@ -109,6 +125,9 @@ export default function AddPatientModal() {
             onSubmitValid={() => {}}
             schema={patientSchema}
             className="mb-4 flex flex-col gap-2 px-2"
+            options={{
+              defaultValues: patient,
+            }}
           >
             {({ control }) => (
               <>
