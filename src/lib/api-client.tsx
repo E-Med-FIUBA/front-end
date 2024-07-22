@@ -1,5 +1,8 @@
 export class ApiError extends Error {
-  constructor(public status: number, public message: string) {
+  constructor(
+    public status: number,
+    public message: string,
+  ) {
     super(message);
   }
 
@@ -10,14 +13,14 @@ export class ApiError extends Error {
 
 export class ApiClient {
   private static fullUrl(url: string) {
-    const urlToAppend = url.startsWith("/") ? url : `/${url}`;
+    const urlToAppend = url.startsWith('/') ? url : `/${url}`;
     return `${import.meta.env.VITE_BACK_END_URL}${urlToAppend}`;
   }
 
   static async get<ReturnType>(url: string): Promise<ReturnType> {
     const fullUrl = this.fullUrl(url);
     const response = await fetch(fullUrl, {
-      method: "GET",
+      method: 'GET',
     });
 
     if (!response.ok) {
@@ -29,13 +32,13 @@ export class ApiClient {
 
   static async post<ReturnType>(
     url: string,
-    data: Record<string, unknown> | Array<unknown>
+    data: Record<string, unknown> | Array<unknown>,
   ): Promise<ReturnType> {
     const fullUrl = this.fullUrl(url);
     const response = await fetch(fullUrl, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });

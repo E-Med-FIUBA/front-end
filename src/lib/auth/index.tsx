@@ -1,5 +1,6 @@
-import { createContext, useCallback, useMemo } from "react";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { createContext, useCallback, useMemo } from 'react';
+
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 export interface UserData {
   token: string;
@@ -18,13 +19,13 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useLocalStorage("user", null);
+  const [user, setUser] = useLocalStorage('user', null);
 
   const login = useCallback(
     async (data: UserData) => {
       setUser(data);
     },
-    [setUser]
+    [setUser],
   );
 
   const logout = useCallback(() => {
@@ -37,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       login,
       logout,
     }),
-    [user, login, logout]
+    [user, login, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
