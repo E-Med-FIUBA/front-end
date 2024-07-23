@@ -29,6 +29,7 @@ interface FormSelectProps<
 > extends FieldWrapperPassThroughProps<TFieldValues, TName> {
   items: FormSelectItem[];
   placeholder: string;
+  containerClassName?: string;
 }
 
 export const FormSelect = <
@@ -41,13 +42,14 @@ export const FormSelect = <
   description,
   items,
   placeholder,
+  containerClassName,
 }: FormSelectProps<TFieldValues, TName>) => {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={containerClassName}>
           {label && <FormLabel>{label}</FormLabel>}
           <Select
             onValueChange={field.onChange}

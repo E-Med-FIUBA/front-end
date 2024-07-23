@@ -1,4 +1,4 @@
-import { isValid, parse } from 'date-fns';
+import { isValid, parse, differenceInYears, format } from 'date-fns';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -10,13 +10,27 @@ import {
   CardContent,
 } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
+import { DisplayInput } from '@/components/ui/form/display-input';
 import { FormCombobox } from '@/components/ui/form/form-combobox';
 import { FormDateInput } from '@/components/ui/form/form-date-input';
 import { FormInput } from '@/components/ui/form/form-input';
 import { FormSelect } from '@/components/ui/form/form-select';
 import { FormTextarea } from '@/components/ui/form/form-textarea';
+import { Input } from '@/components/ui/input';
 import { Insurance } from '@/types/insurance.enum';
 import { Sex } from '@/types/sex.enum';
+
+const getAge = (date: string) => {
+  if (!date) return '';
+  const parsedFormatDesktop = parse(date, 'dd/MM/yyyy', new Date());
+  const parsedFormatMobile = parse(date, 'yyyy-MM-dd', new Date());
+  const parsedDate = isValid(parsedFormatDesktop)
+    ? parsedFormatDesktop
+    : parsedFormatMobile;
+  if (!isValid(parsedDate)) return '';
+  const age = differenceInYears(new Date(), parsedDate);
+  return `${age} año${age === 1 ? '' : 's'}`;
+};
 
 const prescriptionSchema = z.object({
   email: z
@@ -122,110 +136,137 @@ export function PrescriptionForm() {
           }}
           className="grid w-full grid-cols-3 gap-4"
         >
-          {({ control }) => (
-            <>
-              <FormInput
-                type="text"
-                label="Nombre"
-                control={control}
-                name={'firstName'}
-              />
-              <FormInput
-                type="text"
-                label="Apellido/s"
-                control={control}
-                name={'lastName'}
-              />
-              <FormInput
-                type="email"
-                label="Correo electronico"
-                control={control}
-                name={'email'}
-                autoComplete="email"
-              />
-              <FormInput
-                type="number"
-                label="DNI"
-                control={control}
-                name={'dni'}
-                hideArrows
-              />
-              <FormInput
-                type="number"
-                label="Unidades"
-                control={control}
-                name={'units'}
-                hideArrows
-              />
-              <FormInput
-                type="number"
-                label="Numero de afiliado"
-                control={control}
-                name={'afiliateNumber'}
-                hideArrows
-              />
-              <FormSelect
-                control={control}
-                name="insurance"
-                label="Obra social"
-                items={[
-                  { value: Insurance.SwissMedical, label: 'Swiss Medical' },
-                  { value: Insurance.OSDE, label: 'OSDE' },
-                  { value: Insurance.Galeno, label: 'Galeno' },
-                  { value: Insurance.Medicus, label: 'Medicus' },
-                ]}
-                placeholder={'Selecciona una obra social'}
-              />
-              <FormSelect
-                control={control}
-                name="sex"
-                label="Sexo"
-                items={[
-                  { value: Sex.MALE, label: 'Masculino' },
-                  { value: Sex.FEMALE, label: 'Femenino' },
-                  { value: Sex.OTHER, label: 'Otro' },
-                ]}
-                placeholder={'Selecciona el sexo del paciente'}
-              />
-              <FormSelect
-                control={control}
-                name="presentation"
-                label="Presentacion"
-                items={[
-                  { value: '20 comprimidos', label: '20 Comprimidos' },
-                  { value: '30 comprimidos', label: '30 Comprimidos' },
-                  { value: '40 comprimidos', label: '40 Comprimidos' },
-                ]}
-                placeholder={'Selecciona la presentacion del medicamento'}
-              />
-              <FormTextarea
-                control={control}
-                name="diagnosis"
-                label="Diagnostico"
-                disableResize
-              />
-              <FormCombobox
-                control={control}
-                name="medication"
-                label="Medicamento"
-                items={[
-                  { value: 'ibuprofeno', label: 'Ibuprofeno' },
-                  { value: 'paracetamol', label: 'Paracetamol' },
-                  { value: 'amoxicilina', label: 'Amoxicilina' },
-                ]}
-                placeholder={'Selecciona un medicamento'}
-                emptyMessage={'No se encontraron medicamentos'}
-              />
-              <FormDateInput
-                name={'dateOfBirth'}
-                control={control}
-                label="Fecha de nacimiento"
-              />
-              <Button type="submit" className="col-span-3">
-                Crear prescripcion
-              </Button>
-            </>
-          )}
+          {({ control, watch, formState }) => {
+            console.log(control);
+            return (
+              <>
+                <FormInput
+                  type="text"
+                  label="Apellido/s"
+                  control={control}
+                  name={'lastName'}
+                />
+                <FormInput
+                  type="text"
+                  label="Nombre"
+                  control={control}
+                  name={'firstName'}
+                />
+                <FormInput
+                  type="number"
+                  label="DNI"
+                  control={control}
+                  name={'dni'}
+                  hideArrows
+                />
+                <FormSelect
+                  control={control}
+                  name="sex"
+                  label="Sexo"
+                  items={[
+                    { value: Sex.MALE, label: 'Masculino' },
+                    { value: Sex.FEMALE, label: 'Femenino' },
+                    { value: Sex.OTHER, label: 'Otro' },
+                  ]}
+                  placeholder={'Selecciona el sexo del paciente'}
+                />
+                <div className="grid grid-cols-3 gap-2">
+                  <FormDateInput
+                    name={'dateOfBirth'}
+                    control={control}
+                    label="Fecha de nacimiento"
+                    containerClassName="col-span-2"
+                    min="01/01/1900"
+                    max={format(new Date(), 'dd/MM/yyyy')}
+                  />
+                  <DisplayInput
+                    label="Edad"
+                    className={
+                      formState.errors.dateOfBirth && 'text-destructive'
+                    }
+                  >
+                    <Input
+                      type="text"
+                      value={getAge(watch('dateOfBirth'))}
+                      disabled
+                    />
+                  </DisplayInput>
+                </div>
+                <FormInput
+                  type="email"
+                  label="Correo electronico"
+                  control={control}
+                  name={'email'}
+                  autoComplete="email"
+                />
+                <FormSelect
+                  control={control}
+                  name="insurance"
+                  label="Obra social"
+                  items={[
+                    { value: Insurance.SwissMedical, label: 'Swiss Medical' },
+                    { value: Insurance.OSDE, label: 'OSDE' },
+                    { value: Insurance.Galeno, label: 'Galeno' },
+                    { value: Insurance.Medicus, label: 'Medicus' },
+                  ]}
+                  placeholder={'Selecciona una obra social'}
+                />
+                <FormInput
+                  type="number"
+                  label="Numero de afiliado"
+                  control={control}
+                  name={'afiliateNumber'}
+                  hideArrows
+                />
+                <FormTextarea
+                  control={control}
+                  name="diagnosis"
+                  label="Diagnostico"
+                  disableResize
+                  containerClassName="row-span-2 flex flex-col mt-1.5 gap-1"
+                  className="flex-1"
+                />
+
+                <FormCombobox
+                  control={control}
+                  name="medication"
+                  label="Medicamento"
+                  items={[
+                    { value: 'ibuprofeno', label: 'Ibuprofeno' },
+                    { value: 'paracetamol', label: 'Paracetamol' },
+                    { value: 'amoxicilina', label: 'Amoxicilina' },
+                  ]}
+                  placeholder={'Selecciona un medicamento'}
+                  emptyMessage={'No se encontraron medicamentos'}
+                />
+                <div className="grid grid-cols-3 gap-2">
+                  <FormSelect
+                    control={control}
+                    name="presentation"
+                    label="Presentacion"
+                    items={[
+                      { value: '20 comprimidos', label: '20 Comprimidos' },
+                      { value: '30 comprimidos', label: '30 Comprimidos' },
+                      { value: '40 comprimidos', label: '40 Comprimidos' },
+                    ]}
+                    placeholder={'Selecciona la presentacion'}
+                    containerClassName="col-span-2"
+                  />
+                  <FormInput
+                    type="number"
+                    label="Unidades"
+                    control={control}
+                    name={'units'}
+                    hideArrows
+                  />
+                </div>
+
+                <Button type="submit" className="col-span-3">
+                  Crear prescripcion
+                </Button>
+              </>
+            );
+          }}
         </Form>
       </CardContent>
     </Card>

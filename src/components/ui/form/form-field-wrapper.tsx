@@ -6,14 +6,8 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from './form';
+import { DisplayInput } from './display-input';
+import { FormField } from './form';
 
 // type FieldWrapperProps<TFormValues extends FieldValues> = {
 //   children: (field: ControllerRenderProps<FieldValues, string>) => React.ReactNode;
@@ -55,12 +49,13 @@ export const FieldWrapper = <TFormValues extends FieldValues>({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={className}>
-          {label && <FormLabel>{label}</FormLabel>}
-          <FormControl>{children(field)}</FormControl>
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
+        <DisplayInput
+          className={className}
+          label={label}
+          description={description}
+        >
+          {children(field)}
+        </DisplayInput>
       )}
     />
   );

@@ -5,16 +5,21 @@ import useCheckMobileScreen from '@/hooks/use-check-mobile-screen';
 
 import { Input } from './input';
 
-interface DateInputProps
-  extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    'type' | 'onBlur'
-  > {}
+export interface DateInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  min?: string;
+  max?: string;
+}
 
 export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
-  ({ onChange: onChangeWrapper, ...props }, ref) => {
+  (
+    { onChange: onChangeWrapper, onBlur: onBlurWrapper, min, max, ...props },
+    ref,
+  ) => {
     const isMobile = useCheckMobileScreen();
     const currentDate = new Date();
+    const minDate = parse(min || '', 'dd/MM/yyyy', currentDate);
+    const maxDate = parse(max || '', 'dd/MM/yyyy', currentDate);
 
     const formatDate = (value: string) => {
       const cleaned = value.replace(/\D+/g, '');
@@ -48,10 +53,17 @@ export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
       const value = e.target.value;
       const date = parse(value, 'dd/MM/yyyy', currentDate);
       if (isValid(date)) {
-        e.target.value = format(date, 'dd/MM/yyyy');
+        if (minDate && date < minDate) {
+          e.target.value = format(minDate, 'dd/MM/yyyy');
+        } else if (maxDate && date > maxDate) {
+          e.target.value = format(maxDate, 'dd/MM/yyyy');
+        } else {
+          e.target.value = format(date, 'dd/MM/yyyy');
+        }
       } else {
         e.target.value = '';
       }
+      onBlurWrapper && onBlurWrapper(e);
     };
 
     if (isMobile) {

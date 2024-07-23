@@ -13,6 +13,7 @@ interface FormTextareaProps<
 > extends FieldWrapperPassThroughProps<TFieldValues, TName>,
     TextareaProps {
   name: TName;
+  containerClassName?: string;
 }
 
 export const FormTextarea = <
@@ -23,6 +24,7 @@ export const FormTextarea = <
   control,
   name,
   description,
+  containerClassName,
   ...props
 }: FormTextareaProps<TFieldValues, TName>) => {
   return (
@@ -31,6 +33,7 @@ export const FormTextarea = <
       name={name}
       label={label}
       description={description}
+      className={containerClassName}
     >
       {(field) => <Textarea {...props} {...field} />}
     </FieldWrapper>
