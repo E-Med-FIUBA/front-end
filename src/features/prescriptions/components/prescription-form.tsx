@@ -134,7 +134,7 @@ export function PrescriptionForm() {
           onSubmitValid={(data) => {
             console.log(data);
           }}
-          className="grid w-full grid-cols-3 gap-4"
+          className="grid w-full grid-cols-1 gap-4 lg:grid-cols-3"
         >
           {({ control, watch, formState }) => {
             console.log(control);
@@ -261,7 +261,7 @@ export function PrescriptionForm() {
                   />
                 </div>
 
-                <Button type="submit" className="col-span-3">
+                <Button type="submit" className="col-span-1 lg:col-span-3">
                   Crear prescripcion
                 </Button>
               </>
