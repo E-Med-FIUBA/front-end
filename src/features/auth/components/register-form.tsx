@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -65,8 +66,10 @@ type RegisterFormInputs = z.infer<typeof registerSchema>;
 export function RegisterForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onValid: SubmitHandler<RegisterFormInputs> = async (data) => {
+    setIsLoading(true);
     try {
       const res = await ApiClient.post<UserData>('/auth/register/doctor', {
         ...data,
@@ -75,6 +78,7 @@ export function RegisterForm() {
       login(res);
       navigate('/dashboard');
     } catch (error) {
+      setIsLoading(false);
       if (error instanceof ApiError) {
         toast.error(error.message);
       } else {
@@ -151,7 +155,7 @@ export function RegisterForm() {
                   { value: 'otorrino', label: 'Otorrino' },
                 ]}
               />
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" loading={isLoading}>
                 Crear cuenta
               </Button>
             </>

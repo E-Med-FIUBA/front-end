@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -29,13 +30,16 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onValid: SubmitHandler<LoginFormInputs> = async (data) => {
+    setIsLoading(true);
     try {
       const res = await ApiClient.post<UserData>('/auth/login', data);
       login(res);
       navigate('/dashboard');
     } catch (error) {
+      setIsLoading(false);
       if (error instanceof ApiError) {
         toast.error('Credenciales invalidas');
       } else {
@@ -72,7 +76,9 @@ export function LoginForm() {
                 placeholder="Contraseña"
                 {...register('password')}
               />
-              <Button type="submit">Iniciar sesion</Button>
+              <Button type="submit" loading={isLoading}>
+                Iniciar sesion
+              </Button>
             </>
           )}
         </Form>
