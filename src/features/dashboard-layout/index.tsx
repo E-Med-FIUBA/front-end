@@ -2,6 +2,7 @@ import { Menu } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/ui/logo';
 import {
   Sheet,
   SheetContent,
@@ -26,11 +27,7 @@ const SideNav = () => {
     <nav className="flex flex-col items-center gap-4 px-2">
       <div className="flex h-16 shrink-0 items-center px-4">
         <Link to="/dashboard" className="flex h-full items-center gap-2">
-          <img
-            src="https://via.placeholder.com/150"
-            alt="logo"
-            className="max-h-full py-2"
-          />
+          <Logo className="max-h-full py-2 " />
           <h1 className="text-nowrap text-2xl font-bold">E-Med</h1>
         </Link>
       </div>
