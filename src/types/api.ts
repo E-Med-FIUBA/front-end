@@ -14,8 +14,13 @@ export type Patient = {
 };
 
 export type Prescription = {
-  id: number;
-  patientId: number;
-  medication: string;
-  dosage: string;
+  id: string;
+  duration: number;
+  frequency: number;
+  drug: string;
+  indication: string;
+  patient: Patient;
+  quantity: number;
+  startDate: string;
+  endDate: string;
 };
