@@ -39,6 +39,7 @@ export function LoginForm() {
       login(res);
       navigate('/dashboard');
     } catch (error) {
+      console.error(error);
       setIsLoading(false);
       if (error instanceof ApiError) {
         toast.error('Credenciales invalidas');

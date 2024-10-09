@@ -1,8 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table';
+import { format, parseISO } from 'date-fns';
 import { MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { SortableHeader } from '@/components/ui/data-table/sortable-header';
 import {
   DropdownMenu,
@@ -12,65 +12,62 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
+import { Prescription } from '@/types/api';
 
-export type Payment = {
-  id: string;
-  amount: number;
-  status: 'pending' | 'processing' | 'success' | 'failed';
-  email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Prescription>[] = [
   {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
+    id: 'date',
+    accessorFn: (prescription) => prescription.endDate,
+    header: ({ column }) => <SortableHeader column={column} label="Fecha" />,
+    cell: ({ row, column }) =>
+      format(parseISO(row.getValue(column.id)), 'dd/MM/yyyy'),
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('status')}</div>
+    id: 'name',
+    accessorFn: (prescription) => prescription.patient.name,
+    header: ({ column }) => <SortableHeader column={column} label="Nombre" />,
+    cell: ({ row, column }) => {
+      console.log(column.id, row.getValue(column.id));
+      return <div className="capitalize">{row.getValue(column.id)}</div>;
+    },
+  },
+  {
+    id: 'lastName',
+    accessorFn: (prescription) => prescription.patient.lastName,
+    header: ({ column }) => <SortableHeader column={column} label="Apellido" />,
+    cell: ({ row, column }) => (
+      <div className="capitalize">{row.getValue(column.id)}</div>
     ),
   },
   {
-    accessorKey: 'email',
+    id: 'dni',
+    accessorFn: (prescription) => prescription.patient.dni,
+    header: ({ column }) => <SortableHeader column={column} label="DNI" />,
+    cell: ({ row, column }) => (
+      <div className="capitalize">{row.getValue(column.id)}</div>
+    ),
+  },
+  {
+    id: 'email',
+    accessorFn: (prescription) => prescription.patient.email,
     header: ({ column }) => {
       return <SortableHeader column={column} label="Email" />;
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>,
   },
   {
-    accessorKey: 'amount',
+    id: 'drug',
+    accessorFn: (prescription) => prescription.drug.name,
+    header: ({ column }) => (
+      <SortableHeader column={column} label="Medicamento" />
+    ),
+    cell: ({ row, column }) => (
+      <div className="capitalize">{row.getValue(column.id)}</div>
+    ),
+  },
+  {
+    accessorKey: 'quantity',
     header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount'));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
   },
   {
     id: 'actions',
