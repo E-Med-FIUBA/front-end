@@ -42,7 +42,7 @@ const patientSchema = z.object({
     .gt(1000000, {
       message: 'El DNI debe ser mayor a 1.000.000',
     }),
-  firstName: z
+  name: z
     .string({
       message: 'El nombre es requerido',
     })
@@ -56,7 +56,7 @@ const patientSchema = z.object({
     .min(3, {
       message: 'El apellido debe tener al menos 3 caracteres',
     }),
-  dateOfBirth: z
+  birthDate: z
     .string({
       message: 'La fecha de nacimiento es requerida',
     })
@@ -136,7 +136,7 @@ export default function AddPatientModal({
                     type="text"
                     label="Nombre"
                     control={control}
-                    name={'firstName'}
+                    name={'name'}
                   />
                   <FormInput
                     type="text"
@@ -159,7 +159,7 @@ export default function AddPatientModal({
                     name={'dni'}
                   />
                   <FormDateInput
-                    name={'dateOfBirth'}
+                    name={'birthDate'}
                     control={control}
                     label="Fecha de nacimiento"
                   />

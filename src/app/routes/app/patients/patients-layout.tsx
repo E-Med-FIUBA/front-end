@@ -28,13 +28,13 @@ const PatientListItem = ({ patient }: { patient: Patient }) => (
         >
           <Avatar>
             <AvatarFallback>
-              {patient.firstName[0]}
+              {patient.name[0]}
               {patient.lastName[0]}
             </AvatarFallback>
           </Avatar>
           <div>
             <h3 className="text-lg font-semibold">
-              {patient.firstName} {patient.lastName}
+              {patient.name} {patient.lastName}
             </h3>
             <p className="text-sm">DNI: 12345678</p>
           </div>
@@ -46,7 +46,7 @@ const PatientListItem = ({ patient }: { patient: Patient }) => (
         <ContextMenuSeparator />
         <ContextMenuItem inset className="font-medium text-destructive">
           <Trash size={18} className="absolute left-2" />
-          Eliminar a {patient.firstName} {patient.lastName}
+          Eliminar a {patient.name} {patient.lastName}
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

@@ -24,7 +24,7 @@ export function PatientDetailsRoute() {
       <div className="flex justify-between rounded-md border bg-card p-2">
         <div>
           <h2 className="text-xl font-semibold">
-            {patient.firstName} {patient.lastName}
+            {patient.name} {patient.lastName}
           </h2>
 
           <p className="mt-2 text-sm">DNI: 12345678</p>
