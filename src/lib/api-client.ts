@@ -17,10 +17,38 @@ export class ApiClient {
     return `${import.meta.env.VITE_BACK_END_URL}${urlToAppend}`;
   }
 
+  private static getToken(): string | null {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      return null;
+    }
+
+    const parsedUser = JSON.parse(user);
+    return parsedUser.token;
+  }
+
+  private static headers(get: boolean = false): Record<string, string> {
+    const token = this.getToken();
+    let headers: Record<string, string> = {};
+
+    if (!get) {
+      headers = {
+        'Content-Type': 'application/json',
+      };
+    }
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    return headers;
+  }
+
   static async get<ReturnType>(url: string): Promise<ReturnType> {
     const fullUrl = this.fullUrl(url);
     const response = await fetch(fullUrl, {
       method: 'GET',
+      headers: this.headers(true),
     });
 
     if (!response.ok) {
@@ -37,9 +65,25 @@ export class ApiClient {
     const fullUrl = this.fullUrl(url);
     const response = await fetch(fullUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this.headers(),
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw ApiError.fromResponse(response);
+    }
+
+    return response.json();
+  }
+
+  static async put<ReturnType>(
+    url: string,
+    data: Record<string, unknown> | Array<unknown>,
+  ): Promise<ReturnType> {
+    const fullUrl = this.fullUrl(url);
+    const response = await fetch(fullUrl, {
+      method: 'PUT',
+      headers: this.headers(),
       body: JSON.stringify(data),
     });
 

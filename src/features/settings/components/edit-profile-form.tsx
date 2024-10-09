@@ -1,9 +1,16 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { FormInput } from '@/components/ui/form/form-input';
 import { FormSelect } from '@/components/ui/form/form-select';
+import { Loader } from '@/components/ui/loader';
+import { Specialty, User } from '@/types/api';
+
+import { getMe, getSpecialties, updateMe } from '../api';
 
 const editProfileSchema = z.object({
   email: z
@@ -28,7 +35,7 @@ const editProfileSchema = z.object({
       message: 'El DNI debe ser mayor a 1.000.000',
     })
     .optional(),
-  firstName: z
+  name: z
     .string({
       message: 'El nombre es requerido',
     })
@@ -44,50 +51,74 @@ const editProfileSchema = z.object({
       message: 'El apellido debe tener al menos 3 caracteres',
     })
     .optional(),
-  specialty: z
+  specialtyId: z
     .string({
       message: 'La especialidad es requerida',
     })
-    .min(3, {
-      message: 'La especialidad debe tener al menos 3 caracteres',
-    })
     .optional(),
-  address: z
-    .string({
-      message: 'El domicilio es requerido',
-    })
-    .min(3, {
-      message: 'El domicilio debe tener al menos 3 caracteres',
-    }),
 });
 
 export function EditProfileForm() {
+  const [me, setMe] = useState<User | null>(null);
+  const [specialties, setSpecialties] = useState<Array<Specialty>>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [meData, specialtiesData] = await Promise.all([
+          getMe(),
+          getSpecialties(),
+        ]);
+        setMe(meData);
+        setSpecialties(specialtiesData);
+      } catch (error) {
+        toast.error(
+          'Hubo un error al cargar los datos, por favor intente nuevamente',
+        );
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <Loader size={60} />;
+  }
+
   return (
     <Form
       schema={editProfileSchema}
-      onSubmitValid={(data) => {
-        console.log(data);
+      onSubmitValid={async (data) => {
+        setSubmitLoading(true);
+        try {
+          await updateMe(data);
+          toast.success('Perfil actualizado correctamente');
+          navigate(-1);
+        } catch (error) {
+          toast.error('Hubo un error al actualizar el perfil');
+          console.error(error);
+          setSubmitLoading(false);
+        }
       }}
       className="mx-auto grid max-w-sm grid-cols-1 gap-4"
       options={{
         defaultValues: {
-          firstName: 'Juan',
-          lastName: 'Perez',
-          email: 'juan.perez@mail.com',
-          dni: 12345678,
-          specialty: 'cardiologo',
-          address: 'Calle falsa 123',
+          name: me?.name,
+          lastName: me?.lastName,
+          email: me?.email,
+          dni: me?.dni,
+          specialtyId: me?.doctor?.specialtyId.toString(),
         },
       }}
     >
       {({ control }) => (
         <>
-          <FormInput
-            type="text"
-            label="Nombre"
-            control={control}
-            name="firstName"
-          />
+          <FormInput type="text" label="Nombre" control={control} name="name" />
           <FormInput
             type="text"
             label="Apellido/s"
@@ -111,23 +142,17 @@ export function EditProfileForm() {
           <FormSelect
             label="Especialidad"
             control={control}
-            name="specialty"
-            items={[
-              { value: 'cardiologo', label: 'Cardiologo' },
-              { value: 'neurologo', label: 'Neurologo' },
-              { value: 'pediatra', label: 'Pediatra' },
-              { value: 'otorrino', label: 'Otorrino' },
-            ]}
+            name="specialtyId"
+            items={specialties.map((specialty) => ({
+              label: specialty.name,
+              value: specialty.id.toString(),
+            }))}
             placeholder="Selecciona una especialidad"
           />
-          <FormInput
-            type="text"
-            label="Domicilio"
-            control={control}
-            name="address"
-          />
 
-          <Button type="submit">Editar perfil</Button>
+          <Button type="submit" loading={submitLoading}>
+            Editar perfil
+          </Button>
         </>
       )}
     </Form>

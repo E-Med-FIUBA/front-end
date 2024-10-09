@@ -19,7 +19,7 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useLocalStorage('user', null);
+  const [user, setUser, removeUser] = useLocalStorage('user', null);
 
   const login = useCallback(
     async (data: UserData) => {
@@ -29,8 +29,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const logout = useCallback(() => {
-    setUser(null);
-  }, [setUser]);
+    removeUser();
+  }, [removeUser]);
 
   const value = useMemo(
     () => ({

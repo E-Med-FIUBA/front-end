@@ -99,8 +99,8 @@ export const createRouter = () =>
         {
           path: '/history',
           lazy: async () => {
-            const { PrescriptionsRoute } = await import('./app/prescriptions');
-            return { Component: PrescriptionsRoute };
+            const { HistoryRoute } = await import('./app/history');
+            return { Component: HistoryRoute };
           },
         },
         {
