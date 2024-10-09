@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -16,8 +16,10 @@ import { Form } from '@/components/ui/form';
 import { FormInput } from '@/components/ui/form/form-input';
 import { FormSelect } from '@/components/ui/form/form-select';
 import { useAuth } from '@/hooks/use-auth';
+import { getSpecialties } from '@/lib/api/specialty';
 import { ApiClient, ApiError } from '@/lib/api-client';
 import { UserData } from '@/lib/auth';
+import { Specialty } from '@/types/api';
 
 import { AuthFormFooter } from './auth-form-footer';
 
@@ -54,11 +56,9 @@ const registerSchema = z.object({
     .int()
     .min(1000000, 'El DNI debe tener al menos 7 digitos')
     .max(99999999, 'El DNI debe tener como maximo 8 digitos'),
-  specialty: z
-    .string({
-      message: 'La especialidad es obligatoria',
-    })
-    .min(1, 'La especialidad es obligatoria'),
+  specialtyId: z.string({
+    message: 'La especialidad es obligatoria',
+  }),
 });
 
 type RegisterFormInputs = z.infer<typeof registerSchema>;
@@ -66,10 +66,23 @@ type RegisterFormInputs = z.infer<typeof registerSchema>;
 export function RegisterForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [specialties, setSpecialties] = useState<Array<Specialty>>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getSpecialties();
+        setSpecialties(res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const onValid: SubmitHandler<RegisterFormInputs> = async (data) => {
-    setIsLoading(true);
+    setSubmitLoading(true);
     try {
       const res = await ApiClient.post<UserData>('/auth/register/doctor', {
         ...data,
@@ -78,7 +91,7 @@ export function RegisterForm() {
       login(res);
       navigate('/dashboard');
     } catch (error) {
-      setIsLoading(false);
+      setSubmitLoading(false);
       if (error instanceof ApiError) {
         toast.error(error.message);
       } else {
@@ -147,15 +160,13 @@ export function RegisterForm() {
               <FormSelect
                 control={control}
                 placeholder="Selecciona una especialidad"
-                name="specialty"
-                items={[
-                  { value: 'cardiologo', label: 'Cardiologo' },
-                  { value: 'neurologo', label: 'Neurologo' },
-                  { value: 'pediatra', label: 'Pediatra' },
-                  { value: 'otorrino', label: 'Otorrino' },
-                ]}
+                name="specialtyId"
+                items={specialties.map((specialty) => ({
+                  label: specialty.name,
+                  value: specialty.id.toString(),
+                }))}
               />
-              <Button type="submit" className="w-full" loading={isLoading}>
+              <Button type="submit" className="w-full" loading={submitLoading}>
                 Crear cuenta
               </Button>
             </>

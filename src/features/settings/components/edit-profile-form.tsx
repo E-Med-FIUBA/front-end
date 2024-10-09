@@ -8,9 +8,10 @@ import { Form } from '@/components/ui/form';
 import { FormInput } from '@/components/ui/form/form-input';
 import { FormSelect } from '@/components/ui/form/form-select';
 import { Loader } from '@/components/ui/loader';
+import { getSpecialties } from '@/lib/api/specialty';
 import { Specialty, User } from '@/types/api';
 
-import { getMe, getSpecialties, updateMe } from '../api';
+import { getMe, updateMe } from '../api';
 
 const editProfileSchema = z.object({
   email: z
