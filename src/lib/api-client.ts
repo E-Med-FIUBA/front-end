@@ -24,7 +24,7 @@ export class ApiClient {
     }
 
     const parsedUser = JSON.parse(user);
-    return parsedUser.token;
+    return parsedUser?.token;
   }
 
   private static headers(get: boolean = false): Record<string, string> {

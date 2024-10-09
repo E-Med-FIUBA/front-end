@@ -80,7 +80,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-svh w-full bg-muted/60 dark:bg-muted/20">
       <SideBar />
-      <div className="flex w-full flex-1 flex-col">
+      <div className="flex flex-1 flex-col overflow-hidden">
         <header className="flex h-16 items-center border-b bg-background px-2 md:gap-20">
           <MobileNavMenu />
           <div className="flex flex-1 justify-end">
