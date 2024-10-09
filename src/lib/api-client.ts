@@ -75,4 +75,22 @@ export class ApiClient {
 
     return response.json();
   }
+
+  static async put<ReturnType>(
+    url: string,
+    data: Record<string, unknown> | Array<unknown>,
+  ): Promise<ReturnType> {
+    const fullUrl = this.fullUrl(url);
+    const response = await fetch(fullUrl, {
+      method: 'PUT',
+      headers: this.headers(),
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw ApiError.fromResponse(response);
+    }
+
+    return response.json();
+  }
 }

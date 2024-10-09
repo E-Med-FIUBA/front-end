@@ -31,6 +31,20 @@ export type User = {
   lastName: string;
   email: string;
   dni: number;
+  doctor?: Doctor;
+};
+
+export type Doctor = {
+  id: number;
+  specialtyId: number;
+  specialty: Specialty;
+  license: number;
+  user: User;
+};
+
+export type Specialty = {
+  id: number;
+  name: string;
 };
 
 export type Drug = {
