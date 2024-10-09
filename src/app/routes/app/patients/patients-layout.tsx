@@ -10,10 +10,12 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
+import { Loader } from '@/components/ui/loader';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ContentLayout } from '@/features/dashboard-layout/content-layout';
 import AddPatientModal from '@/features/patients/add-patient-modal';
-import { patientsMock } from '@/testing/mocks/patients';
+import { getPatients } from '@/features/patients/api';
+import { useFetch } from '@/hooks/use-fetch';
 import { Patient } from '@/types/api';
 import { cn } from '@/utils/cn';
 
@@ -55,32 +57,41 @@ const PatientListItem = ({ patient }: { patient: Patient }) => (
 
 const PatientList = ({
   showPatientsMobile,
+  patients,
+  loading,
 }: {
   showPatientsMobile?: boolean;
-}) => (
-  <ScrollArea
-    className={cn(
-      'h-full bg-card rounded-md border col-span-4 xl:col-span-1',
-      showPatientsMobile
-        ? 'flex flex-col gap-2'
-        : 'hidden xl:flex flex-col gap-2',
-    )}
-    type="always"
-  >
-    <ul>
-      {patientsMock.map((patient) => (
-        <PatientListItem key={patient.id} patient={patient} />
-      ))}
-    </ul>
-  </ScrollArea>
-);
+  patients: Patient[];
+  loading: boolean;
+}) =>
+  loading ? (
+    <div className="flex h-full flex-1 items-center justify-center rounded-md border bg-card">
+      <Loader size={60} />
+    </div>
+  ) : (
+    <ScrollArea
+      className={cn(
+        'h-full bg-card rounded-md border col-span-4 xl:col-span-1',
+        showPatientsMobile
+          ? 'flex flex-col gap-2'
+          : 'hidden xl:flex flex-col gap-2',
+      )}
+      type="always"
+    >
+      <ul>
+        {patients.map((patient) => (
+          <PatientListItem key={patient.id} patient={patient} />
+        ))}
+      </ul>
+    </ScrollArea>
+  );
 
 export function PatientsLayout() {
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [patient, setPatient] = useState<Patient | undefined>(undefined);
-
   const showPatientsMobile = location.pathname === '/patients';
+  const { data: patients, loading } = useFetch<Patient[]>(getPatients);
 
   return (
     <ContentLayout
@@ -95,7 +106,11 @@ export function PatientsLayout() {
       }
     >
       <div className="grid h-full grid-cols-4 gap-4">
-        <PatientList showPatientsMobile={showPatientsMobile} />
+        <PatientList
+          showPatientsMobile={showPatientsMobile}
+          patients={patients || []}
+          loading={loading}
+        />
         <Outlet context={[setIsModalOpen, setPatient]} />
       </div>
     </ContentLayout>

@@ -17,9 +17,12 @@ import { FormDateInput } from '@/components/ui/form/form-date-input';
 import { FormInput } from '@/components/ui/form/form-input';
 import { FormSelect } from '@/components/ui/form/form-select';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Patient } from '@/types/api';
+import { useFetch } from '@/hooks/use-fetch';
+import { InsuranceCompany, Patient } from '@/types/api';
 import { Insurance } from '@/types/insurance.enum';
 import { Sex } from '@/types/sex.enum';
+
+import { getInsuranceCompanies } from './api';
 
 const patientSchema = z.object({
   email: z
@@ -70,7 +73,7 @@ const patientSchema = z.object({
         message: 'La fecha de nacimiento debe ser una fecha valida',
       },
     ),
-  afiliateNumber: z.coerce
+  affiliateNumber: z.coerce
     .number({
       message: 'El numero de afiliado debe ser un numero',
     })
@@ -99,10 +102,17 @@ export default function AddPatientModal({
   setOpen: (value: boolean) => void;
   setPatient: (value: Patient | undefined) => void;
 }) {
+  const { data: insuranceCompanies, loading } = useFetch<InsuranceCompany[]>(
+    getInsuranceCompanies,
+  );
   const onOpenChangeWrapper = (value: boolean) => {
     if (!value) setPatient(undefined);
     setOpen(value);
   };
+
+  const isEdit = !!patient;
+
+  if (loading) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChangeWrapper}>
@@ -178,24 +188,27 @@ export default function AddPatientModal({
                 <div className="grid gap-2 sm:grid-cols-2">
                   <FormSelect
                     label="Obra social"
-                    name={'insurance'}
+                    name={'insurancePlan.insuranceCompany.id'}
                     placeholder="Seleccione una obra social"
                     control={control}
-                    items={[
-                      { label: 'OSDE', value: Insurance.OSDE },
-                      { label: 'Swiss Medical', value: Insurance.SwissMedical },
-                      { label: 'Galeno', value: Insurance.Galeno },
-                    ]}
+                    items={
+                      insuranceCompanies?.map((company) => ({
+                        value: company.id,
+                        label: company.name,
+                      })) || []
+                    }
                   />
                   <FormInput
                     type="number"
                     label="Numero de afiliado"
                     control={control}
-                    name={'afiliateNumber'}
+                    name={'affiliateNumber'}
                   />
                 </div>
                 <DialogFooter>
-                  <Button type="submit">Crear paciente</Button>
+                  <Button type="submit">
+                    {isEdit ? 'Editar' : 'Crear'} paciente
+                  </Button>
                 </DialogFooter>
               </>
             )}

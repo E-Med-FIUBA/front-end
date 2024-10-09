@@ -19,7 +19,7 @@ import {
 import { FieldWrapperPassThroughProps } from './form-field-wrapper';
 
 type FormSelectItem = {
-  value: string;
+  value: string | number;
   label: string;
 };
 

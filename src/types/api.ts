@@ -5,10 +5,10 @@ export type Patient = {
   name: string;
   lastName: string;
   birthDate: string;
-  afiliateNumber: number;
+  affiliateNumber: number;
   email: string;
   dni: number;
-  insurance: InsurancePlan;
+  insurancePlan: InsurancePlan;
   sex: Sex;
   doctorId: number;
 };
@@ -16,7 +16,7 @@ export type Patient = {
 export type InsurancePlan = {
   id: number;
   name: string;
-  company: InsuranceCompany;
+  insuranceCompany: InsuranceCompany;
 };
 
 export type InsuranceCompany = {

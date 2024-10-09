@@ -1,22 +1,29 @@
+import { useCallback } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { getPatient } from '@/features/patients/api';
 import PatientActions from '@/features/patients/patient-actions';
-import { patientsMock } from '@/testing/mocks/patients';
+import { useFetch } from '@/hooks/use-fetch';
 
 export function PatientDetailsRoute() {
   const { patientId } = useParams();
-  const [setIsModalOpen, setPatient] =
-    useOutletContext<Array<React.Dispatch<React.SetStateAction<unknown>>>>();
-
   if (!patientId) {
     throw new Error('No patient id provided');
   }
 
-  const patient = patientsMock[parseInt(patientId) - 1];
+  const { data: patient, loading } = useFetch(
+    useCallback(() => getPatient(patientId), [patientId]),
+  );
+  const [setIsModalOpen, setPatient] =
+    useOutletContext<Array<React.Dispatch<React.SetStateAction<unknown>>>>();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!patient) {
-    throw new Error('Patient not found');
+    return <div>Patient not found</div>;
   }
 
   return (
@@ -27,13 +34,16 @@ export function PatientDetailsRoute() {
             {patient.name} {patient.lastName}
           </h2>
 
-          <p className="mt-2 text-sm">DNI: 12345678</p>
-          <p className="mt-2 text-sm">Edad: 25</p>
-          <p className="mt-2 text-sm">Fecha de nacimiento: 01/01/1996</p>
-          <p className="mt-2 text-sm">Sexo: Masculino</p>
-          <p className="mt-2 text-sm">Obra social: OSDE</p>
-          <p className="mt-2 text-sm">Ultima actualización: 01/01/2021</p>
-          <p className="mt-2 text-sm text-muted-foreground">patient@mail.com</p>
+          <p className="mt-2 text-sm">DNI: {patient.dni}</p>
+          <p className="mt-2 text-sm">
+            Fecha de nacimiento: {patient.birthDate}
+          </p>
+          <p className="mt-2 text-sm">Sexo: {patient.sex}</p>
+          <p className="mt-2 text-sm">
+            Obra social: {patient.insurancePlan.insuranceCompany.name}
+          </p>
+          <p className="mt-2 text-sm">Plan: {patient.insurancePlan.name}</p>
+          <p className="mt-2 text-sm text-muted-foreground">{patient.email}</p>
         </div>
         <PatientActions
           setIsModalOpen={setIsModalOpen}
