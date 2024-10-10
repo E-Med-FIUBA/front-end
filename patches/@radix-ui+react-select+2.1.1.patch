@@ -1,0 +1,29 @@
+diff --git a/node_modules/@radix-ui/react-select/dist/index.d.mts b/node_modules/@radix-ui/react-select/dist/index.d.mts
+index 9775d79..a7da208 100644
+--- a/node_modules/@radix-ui/react-select/dist/index.d.mts
++++ b/node_modules/@radix-ui/react-select/dist/index.d.mts
+@@ -18,11 +18,11 @@ interface CreateScope {
+ 
+ type Direction = 'ltr' | 'rtl';
+ declare const createSelectScope: CreateScope;
+-interface SelectProps {
++interface SelectProps<T> {
+     children?: React.ReactNode;
+-    value?: string;
+-    defaultValue?: string;
+-    onValueChange?(value: string): void;
++    value?: T;
++    defaultValue?: T;
++    onValueChange?(value: T): void;
+     open?: boolean;
+     defaultOpen?: boolean;
+     onOpenChange?(open: boolean): void;
+@@ -97,7 +97,7 @@ interface SelectLabelProps extends PrimitiveDivProps {
+ }
+ declare const SelectLabel: React.ForwardRefExoticComponent<SelectLabelProps & React.RefAttributes<HTMLDivElement>>;
+ interface SelectItemProps extends PrimitiveDivProps {
+-    value: string;
++    value: T;
+     disabled?: boolean;
+     textValue?: string;
+ }
