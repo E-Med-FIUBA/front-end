@@ -8,15 +8,9 @@ export type Patient = {
   affiliateNumber: number;
   email: string;
   dni: number;
-  insurancePlan: InsurancePlan;
+  insuranceCompany: InsuranceCompany;
   sex: Sex;
   doctorId: number;
-};
-
-export type InsurancePlan = {
-  id: number;
-  name: string;
-  insuranceCompany: InsuranceCompany;
 };
 
 export type InsuranceCompany = {

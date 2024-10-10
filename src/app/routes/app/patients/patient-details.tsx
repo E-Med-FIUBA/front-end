@@ -40,9 +40,8 @@ export function PatientDetailsRoute() {
           </p>
           <p className="mt-2 text-sm">Sexo: {patient.sex}</p>
           <p className="mt-2 text-sm">
-            Obra social: {patient.insurancePlan.insuranceCompany.name}
+            Obra social: {patient.insuranceCompany.name}
           </p>
-          <p className="mt-2 text-sm">Plan: {patient.insurancePlan.name}</p>
           <p className="mt-2 text-sm text-muted-foreground">{patient.email}</p>
         </div>
         <PatientActions

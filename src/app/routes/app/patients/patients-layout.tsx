@@ -91,7 +91,7 @@ export function PatientsLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [patient, setPatient] = useState<Patient | undefined>(undefined);
   const showPatientsMobile = location.pathname === '/patients';
-  const { data: patients, loading } = useFetch<Patient[]>(getPatients);
+  const { data: patients, loading, refresh } = useFetch<Patient[]>(getPatients);
 
   return (
     <ContentLayout
@@ -102,6 +102,7 @@ export function PatientsLayout() {
           setOpen={setIsModalOpen}
           patient={patient}
           setPatient={setPatient}
+          refreshPatients={refresh}
         />
       }
     >

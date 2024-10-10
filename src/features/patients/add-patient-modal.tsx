@@ -19,10 +19,9 @@ import { FormSelect } from '@/components/ui/form/form-select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useFetch } from '@/hooks/use-fetch';
 import { InsuranceCompany, Patient } from '@/types/api';
-import { Insurance } from '@/types/insurance.enum';
 import { Sex } from '@/types/sex.enum';
 
-import { getInsuranceCompanies } from './api';
+import { createPatient, CreatePatientDto, getInsuranceCompanies } from './api';
 
 const patientSchema = z.object({
   email: z
@@ -83,7 +82,7 @@ const patientSchema = z.object({
     .positive({
       message: 'El numero de afiliado debe ser un numero positivo',
     }),
-  insurance: z.nativeEnum(Insurance, {
+  insuranceCompanyId: z.coerce.number({
     message: 'La obra social es requerida',
   }),
   sex: z.nativeEnum(Sex, {
@@ -91,16 +90,29 @@ const patientSchema = z.object({
   }),
 });
 
+const defaultValues = {
+  name: '',
+  lastName: '',
+  email: '',
+  dni: '',
+  birthDate: '',
+  affiliateNumber: '',
+  insuranceCompanyId: '',
+  sex: '',
+};
+
 export default function AddPatientModal({
   patient,
   open,
   setOpen,
   setPatient,
+  refreshPatients,
 }: {
   patient?: Patient;
   open: boolean;
   setOpen: (value: boolean) => void;
   setPatient: (value: Patient | undefined) => void;
+  refreshPatients: () => Promise<void>;
 }) {
   const { data: insuranceCompanies, loading } = useFetch<InsuranceCompany[]>(
     getInsuranceCompanies,
@@ -132,11 +144,26 @@ export default function AddPatientModal({
         </DialogHeader>
         <ScrollArea className="overflow-y-auto" type="always">
           <Form
-            onSubmitValid={() => {}}
+            onSubmitValid={async (patientData: CreatePatientDto) => {
+              await createPatient(patientData);
+              await refreshPatients();
+              setOpen(false);
+            }}
             schema={patientSchema}
             className="mb-4 flex flex-col gap-2 px-2"
             options={{
-              defaultValues: patient,
+              defaultValues: patient
+                ? {
+                    name: '',
+                    lastName: '',
+                    email: '',
+                    dni: '',
+                    birthDate: '',
+                    affiliateNumber: '',
+                    insuranceCompanyId: '',
+                    sex: '',
+                  }
+                : defaultValues,
             }}
           >
             {({ control }) => (
@@ -188,12 +215,12 @@ export default function AddPatientModal({
                 <div className="grid gap-2 sm:grid-cols-2">
                   <FormSelect
                     label="Obra social"
-                    name={'insurancePlan.insuranceCompany.id'}
+                    name={'insuranceCompanyId'}
                     placeholder="Seleccione una obra social"
                     control={control}
                     items={
                       insuranceCompanies?.map((company) => ({
-                        value: company.id,
+                        value: company.id.toString(),
                         label: company.name,
                       })) || []
                     }

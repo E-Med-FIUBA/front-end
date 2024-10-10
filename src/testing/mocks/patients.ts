@@ -10,14 +10,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -29,14 +27,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -48,14 +44,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -67,14 +61,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -86,14 +78,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -105,14 +95,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -124,14 +112,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -143,14 +129,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -162,14 +146,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -181,14 +163,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -200,14 +180,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -219,14 +197,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -238,14 +214,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -257,14 +231,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -276,14 +248,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -295,14 +265,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -314,14 +282,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -333,14 +299,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -352,14 +316,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -371,14 +333,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -390,14 +350,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -409,14 +367,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -428,14 +384,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -447,14 +401,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
@@ -466,14 +418,12 @@ export const patientsMock: Patient[] = [
     birthDate: '01/01/1990',
     dni: 12345678,
     email: 'test@patient.com',
-    insurancePlan: {
-      insuranceCompany: {
-        id: 1,
-        name: 'OSDE',
-      },
+
+    insuranceCompany: {
       id: 1,
-      name: '201',
+      name: 'OSDE',
     },
+
     sex: Sex.FEMALE,
     doctorId: 1,
   },
