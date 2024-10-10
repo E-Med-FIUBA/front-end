@@ -21,7 +21,12 @@ import { useFetch } from '@/hooks/use-fetch';
 import { InsuranceCompany, Patient } from '@/types/api';
 import { Sex } from '@/types/sex.enum';
 
-import { createPatient, CreatePatientDto, getInsuranceCompanies } from './api';
+import {
+  createPatient,
+  CreatePatientDto,
+  getInsuranceCompanies,
+  updatePatient,
+} from './api';
 
 const patientSchema = z.object({
   email: z
@@ -145,7 +150,14 @@ export default function AddPatientModal({
         <ScrollArea className="overflow-y-auto" type="always">
           <Form
             onSubmitValid={async (patientData: CreatePatientDto) => {
-              await createPatient(patientData);
+              if (isEdit) {
+                await updatePatient({
+                  ...patientData,
+                  id: patient.id.toString(),
+                });
+              } else {
+                await createPatient(patientData);
+              }
               await refreshPatients();
               setOpen(false);
             }}
@@ -154,14 +166,14 @@ export default function AddPatientModal({
             options={{
               defaultValues: patient
                 ? {
-                    name: '',
-                    lastName: '',
-                    email: '',
-                    dni: '',
-                    birthDate: '',
-                    affiliateNumber: '',
-                    insuranceCompanyId: '',
-                    sex: '',
+                    name: patient.name,
+                    lastName: patient.lastName,
+                    email: patient.email,
+                    dni: patient.dni.toString(),
+                    birthDate: patient.birthDate,
+                    affiliateNumber: patient.affiliateNumber.toString(),
+                    insuranceCompanyId: patient.insuranceCompany.id.toString(),
+                    sex: patient.sex,
                   }
                 : defaultValues,
             }}

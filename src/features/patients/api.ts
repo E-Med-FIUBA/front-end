@@ -15,6 +15,10 @@ export interface CreatePatientDto {
   sex: string;
 }
 
+export interface UpdatePatientDto extends CreatePatientDto {
+  id: string;
+}
+
 export const getPatients = async () => ApiClient.get<Patient[]>('/patients');
 
 export const getPatient = async (id: string) => {
@@ -30,6 +34,19 @@ export const getInsuranceCompanies = async () =>
 
 export const createPatient = async (patient: CreatePatientDto) =>
   ApiClient.post('/patients', {
+    doctorId: Number(patient.doctorId),
+    birthDate: parse(patient.birthDate, 'dd/MM/yyyy', new Date()).toISOString(),
+    insuranceCompanyId: Number(patient.insuranceCompanyId),
+    affiliateNumber: Number(patient.affiliateNumber),
+    dni: Number(patient.dni),
+    email: patient.email,
+    name: patient.name,
+    lastName: patient.lastName,
+    sex: patient.sex,
+  });
+
+export const updatePatient = async (patient: UpdatePatientDto) =>
+  ApiClient.put(`/patients/${patient.id}`, {
     doctorId: Number(patient.doctorId),
     birthDate: parse(patient.birthDate, 'dd/MM/yyyy', new Date()).toISOString(),
     insuranceCompanyId: Number(patient.insuranceCompanyId),
