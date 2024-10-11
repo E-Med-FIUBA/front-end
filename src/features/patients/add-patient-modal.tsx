@@ -18,15 +18,11 @@ import { FormInput } from '@/components/ui/form/form-input';
 import { FormSelect } from '@/components/ui/form/form-select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useFetch } from '@/hooks/use-fetch';
+import { getInsuranceCompanies } from '@/lib/api/patients';
 import { InsuranceCompany, Patient } from '@/types/api';
 import { Sex } from '@/types/sex.enum';
 
-import {
-  createPatient,
-  CreatePatientDto,
-  getInsuranceCompanies,
-  updatePatient,
-} from './api';
+import { createPatient, CreatePatientDto, updatePatient } from './api';
 
 const patientSchema = z.object({
   email: z

@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { getPatient } from '@/features/patients/api';
 import PatientActions from '@/features/patients/patient-actions';
 import { useFetch } from '@/hooks/use-fetch';
+import { getPatient } from '@/lib/api/patients';
 
 export function PatientDetailsRoute() {
   const { patientId } = useParams();

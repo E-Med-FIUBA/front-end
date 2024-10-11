@@ -34,49 +34,59 @@ const PatientListItem = ({
   patient: Patient;
   setPatient: (value: Patient) => void;
   setOpen: (value: boolean) => void;
-}) => (
-  <li>
-    <ContextMenu>
-      <ContextMenuTrigger className="flex items-center justify-center rounded-md">
-        <NavLink
-          to={`/patients/${patient.id}`}
-          onClick={() => setPatient(patient)}
-          className="flex w-full select-none items-center gap-4 p-2 transition-all duration-100 ease-in-out hover:bg-muted/60 active:bg-muted/90 dark:hover:bg-muted/20 dark:active:bg-muted/30"
-          draggable={false}
-        >
-          <Avatar>
-            <AvatarFallback>
-              {patient.name[0]}
-              {patient.lastName[0]}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <h3 className="text-lg font-semibold">
-              {patient.name} {patient.lastName}
-            </h3>
-            <p className="text-sm">DNI: 12345678</p>
-          </div>
-        </NavLink>
-      </ContextMenuTrigger>
-      <ContextMenuContent className="w-64">
-        <ContextMenuItem inset>Crear receta</ContextMenuItem>
-        <ContextMenuItem inset>Ver historial</ContextMenuItem>
-        <ContextMenuSeparator />
-        <ContextMenuItem
-          inset
-          className="font-medium text-destructive"
-          onClick={() => {
-            setPatient(patient);
-            setOpen(true);
-          }}
-        >
-          <Trash size={18} className="absolute left-2" />
-          Eliminar a {patient.name} {patient.lastName}
-        </ContextMenuItem>
-      </ContextMenuContent>
-    </ContextMenu>
-  </li>
-);
+}) => {
+  const navigate = useNavigate();
+  return (
+    <li>
+      <ContextMenu>
+        <ContextMenuTrigger className="flex items-center justify-center rounded-md">
+          <NavLink
+            to={`/patients/${patient.id}`}
+            onClick={() => setPatient(patient)}
+            className="flex w-full select-none items-center gap-4 p-2 transition-all duration-100 ease-in-out hover:bg-muted/60 active:bg-muted/90 dark:hover:bg-muted/20 dark:active:bg-muted/30"
+            draggable={false}
+          >
+            <Avatar>
+              <AvatarFallback>
+                {patient.name[0]}
+                {patient.lastName[0]}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h3 className="text-lg font-semibold">
+                {patient.name} {patient.lastName}
+              </h3>
+              <p className="text-sm">DNI: 12345678</p>
+            </div>
+          </NavLink>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-64">
+          <ContextMenuItem
+            inset
+            onClick={() => {
+              navigate(`/prescriptions?patientId=${patient.id}`);
+            }}
+          >
+            Crear prescripción
+          </ContextMenuItem>
+          <ContextMenuItem inset>Ver historial</ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem
+            inset
+            className="font-medium text-destructive"
+            onClick={() => {
+              setPatient(patient);
+              setOpen(true);
+            }}
+          >
+            <Trash size={18} className="absolute left-2" />
+            Eliminar a {patient.name} {patient.lastName}
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    </li>
+  );
+};
 
 const PatientList = ({
   showPatientsMobile,

@@ -1,4 +1,5 @@
-import { Edit, Ellipsis, Trash2 } from 'lucide-react';
+import { Edit, Ellipsis, NotepadText, Trash2 } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +19,9 @@ export default function PatientActions({
   setIsDeletionModalOpen: (value: boolean) => void;
   setPatient: () => void;
 }) {
+  const { patientId } = useParams();
+  const navigate = useNavigate();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,6 +30,13 @@ export default function PatientActions({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
+        <DropdownMenuItem
+          className="flex items-center gap-2"
+          onClick={() => navigate(`/prescriptions?patientId=${patientId}`)}
+        >
+          <NotepadText className="size-4" />
+          <span>Crear Prescripción</span>
+        </DropdownMenuItem>
         <DropdownMenuItem
           className="flex items-center gap-2"
           onClick={() => {

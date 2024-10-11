@@ -30,6 +30,7 @@ interface FormSelectProps<
   items: FormSelectItem[];
   placeholder: string;
   containerClassName?: string;
+  disabled?: boolean;
 }
 
 export const FormSelect = <
@@ -43,6 +44,7 @@ export const FormSelect = <
   items,
   placeholder,
   containerClassName,
+  disabled,
 }: FormSelectProps<TFieldValues, TName>) => {
   return (
     <FormField
@@ -55,6 +57,7 @@ export const FormSelect = <
             onValueChange={field.onChange}
             defaultValue={field.value}
             name={`${field.name}-internal-select`}
+            disabled={disabled}
           >
             <FormControl>
               <SelectTrigger>
