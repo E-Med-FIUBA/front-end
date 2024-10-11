@@ -69,7 +69,12 @@ const PatientListItem = ({
           >
             Crear prescripción
           </ContextMenuItem>
-          <ContextMenuItem inset>Ver historial</ContextMenuItem>
+          <ContextMenuItem
+            inset
+            onClick={() => navigate(`/history?patientId=${patient.id}`)}
+          >
+            Ver historial
+          </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem
             inset

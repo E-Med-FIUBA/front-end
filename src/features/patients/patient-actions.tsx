@@ -1,4 +1,4 @@
-import { Edit, Ellipsis, NotepadText, Trash2 } from 'lucide-react';
+import { Edit, Ellipsis, History, NotepadText, Trash2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
@@ -36,6 +36,13 @@ export default function PatientActions({
         >
           <NotepadText className="size-4" />
           <span>Crear Prescripción</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="flex items-center gap-2"
+          onClick={() => navigate(`/history?patientId=${patientId}`)}
+        >
+          <History className="size-4" />
+          <span>Ver Historial</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="flex items-center gap-2"
