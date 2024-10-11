@@ -57,3 +57,6 @@ export const updatePatient = async (patient: UpdatePatientDto) =>
     lastName: patient.lastName,
     sex: patient.sex,
   });
+
+export const deletePatient = async (id: number) =>
+  ApiClient.delete(`/patients/${id}`);

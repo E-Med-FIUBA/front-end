@@ -93,4 +93,18 @@ export class ApiClient {
 
     return response.json();
   }
+
+  static async delete<ReturnType>(url: string): Promise<ReturnType> {
+    const fullUrl = this.fullUrl(url);
+    const response = await fetch(fullUrl, {
+      method: 'DELETE',
+      headers: this.headers(),
+    });
+
+    if (!response.ok) {
+      throw ApiError.fromResponse(response);
+    }
+
+    return response.json();
+  }
 }

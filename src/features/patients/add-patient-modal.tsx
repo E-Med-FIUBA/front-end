@@ -113,17 +113,17 @@ export default function AddPatientModal({
   setPatient,
   refreshPatients,
 }: {
-  patient?: Patient;
+  patient: Patient | null;
   open: boolean;
   setOpen: (value: boolean) => void;
-  setPatient: (value: Patient | undefined) => void;
+  setPatient: (value: Patient | null) => void;
   refreshPatients: () => Promise<void>;
 }) {
   const { data: insuranceCompanies, loading } = useFetch<InsuranceCompany[]>(
     getInsuranceCompanies,
   );
   const onOpenChangeWrapper = (value: boolean) => {
-    if (!value) setPatient(undefined);
+    if (!value) setPatient(null);
     setOpen(value);
   };
 
@@ -172,7 +172,7 @@ export default function AddPatientModal({
                     dni: patient.dni.toString(),
                     birthDate: patient.birthDate,
                     affiliateNumber: patient.affiliateNumber.toString(),
-                    insuranceCompanyId: patient.insuranceCompany.id.toString(),
+                    insuranceCompanyId: patient.insuranceCompany?.id.toString(),
                     sex: patient.sex,
                   }
                 : defaultValues,

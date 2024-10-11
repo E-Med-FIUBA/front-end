@@ -11,9 +11,11 @@ import {
 
 export default function PatientActions({
   setIsModalOpen,
+  setIsDeletionModalOpen,
   setPatient,
 }: {
   setIsModalOpen: (value: boolean) => void;
+  setIsDeletionModalOpen: (value: boolean) => void;
   setPatient: () => void;
 }) {
   return (
@@ -35,7 +37,13 @@ export default function PatientActions({
           <span>Editar Paciente</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex cursor-pointer items-center gap-2 font-bold !text-destructive">
+        <DropdownMenuItem
+          className="flex cursor-pointer items-center gap-2 font-bold !text-destructive"
+          onClick={() => {
+            setPatient();
+            setIsDeletionModalOpen(true);
+          }}
+        >
           <Trash2 className="size-4" />
           <span>Eliminar Paciente</span>
         </DropdownMenuItem>

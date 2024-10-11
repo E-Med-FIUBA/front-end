@@ -15,7 +15,7 @@ export function PatientDetailsRoute() {
   const { data: patient, loading } = useFetch(
     useCallback(() => getPatient(patientId), [patientId]),
   );
-  const [setIsModalOpen, setPatient] =
+  const [setIsModalOpen, setIsDeletionModalOpen, setPatient] =
     useOutletContext<Array<React.Dispatch<React.SetStateAction<unknown>>>>();
 
   if (loading) {
@@ -46,6 +46,7 @@ export function PatientDetailsRoute() {
         </div>
         <PatientActions
           setIsModalOpen={setIsModalOpen}
+          setIsDeletionModalOpen={setIsDeletionModalOpen}
           setPatient={() => setPatient(patient)}
         />
       </div>
