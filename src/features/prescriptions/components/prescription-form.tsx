@@ -26,6 +26,11 @@ import { Patient } from '@/types/api';
 import { Insurance } from '@/types/insurance.enum';
 import { Sex } from '@/types/sex.enum';
 
+import {
+  createPrescriptionExistingPatient,
+  createPrescriptionNoPatient,
+} from '../api';
+
 const getAge = (date: string) => {
   if (!date) return '';
   const parsedFormatDesktop = parse(date, 'dd/MM/yyyy', new Date());
@@ -59,7 +64,7 @@ const prescriptionSchema = z.object({
     .gt(1000000, {
       message: 'El DNI debe ser mayor a 1.000.000',
     }),
-  firstName: z
+  name: z
     .string({
       message: 'El nombre es requerido',
     })
@@ -163,8 +168,19 @@ export function PrescriptionForm() {
       <CardContent>
         <Form
           schema={prescriptionSchema}
-          onSubmitValid={(data) => {
-            console.log(data);
+          onSubmitValid={async (data) => {
+            if (isSaved) {
+              await createPrescriptionExistingPatient({
+                ...data,
+                patientId: patient.id,
+              });
+            } else {
+              await createPrescriptionNoPatient({
+                ...data,
+                dni: Number(data.dni),
+                affiliateNumber: Number(data.affiliateNumber),
+              });
+            }
           }}
           options={{
             defaultValues: {
@@ -176,7 +192,7 @@ export function PrescriptionForm() {
                 : {
                     email: '',
                     dni: '',
-                    firstName: '',
+                    name: '',
                     lastName: '',
                     birthDate: '',
                     affiliateNumber: '',
