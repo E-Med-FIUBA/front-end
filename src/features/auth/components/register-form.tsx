@@ -15,6 +15,7 @@ import {
 import { Form } from '@/components/ui/form';
 import { FormInput } from '@/components/ui/form/form-input';
 import { FormSelect } from '@/components/ui/form/form-select';
+import { GradientShadow } from '@/components/ui/gradient-shadow';
 import { useAuth } from '@/hooks/use-auth';
 import { getSpecialties } from '@/lib/api/specialty';
 import { ApiClient, ApiError } from '@/lib/api-client';
@@ -103,81 +104,91 @@ export function RegisterForm() {
   };
 
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-xl">Registro</CardTitle>
-        <CardDescription>
-          Ingresa tus datos para crear una cuenta nueva
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form
-          onSubmitValid={onValid}
-          schema={registerSchema}
-          className="grid gap-4"
-        >
-          {({ control }) => (
-            <>
-              <div className="grid grid-cols-2 gap-4">
+    <GradientShadow
+      gradientClassName="from-[#009994] to-[#4c64ab]"
+      insetClassName="-inset-52"
+      className="mx-auto max-w-sm"
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Registro</CardTitle>
+          <CardDescription>
+            Ingresa tus datos para crear una cuenta nueva
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form
+            onSubmitValid={onValid}
+            schema={registerSchema}
+            className="grid gap-4"
+          >
+            {({ control }) => (
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormInput
+                    control={control}
+                    type="text"
+                    placeholder="Nombre"
+                    name="firstName"
+                  />
+                  <FormInput
+                    control={control}
+                    type="text"
+                    placeholder="Apellido/s"
+                    name="lastName"
+                  />
+                </div>
                 <FormInput
                   control={control}
                   type="text"
-                  placeholder="Nombre"
-                  name="firstName"
+                  placeholder="Correo electronico"
+                  name="email"
+                />
+                <FormInput
+                  control={control}
+                  type="password"
+                  placeholder="Contraseña"
+                  name="password"
                 />
                 <FormInput
                   control={control}
                   type="text"
-                  placeholder="Apellido/s"
-                  name="lastName"
+                  placeholder="Matricula"
+                  name="license"
                 />
-              </div>
-              <FormInput
-                control={control}
-                type="text"
-                placeholder="Correo electronico"
-                name="email"
-              />
-              <FormInput
-                control={control}
-                type="password"
-                placeholder="Contraseña"
-                name="password"
-              />
-              <FormInput
-                control={control}
-                type="text"
-                placeholder="Matricula"
-                name="license"
-              />
-              <FormInput
-                control={control}
-                type="number"
-                placeholder="DNI"
-                name="dni"
-                hideArrows
-              />
-              <FormSelect
-                control={control}
-                placeholder="Selecciona una especialidad"
-                name="specialtyId"
-                items={specialties.map((specialty) => ({
-                  label: specialty.name,
-                  value: specialty.id.toString(),
-                }))}
-              />
-              <Button type="submit" className="w-full" loading={submitLoading}>
-                Crear cuenta
-              </Button>
-            </>
-          )}
-        </Form>
-        <AuthFormFooter
-          to="/login"
-          text="Ya tienes una cuenta?"
-          linkText="Inicia sesion"
-        />
-      </CardContent>
-    </Card>
+                <FormInput
+                  control={control}
+                  type="number"
+                  placeholder="DNI"
+                  name="dni"
+                  hideArrows
+                />
+                <FormSelect
+                  control={control}
+                  placeholder="Selecciona una especialidad"
+                  name="specialtyId"
+                  items={specialties.map((specialty) => ({
+                    label: specialty.name,
+                    value: specialty.id.toString(),
+                  }))}
+                />
+                <Button
+                  type="submit"
+                  className="w-full"
+                  loading={submitLoading}
+                >
+                  Crear cuenta
+                </Button>
+              </>
+            )}
+          </Form>
+          <AuthFormFooter
+            to="/login"
+            text="Ya tienes una cuenta?"
+            linkText="Inicia sesion"
+          />
+        </CardContent>
+      </Card>
+    </GradientShadow>
   );
 }
