@@ -53,8 +53,11 @@ export function LoginForm() {
   };
 
   return (
-    <GradientShadow className="from-[#009994] to-[#4c64ab]">
-      <Card className="w-full max-w-sm">
+    <GradientShadow
+      gradientClassName="from-[#009994] to-[#4c64ab]"
+      className="w-full max-w-sm"
+    >
+      <Card>
         <CardHeader>
           <CardTitle className="text-xl">Inicio de Sesión</CardTitle>
           <CardDescription>
