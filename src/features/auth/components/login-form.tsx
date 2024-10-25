@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
+import { GradientShadow } from '@/components/ui/gradient-shadow';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/use-auth';
 import { ApiClient, ApiError } from '@/lib/api-client';
@@ -52,43 +53,45 @@ export function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-xl">Inicio de Sesión</CardTitle>
-        <CardDescription>
-          Ingresa tus datos para iniciar sesion en tu cuenta
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form
-          className="grid w-full gap-4"
-          onSubmitValid={onValid}
-          schema={loginSchema}
-        >
-          {({ register }) => (
-            <>
-              <Input
-                type="text"
-                placeholder="Correo electronico"
-                {...register('email')}
-              />
-              <Input
-                type="password"
-                placeholder="Contraseña"
-                {...register('password')}
-              />
-              <Button type="submit" loading={isLoading}>
-                Iniciar sesion
-              </Button>
-            </>
-          )}
-        </Form>
-        <AuthFormFooter
-          to="/register"
-          text="No tienes una cuenta?"
-          linkText="Registrate aqui"
-        />
-      </CardContent>
-    </Card>
+    <GradientShadow className="from-[#009994] to-[#4c64ab]">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-xl">Inicio de Sesión</CardTitle>
+          <CardDescription>
+            Ingresa tus datos para iniciar sesion en tu cuenta
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form
+            className="grid w-full gap-4"
+            onSubmitValid={onValid}
+            schema={loginSchema}
+          >
+            {({ register }) => (
+              <>
+                <Input
+                  type="text"
+                  placeholder="Correo electronico"
+                  {...register('email')}
+                />
+                <Input
+                  type="password"
+                  placeholder="Contraseña"
+                  {...register('password')}
+                />
+                <Button type="submit" loading={isLoading}>
+                  Iniciar sesion
+                </Button>
+              </>
+            )}
+          </Form>
+          <AuthFormFooter
+            to="/register"
+            text="No tienes una cuenta?"
+            linkText="Registrate aqui"
+          />
+        </CardContent>
+      </Card>
+    </GradientShadow>
   );
 }
