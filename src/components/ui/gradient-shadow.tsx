@@ -8,7 +8,7 @@ export const GradientShadow = ({
   children,
 }: {
   className?: string;
-  gradientClassName?: string;
+  gradientClassName: string;
   children: ReactNode;
 }) => {
   return (
