@@ -54,7 +54,7 @@ export function LoginForm() {
 
   return (
     <GradientShadow
-      gradientClassName="from-[#009994] to-[#4c64ab]"
+      colors={['#009994', '#4c64ab', '#009994']}
       className="w-full max-w-sm"
     >
       <Card>

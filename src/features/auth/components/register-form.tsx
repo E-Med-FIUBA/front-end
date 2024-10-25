@@ -105,8 +105,8 @@ export function RegisterForm() {
 
   return (
     <GradientShadow
-      gradientClassName="from-[#009994] to-[#4c64ab]"
-      insetClassName="-inset-52"
+      colors={['#009994', '#4c64ab', '#009994']}
+      size={16}
       className="mx-auto max-w-sm"
     >
       <Card>
