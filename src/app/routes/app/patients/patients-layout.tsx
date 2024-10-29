@@ -20,7 +20,7 @@ import {
 import { Loader } from '@/components/ui/loader';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ContentLayout } from '@/features/dashboard-layout/content-layout';
-import AddPatientModal from '@/features/patients/add-patient-modal';
+import AddPatientModal from '@/features/patients/components/add-patient-modal';
 import { deletePatient, getPatients } from '@/features/patients/api';
 import { useFetch } from '@/hooks/use-fetch';
 import { Patient } from '@/types/api';
