@@ -19,6 +19,7 @@ import { ApiClient, ApiError } from '@/lib/api-client';
 import { UserData } from '@/lib/auth';
 
 import { AuthFormFooter } from './auth-form-footer';
+import { KeyStore } from '@/lib/key/key';
 
 const loginSchema = z.object({
   email: z.string(),
@@ -31,6 +32,8 @@ export function LoginForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
+  const keyStore = new KeyStore();
 
   const onValid: SubmitHandler<LoginFormInputs> = async (data) => {
     setIsLoading(true);
@@ -51,8 +54,25 @@ export function LoginForm() {
     }
   };
 
+  const onClick = () => {
+    console.log(keyStore.generateCredentials({
+      name: 'Ian',
+      lastName: 'Shih',
+      countryName: 'AR',
+      province: 'CABA',
+      localityName: 'CABA',
+      password: 'xdxd'
+    }));
+  }
+
+  const onClick2 = () => {
+    console.log(keyStore.getPrivateKey('xdxd'))
+  }
+
   return (
     <Card className="w-full max-w-sm">
+      <Button onClick={onClick}>GENERAR CREDENCIALES</Button>
+      <Button onClick={onClick2}>IMPRIMIR CREDENCIALES</Button>
       <CardHeader>
         <CardTitle className="text-xl">Inicio de Sesión</CardTitle>
         <CardDescription>
