@@ -1,5 +1,5 @@
 import { isValid, parse, differenceInYears, format } from 'date-fns';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 
@@ -21,9 +21,9 @@ import { FormTextarea } from '@/components/ui/form/form-textarea';
 import { Input } from '@/components/ui/input';
 import { Loader } from '@/components/ui/loader';
 import { useFetch } from '@/hooks/use-fetch';
+import { getDrug, getDrugs } from '@/lib/api/drugs';
 import { getInsuranceCompanies, getPatient } from '@/lib/api/patients';
-import { Patient } from '@/types/api';
-import { Insurance } from '@/types/insurance.enum';
+import { Patient, Presentation } from '@/types/api';
 import { Sex } from '@/types/sex.enum';
 
 import {
@@ -112,19 +112,19 @@ const prescriptionSchema = z.object({
     .positive({
       message: 'El numero de afiliado debe ser un numero positivo',
     }),
-  insuranceCompanyId: z.nativeEnum(Insurance, {
+  insuranceCompanyId: z.coerce.number({
     message: 'La obra social es requerida',
   }),
   sex: z.nativeEnum(Sex, {
     message: 'El sexo es requerido',
   }),
-  presentation: z.string({
+  presentationId: z.coerce.number({
     message: 'La presentacion es requerida',
   }),
   diagnosis: z.string({
     message: 'El diagnostico es requerido',
   }),
-  medication: z.string({
+  medicationId: z.coerce.number({
     message: 'El medicamento es requerido',
   }),
 });
@@ -132,6 +132,9 @@ const prescriptionSchema = z.object({
 export function PrescriptionForm() {
   const [searchParams, setSearchParams] = useSearchParams();
   const patientId = searchParams.get('patientId');
+  const [availablePresentations, setAvailablePresentations] = useState<
+    Presentation[]
+  >([]);
   const { data: patient, loading: loadingPatient } = useFetch<Patient | null>(
     useCallback(() => {
       if (!patientId) return Promise.resolve(null);
@@ -141,10 +144,11 @@ export function PrescriptionForm() {
   const { data: insuranceCompanies, loading: loadingCompanies } = useFetch(
     getInsuranceCompanies,
   );
+  const { data: drugs, loading: loadingDrugs } = useFetch(getDrugs);
 
   const isSaved = !!patient;
 
-  if (loadingPatient || loadingCompanies) {
+  if (loadingPatient || loadingCompanies || loadingDrugs) {
     return (
       <div className="flex h-full items-center justify-center">
         <Loader size={60} />
@@ -156,6 +160,7 @@ export function PrescriptionForm() {
     setSearchParams({});
   }
 
+  console.log('drugs', drugs);
   return (
     <Card className="w-full">
       <CardHeader>
@@ -168,17 +173,31 @@ export function PrescriptionForm() {
       <CardContent>
         <Form
           schema={prescriptionSchema}
+          onSubmitInvalid={(errors) => {
+            console.log('errors', errors);
+          }}
           onSubmitValid={async (data) => {
+            if (
+              !data.insuranceCompanyId ||
+              !data.medicationId ||
+              !data.presentationId
+            )
+              return;
             if (isSaved) {
               await createPrescriptionExistingPatient({
                 ...data,
+                medicationId: data.medicationId,
+                presentationId: data.presentationId,
                 patientId: patient.id,
               });
             } else {
               await createPrescriptionNoPatient({
                 ...data,
                 dni: Number(data.dni),
+                medicationId: data.medicationId,
+                presentationId: data.presentationId,
                 affiliateNumber: Number(data.affiliateNumber),
+                insuranceCompanyId: data.insuranceCompanyId,
               });
             }
           }}
@@ -196,11 +215,11 @@ export function PrescriptionForm() {
                     lastName: '',
                     birthDate: '',
                     affiliateNumber: '',
-                    insuranceCompanyId: '',
+                    insuranceCompanyId: undefined as string | undefined,
                   }),
               diagnosis: '',
-              medication: '',
-              presentation: '',
+              medicationId: undefined as string | undefined,
+              presentationId: undefined as string | undefined,
               units: '',
             },
           }}
@@ -303,26 +322,36 @@ export function PrescriptionForm() {
 
               <FormCombobox
                 control={control}
-                name="medication"
+                name="medicationId"
                 label="Medicamento"
-                items={[
-                  { value: 'ibuprofeno', label: 'Ibuprofeno' },
-                  { value: 'paracetamol', label: 'Paracetamol' },
-                  { value: 'amoxicilina', label: 'Amoxicilina' },
-                ]}
+                items={
+                  drugs?.map((drug) => ({
+                    value: drug.id.toString(),
+                    label: drug.name,
+                  })) || []
+                }
+                onChangeCallback={async (value) => {
+                  const selectedDrug = drugs?.find(
+                    (drug) => drug.id === Number(value),
+                  );
+                  if (!selectedDrug) return;
+                  const drugData = await getDrug(selectedDrug?.id);
+                  setAvailablePresentations(drugData?.presentations || []);
+                }}
                 placeholder={'Selecciona un medicamento'}
                 emptyMessage={'No se encontraron medicamentos'}
               />
               <div className="grid grid-cols-3 gap-2">
                 <FormSelect
                   control={control}
-                  name="presentation"
+                  name="presentationId"
                   label="Presentacion"
-                  items={[
-                    { value: '20 comprimidos', label: '20 Comprimidos' },
-                    { value: '30 comprimidos', label: '30 Comprimidos' },
-                    { value: '40 comprimidos', label: '40 Comprimidos' },
-                  ]}
+                  items={
+                    availablePresentations.map((presentation) => ({
+                      value: presentation.id.toString(),
+                      label: presentation.name,
+                    })) || []
+                  }
                   placeholder={'Selecciona la presentacion'}
                   containerClassName="col-span-2"
                 />

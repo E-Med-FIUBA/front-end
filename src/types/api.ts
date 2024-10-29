@@ -45,6 +45,14 @@ export type Drug = {
   id: number;
   name: string;
   description: string;
+  presentations?: Presentation[];
+};
+
+export type Presentation = {
+  id: number;
+  name: string;
+  drugId: number;
+  drug?: Drug;
 };
 
 export type Prescription = {

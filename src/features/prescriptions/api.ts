@@ -1,10 +1,12 @@
+import { parse } from 'date-fns';
+
 import { ApiClient } from '@/lib/api-client';
 import { Prescription } from '@/types/api';
 
 interface CreatePrescriptionDto {
   diagnosis: string;
-  medication: string;
-  presentation: string;
+  medicationId: string;
+  presentationId: string;
   units: string;
   [key: string]: string | number | any;
 }
@@ -26,11 +28,20 @@ interface CreatePrescriptionExistingPatientDto extends CreatePrescriptionDto {
 export const createPrescriptionNoPatient = async (
   data: CreatePrescriptionNoPatientDto,
 ) => {
-  return await ApiClient.post<Prescription>('/prescriptions/no-patient', data);
+  return await ApiClient.post<Prescription>('/prescriptions/patientless', {
+    ...data,
+    quantity: data.units,
+    indication: data.diagnosis,
+    birthDate: parse(data.birthDate, 'dd/MM/yyyy', new Date()).toISOString(),
+  });
 };
 
 export const createPrescriptionExistingPatient = async (
   data: CreatePrescriptionExistingPatientDto,
 ) => {
-  return await ApiClient.post<Prescription>('/prescriptions', data);
+  return await ApiClient.post<Prescription>('/prescriptions', {
+    ...data,
+    quantity: data.units,
+    indication: data.diagnosis,
+  });
 };
