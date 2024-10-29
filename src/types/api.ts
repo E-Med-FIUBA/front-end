@@ -57,14 +57,11 @@ export type Presentation = {
 
 export type Prescription = {
   id: string;
-  duration: number;
-  frequency: number;
-  drug: Drug;
+  presentation: Presentation;
   doctorId: number;
   patientId: number;
   indication: string;
   patient: Patient;
   quantity: number;
-  startDate: string;
-  endDate: string;
+  emitedAt: string;
 };
