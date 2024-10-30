@@ -55,7 +55,7 @@ export function DataTable({
   });
 
   return (
-    <div className="flex size-full flex-col rounded-md border">
+    <div className="flex size-full flex-col overflow-hidden rounded-md border">
       <div className="h-full overflow-hidden border-b ">
         <Table className="h-full">
           <TableHeader className="sticky top-0 z-50 bg-background">
