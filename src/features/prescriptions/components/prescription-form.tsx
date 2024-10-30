@@ -1,5 +1,5 @@
 import { isValid, parse, differenceInYears, format } from 'date-fns';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 
@@ -30,6 +30,9 @@ import {
   createPrescriptionExistingPatient,
   createPrescriptionNoPatient,
 } from '../api';
+import { SignatureService } from '@/lib/signature/signature';
+import { PasswordDialog } from './password-dialog';
+import { KeyStore } from '@/lib/signature/key-store';
 
 const getAge = (date: string) => {
   if (!date) return '';
@@ -131,6 +134,9 @@ const prescriptionSchema = z.object({
 
 export function PrescriptionForm() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [formData, setFormData] = useState<any>(null);
+
   const patientId = searchParams.get('patientId');
   const { data: patient, loading: loadingPatient } = useFetch<Patient | null>(
     useCallback(() => {
@@ -144,6 +150,8 @@ export function PrescriptionForm() {
 
   const isSaved = !!patient;
 
+  const signatureService = new SignatureService();
+
   if (loadingPatient || loadingCompanies) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -155,6 +163,43 @@ export function PrescriptionForm() {
   if (!isSaved && patientId) {
     setSearchParams({});
   }
+
+  const handleFormSubmit = async (data: any) => {
+    setFormData(data);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const handlePasswordSubmit = async (password: string) => {
+
+    const data = isSaved ? {
+      ...formData,
+      patientId: patient.id,
+    } : {
+      ...formData,
+      dni: Number(formData.dni),
+      affiliateNumber: Number(formData.affiliateNumber),
+    }
+    const keyStore = new KeyStore();
+
+    keyStore.generateCredentials({
+      name: "Ian",
+      lastName: "Shih",
+      countryName: "AR",
+      province: "CABA",
+      localityName: "CABA",
+      password: "xdxd"
+    });
+
+    const signature = signatureService.sign(password, JSON.stringify(data));
+
+    const createPrescriptionFn = isSaved ? createPrescriptionExistingPatient : createPrescriptionNoPatient;
+
+    await createPrescriptionFn({ ...data, signature })
+  };
 
   return (
     <Card className="w-full">
@@ -169,35 +214,24 @@ export function PrescriptionForm() {
         <Form
           schema={prescriptionSchema}
           onSubmitValid={async (data) => {
-            if (isSaved) {
-              await createPrescriptionExistingPatient({
-                ...data,
-                patientId: patient.id,
-              });
-            } else {
-              await createPrescriptionNoPatient({
-                ...data,
-                dni: Number(data.dni),
-                affiliateNumber: Number(data.affiliateNumber),
-              });
-            }
+            handleFormSubmit(data);
           }}
           options={{
             defaultValues: {
               ...(patient
                 ? {
-                    ...patient,
-                    insuranceCompanyId: patient.insuranceCompany.id.toString(),
-                  }
+                  ...patient,
+                  insuranceCompanyId: patient.insuranceCompany.id.toString(),
+                }
                 : {
-                    email: '',
-                    dni: '',
-                    name: '',
-                    lastName: '',
-                    birthDate: '',
-                    affiliateNumber: '',
-                    insuranceCompanyId: '',
-                  }),
+                  email: '',
+                  dni: '',
+                  name: '',
+                  lastName: '',
+                  birthDate: '',
+                  affiliateNumber: '',
+                  insuranceCompanyId: '',
+                }),
               diagnosis: '',
               medication: '',
               presentation: '',
@@ -338,6 +372,8 @@ export function PrescriptionForm() {
               <Button type="submit" className="col-span-1 lg:col-span-3">
                 Crear prescripcion
               </Button>
+
+              <PasswordDialog open={isDialogOpen} onClose={handleCloseDialog} onSubmit={handlePasswordSubmit} />
             </>
           )}
         </Form>

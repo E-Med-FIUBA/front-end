@@ -19,8 +19,6 @@ import { ApiClient, ApiError } from '@/lib/api-client';
 import { UserData } from '@/lib/auth';
 
 import { AuthFormFooter } from './auth-form-footer';
-import { KeyStore } from '@/lib/signature/key-store';
-import { SignatureService } from '@/lib/signature/signature';
 
 const loginSchema = z.object({
   email: z.string(),

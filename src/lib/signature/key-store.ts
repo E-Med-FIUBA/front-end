@@ -40,6 +40,15 @@ export class KeyStore {
         return pki.certificationRequestFromPem(csrPEM);
     }
 
+    public getCSRPEM(): PEM {
+        const csrPEM = localStorage.getItem('csr');
+
+        if (!csrPEM) {
+            throw new Error('No CSR set');
+        }
+        return csrPEM
+    }
+
     public getPrivateKey(password: string): PrivateKey {
         const privateKey = localStorage.getItem('privateKey');
 

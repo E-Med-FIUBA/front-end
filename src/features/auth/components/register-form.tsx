@@ -22,6 +22,7 @@ import { UserData } from '@/lib/auth';
 import { Specialty } from '@/types/api';
 
 import { AuthFormFooter } from './auth-form-footer';
+import { KeyStore } from '@/lib/signature/key-store';
 
 const registerSchema = z.object({
   firstName: z
@@ -69,6 +70,8 @@ export function RegisterForm() {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [specialties, setSpecialties] = useState<Array<Specialty>>([]);
 
+  const keyStore = new KeyStore();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -84,10 +87,12 @@ export function RegisterForm() {
   const onValid: SubmitHandler<RegisterFormInputs> = async (data) => {
     setSubmitLoading(true);
     try {
-      const res = await ApiClient.post<UserData>('/auth/register/doctor', {
+      const reqData = {
         ...data,
         name: data.firstName,
-      });
+      }
+      keyStore.generateCredentials({ ...reqData, countryName: "AR", localityName: "CABA", province: "CABA" });
+      const res = await ApiClient.post<UserData>('/auth/register/doctor', { ...reqData, certificateRequest: keyStore.getCSRPEM() });
       login(res);
       navigate('/dashboard');
     } catch (error) {
