@@ -16,7 +16,9 @@ export function HistoryRoute() {
 
   return (
     <ContentLayout title="Historial">
-      <DataTable columns={columns} data={data} />
+      <div className="h-full overflow-hidden">
+        <DataTable columns={columns} data={data} />
+      </div>
     </ContentLayout>
   );
 }
