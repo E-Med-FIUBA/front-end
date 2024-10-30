@@ -1,5 +1,6 @@
 import { pki, random, pkcs5, cipher as forgeCipher, util } from "node-forge";
-import { CipherConfig, KeyPair, PEM, PrivateKey, } from "./types";
+import { CipherConfig, CSR, PEM, PrivateKey, } from "./types";
+import { generateCSR, generateKeyPair, safeDecode } from "./utils";
 
 export interface DoctorData {
     name: string;
@@ -19,17 +20,34 @@ export class KeyStore {
 
         this.storePrivateKey(doctorData.password, keys.privateKey);
 
-        return { csr: generateCSR(keys, doctorData), privateKey: pki.privateKeyToPem(keys.privateKey) }
+        const csr = generateCSR(keys, doctorData)
+        this.storeCertificateRequest(csr);
+
+        return { csr: pki.certificationRequestToPem(csr), privateKey: pki.privateKeyToPem(keys.privateKey) }
     }
 
-    public getPrivateKey(password: string) {
+
+    private storeCertificateRequest(csr: CSR) {
+        localStorage.setItem('csr', pki.certificationRequestToPem(csr));
+    }
+
+    public getCSR(): CSR {
+        const csrPEM = localStorage.getItem('csr');
+
+        if (!csrPEM) {
+            throw new Error('No CSR set');
+        }
+        return pki.certificationRequestFromPem(csrPEM);
+    }
+
+    public getPrivateKey(password: string): PrivateKey {
         const privateKey = localStorage.getItem('privateKey');
 
         if (!privateKey) {
             throw new Error('No private key set');
         }
 
-        return this.decrypt(password, privateKey);
+        return pki.privateKeyFromPem(this.decrypt(password, privateKey));
     }
 
     private storePrivateKey(password: string, privateKey: PrivateKey) {
@@ -37,8 +55,8 @@ export class KeyStore {
     }
 
     private generateCipherConfig(password: string): CipherConfig {
-        let salt = safeAtob(localStorage.getItem('salt'));
-        let iv = safeAtob(localStorage.getItem('iv'));
+        let salt = safeDecode(localStorage.getItem('salt'));
+        let iv = safeDecode(localStorage.getItem('iv'));
         if (!salt) {
             salt = random.getBytesSync(128);
             localStorage.setItem('salt', util.encode64(salt));
@@ -84,61 +102,3 @@ export class KeyStore {
     }
 }
 
-// Generate RSA key pair (2048-bit)
-export function generateKeyPair(): KeyPair {
-    return pki.rsa.generateKeyPair(2048);
-}
-
-export function generateCSR(keys: KeyPair, doctor: DoctorData): PEM {
-    const csr = pki.createCertificationRequest();
-    csr.publicKey = keys.publicKey;
-    csr.setSubject([{
-        // Cambiar a nombre doctor
-        name: 'commonName',
-        value: `${doctor.name} ${doctor.lastName}`
-    }, {
-        // Cambiar a dinamico
-        name: 'countryName',
-        value: doctor.countryName
-    }, {
-        // Cambiar a dinamico
-        shortName: 'ST',
-        value: doctor.province
-    }, {
-        // Cambiar a dinamico
-        name: 'localityName',
-        value: doctor.localityName
-    }, {
-        name: 'organizationName',
-        value: 'EMED'
-    }, {
-        shortName: 'OU',
-        value: 'doctors'
-    }]);
-
-    csr.sign(keys.privateKey);
-
-    return pki.certificationRequestToPem(csr);
-}
-
-export function safeAtob(bytes: string | null) {
-    if (!bytes) {
-        return null
-    }
-
-    return bytes ? util.decode64(bytes) : null
-}
-
-function hexToString(hex: string) {
-    // Remove any spaces or non-hex characters
-    hex = hex.replace(/[^0-9A-Fa-f]/g, '');
-
-    let str = '';
-    for (let i = 0; i < hex.length; i += 2) {
-        // Get each pair of hex digits
-        const byte = hex.substr(i, 2);
-        // Convert hex to decimal and then to character
-        str += String.fromCharCode(parseInt(byte, 16));
-    }
-    return str;
-}
