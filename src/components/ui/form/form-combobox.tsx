@@ -38,6 +38,7 @@ export type ComboboxProps = {
   className?: string;
   value: string;
   onChange: (value: string) => void;
+  onChangeCallback?: (value: string) => void;
 };
 
 interface FormComboboxProps<
@@ -58,6 +59,7 @@ export const FormCombobox = <
   placeholder,
   emptyMessage,
   className,
+  onChangeCallback,
 }: FormComboboxProps<TFieldValues, TName>) => {
   const [open, setOpen] = useState(false);
 
@@ -97,8 +99,10 @@ export const FormCombobox = <
                       <CommandItem
                         key={item.value}
                         value={item.value}
-                        onSelect={(currentValue) => {
+                        onSelect={async (currentValue) => {
                           field.onChange(currentValue);
+                          if (onChangeCallback)
+                            await onChangeCallback(currentValue);
                           setOpen(false);
                         }}
                       >
