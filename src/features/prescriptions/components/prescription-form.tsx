@@ -160,7 +160,6 @@ export function PrescriptionForm() {
     setSearchParams({});
   }
 
-  console.log('drugs', drugs);
   return (
     <Card className="w-full">
       <CardHeader>

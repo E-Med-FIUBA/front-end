@@ -26,10 +26,9 @@ export const columns: ColumnDef<Prescription>[] = [
     id: 'name',
     accessorFn: (prescription) => prescription.patient.name,
     header: ({ column }) => <SortableHeader column={column} label="Nombre" />,
-    cell: ({ row, column }) => {
-      console.log(column.id, row.getValue(column.id));
-      return <div className="capitalize">{row.getValue(column.id)}</div>;
-    },
+    cell: ({ row, column }) => (
+      <div className="capitalize">{row.getValue(column.id)}</div>
+    ),
   },
   {
     id: 'lastName',
