@@ -45,18 +45,23 @@ export type Drug = {
   id: number;
   name: string;
   description: string;
+  presentations?: Presentation[];
+};
+
+export type Presentation = {
+  id: number;
+  name: string;
+  drugId: number;
+  drug?: Drug;
 };
 
 export type Prescription = {
   id: string;
-  duration: number;
-  frequency: number;
-  drug: Drug;
+  presentation: Presentation;
   doctorId: number;
   patientId: number;
   indication: string;
   patient: Patient;
   quantity: number;
-  startDate: string;
-  endDate: string;
+  emitedAt: string;
 };

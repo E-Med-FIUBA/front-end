@@ -21,7 +21,15 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-export function DataTable({ data, columns }: { data: any[]; columns: any[] }) {
+export function DataTable({
+  data,
+  columns,
+  showSelectionCount,
+}: {
+  data: any[];
+  columns: any[];
+  showSelectionCount?: boolean;
+}) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -47,10 +55,10 @@ export function DataTable({ data, columns }: { data: any[]; columns: any[] }) {
   });
 
   return (
-    <div className="w-full">
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
+    <div className="flex size-full flex-col rounded-md border">
+      <div className="h-full overflow-hidden border-b ">
+        <Table className="h-full">
+          <TableHeader className="sticky top-0 z-50 bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -68,7 +76,7 @@ export function DataTable({ data, columns }: { data: any[]; columns: any[] }) {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="overflow-auto">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -98,11 +106,19 @@ export function DataTable({ data, columns }: { data: any[]; columns: any[] }) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} de{' '}
-          {table.getFilteredRowModel().rows.length} fila(s) seleccionadas.
-        </div>
+      <div className="flex items-center justify-end space-x-2 bg-background py-4 pr-4">
+        {showSelectionCount && (
+          <div className="flex-1 text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} de{' '}
+            {table.getFilteredRowModel().rows.length} fila(s) seleccionadas.
+          </div>
+        )}
+        {(table.getCanPreviousPage() || table.getCanNextPage()) && (
+          <div className="text-sm text-muted-foreground">
+            Página {table.getState().pagination.pageIndex + 1} de{' '}
+            {table.getPageCount()}
+          </div>
+        )}
         <div className="space-x-2">
           <Button
             variant="outline"

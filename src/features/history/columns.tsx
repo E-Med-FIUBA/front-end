@@ -17,7 +17,7 @@ import { Prescription } from '@/types/api';
 export const columns: ColumnDef<Prescription>[] = [
   {
     id: 'date',
-    accessorFn: (prescription) => prescription.endDate,
+    accessorFn: (prescription) => prescription.emitedAt,
     header: ({ column }) => <SortableHeader column={column} label="Fecha" />,
     cell: ({ row, column }) =>
       format(parseISO(row.getValue(column.id)), 'dd/MM/yyyy'),
@@ -26,10 +26,9 @@ export const columns: ColumnDef<Prescription>[] = [
     id: 'name',
     accessorFn: (prescription) => prescription.patient.name,
     header: ({ column }) => <SortableHeader column={column} label="Nombre" />,
-    cell: ({ row, column }) => {
-      console.log(column.id, row.getValue(column.id));
-      return <div className="capitalize">{row.getValue(column.id)}</div>;
-    },
+    cell: ({ row, column }) => (
+      <div className="capitalize">{row.getValue(column.id)}</div>
+    ),
   },
   {
     id: 'lastName',
@@ -57,7 +56,7 @@ export const columns: ColumnDef<Prescription>[] = [
   },
   {
     id: 'drug',
-    accessorFn: (prescription) => prescription.drug.name,
+    accessorFn: (prescription) => prescription.presentation.drug?.name,
     header: ({ column }) => (
       <SortableHeader column={column} label="Medicamento" />
     ),
