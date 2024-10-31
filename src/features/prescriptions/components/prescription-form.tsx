@@ -31,8 +31,6 @@ import {
   createPrescriptionNoPatient,
 } from '../api';
 import { SignatureService } from '@/lib/signature/signature';
-import { PasswordDialog } from './password-dialog';
-import { KeyStore } from '@/lib/signature/key-store';
 
 const getAge = (date: string) => {
   if (!date) return '';
@@ -134,8 +132,6 @@ const prescriptionSchema = z.object({
 
 export function PrescriptionForm() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [formData, setFormData] = useState<any>(null);
 
   const patientId = searchParams.get('patientId');
   const [availablePresentations, setAvailablePresentations] = useState<
@@ -168,22 +164,14 @@ export function PrescriptionForm() {
     setSearchParams({});
   }
 
-  const handleFormSubmit = async (data: any) => {
+  const handleFormSubmit = async (formData: any) => {
     if (
-      !data.insuranceCompanyId ||
-      !data.medicationId ||
-      !data.presentationId
+      !formData.insuranceCompanyId ||
+      !formData.medicationId ||
+      !formData.presentationId
     )
       return;
-    setFormData(data);
-    setDialogOpen(true);
-  };
 
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-  };
-
-  const handlePasswordSubmit = async (password: string) => {
     const data = isSaved ? {
       ...formData,
       medicationId: formData.medicationId,
@@ -198,7 +186,7 @@ export function PrescriptionForm() {
       insuranceCompanyId: formData.insuranceCompanyId,
     }
 
-    const signature = signatureService.sign(password, JSON.stringify(data));
+    const signature = await signatureService.sign(JSON.stringify({ medicationId: formData.medicationId, presentation: formData.presentationId, diagnosis: formData.diagnosis }));
 
     const createPrescriptionFn = isSaved ? createPrescriptionExistingPatient : createPrescriptionNoPatient;
 
@@ -389,8 +377,6 @@ export function PrescriptionForm() {
               <Button type="submit" className="col-span-1 lg:col-span-3">
                 Crear prescripcion
               </Button>
-
-              <PasswordDialog open={isDialogOpen} onClose={handleCloseDialog} onSubmit={handlePasswordSubmit} />
             </>
           )}
         </Form>
