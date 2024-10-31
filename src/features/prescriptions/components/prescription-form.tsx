@@ -172,9 +172,6 @@ export function PrescriptionForm() {
       <CardContent>
         <Form
           schema={prescriptionSchema}
-          onSubmitInvalid={(errors) => {
-            console.log('errors', errors);
-          }}
           onSubmitValid={async (data) => {
             if (
               !data.insuranceCompanyId ||

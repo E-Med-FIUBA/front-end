@@ -1,4 +1,11 @@
-import { Edit, Ellipsis, History, NotepadText, Trash2 } from 'lucide-react';
+import {
+  Edit,
+  Ellipsis,
+  FilePlus,
+  History,
+  NotepadText,
+  Trash2,
+} from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
@@ -13,10 +20,12 @@ import {
 export default function PatientActions({
   setIsModalOpen,
   setIsDeletionModalOpen,
+  setIsNoteModalOpen,
   setPatient,
 }: {
   setIsModalOpen: (value: boolean) => void;
   setIsDeletionModalOpen: (value: boolean) => void;
+  setIsNoteModalOpen: (value: boolean) => void;
   setPatient: () => void;
 }) {
   const { patientId } = useParams();
@@ -36,6 +45,16 @@ export default function PatientActions({
         >
           <NotepadText className="size-4" />
           <span>Crear Prescripción</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="flex items-center gap-2"
+          onClick={() => {
+            setPatient();
+            setIsNoteModalOpen(true);
+          }}
+        >
+          <FilePlus className="size-4" />
+          <span>Añadir Nota</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="flex items-center gap-2"

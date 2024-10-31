@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { format, parseISO } from 'date-fns';
-import { MoreHorizontal } from 'lucide-react';
+import { Edit2, MoreHorizontal, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { SortableHeader } from '@/components/ui/data-table/sortable-header';
@@ -12,68 +12,44 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { Prescription } from '@/types/api';
+import { PatientNote } from '@/types/api';
 
-export const columns: ColumnDef<Prescription>[] = [
+export const createColumns = (
+  openEditModal: (note: PatientNote) => void,
+  openDeleteModal: (note: PatientNote) => void,
+): ColumnDef<PatientNote>[] => [
   {
-    id: 'date',
-    accessorFn: (prescription) => prescription.endDate,
-    header: ({ column }) => <SortableHeader column={column} label="Fecha" />,
+    id: 'createdAt',
+    accessorFn: (note) => note.createdAt,
+    header: ({ column }) => (
+      <SortableHeader column={column} label="Fecha de creacion" />
+    ),
     cell: ({ row, column }) =>
       format(parseISO(row.getValue(column.id)), 'dd/MM/yyyy'),
   },
   {
-    id: 'name',
-    accessorFn: (prescription) => prescription.patient.name,
-    header: ({ column }) => <SortableHeader column={column} label="Nombre" />,
-    cell: ({ row, column }) => {
-      console.log(column.id, row.getValue(column.id));
-      return <div className="capitalize">{row.getValue(column.id)}</div>;
-    },
-  },
-  {
-    id: 'lastName',
-    accessorFn: (prescription) => prescription.patient.lastName,
-    header: ({ column }) => <SortableHeader column={column} label="Apellido" />,
-    cell: ({ row, column }) => (
-      <div className="capitalize">{row.getValue(column.id)}</div>
-    ),
-  },
-  {
-    id: 'dni',
-    accessorFn: (prescription) => prescription.patient.dni,
-    header: ({ column }) => <SortableHeader column={column} label="DNI" />,
-    cell: ({ row, column }) => (
-      <div className="capitalize">{row.getValue(column.id)}</div>
-    ),
-  },
-  {
-    id: 'email',
-    accessorFn: (prescription) => prescription.patient.email,
-    header: ({ column }) => {
-      return <SortableHeader column={column} label="Email" />;
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>,
-  },
-  {
-    id: 'drug',
-    accessorFn: (prescription) => prescription.drug.name,
+    id: 'updatedAt',
+    accessorFn: (note) => note.updatedAt,
     header: ({ column }) => (
-      <SortableHeader column={column} label="Medicamento" />
+      <SortableHeader column={column} label="Ultima modificacion" />
     ),
-    cell: ({ row, column }) => (
-      <div className="capitalize">{row.getValue(column.id)}</div>
-    ),
+    cell: ({ row, column }) => {
+      const value: string | undefined = row.getValue(column.id);
+      return value ? format(parseISO(value), 'dd/MM/yyyy') : 'Nunca';
+    },
   },
   {
-    accessorKey: 'quantity',
-    header: () => <div className="text-right">Amount</div>,
+    id: 'note',
+    accessorFn: (note) => note.note,
+    header: ({ column }) => (
+      <SortableHeader column={column} label="Descripcion" />
+    ),
   },
   {
     id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const note = row.original;
 
       return (
         <DropdownMenu>
@@ -86,15 +62,22 @@ export const columns: ColumnDef<Prescription>[] = [
             </DropdownMenuTrigger>
           </div>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
+            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center gap-2"
+              onClick={() => openEditModal(note)}
+            >
+              <Edit2 className="size-4" />
+              Editar
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center gap-2 font-bold !text-destructive"
+              onClick={() => openDeleteModal(note)}
+            >
+              <Trash2 className="size-4" />
+              <span>Eliminar</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

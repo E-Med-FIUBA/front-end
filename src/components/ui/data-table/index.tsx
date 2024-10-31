@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { cn } from '@/utils/cn';
 
 export function DataTable({
   data,
@@ -57,7 +58,7 @@ export function DataTable({
   return (
     <div className="flex size-full flex-col overflow-hidden rounded-md border">
       <div className="h-full overflow-hidden border-b ">
-        <Table className="h-full">
+        <Table className={cn(!table.getRowModel().rows?.length && 'h-full')}>
           <TableHeader className="sticky top-0 z-50 bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

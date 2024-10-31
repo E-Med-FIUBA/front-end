@@ -175,6 +175,7 @@ export function PatientsLayout() {
   const [patient, setPatient] = useState<Patient | null>(null);
   const showPatientsMobile = location.pathname === '/patients';
   const { data: patients, loading, refresh } = useFetch<Patient[]>(getPatients);
+
   const [isDeletionModalOpen, setIsDeletionModalOpen] = useState(false);
 
   return (
