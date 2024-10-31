@@ -65,3 +65,12 @@ export type Prescription = {
   quantity: number;
   emitedAt: string;
 };
+
+export type PatientNote = {
+  id: number;
+  note: string;
+  patientId: number;
+  patient: Patient;
+  createdAt: string;
+  updatedAt: string;
+};

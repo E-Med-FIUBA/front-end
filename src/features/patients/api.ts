@@ -1,7 +1,7 @@
 import { parse } from 'date-fns';
 
 import { ApiClient } from '@/lib/api-client';
-import { Patient } from '@/types/api';
+import { Patient, PatientNote } from '@/types/api';
 
 export interface CreatePatientDto {
   doctorId: string;
@@ -49,3 +49,9 @@ export const updatePatient = async (patient: UpdatePatientDto) =>
 
 export const deletePatient = async (id: number) =>
   ApiClient.delete(`/patients/${id}`);
+
+export const getPatientNotes = async (patientId: string) =>
+  ApiClient.get<PatientNote[]>(`/patients/${patientId}/notes`);
+
+export const createPatientNote = async (patientId: number, note: string) =>
+  ApiClient.post(`/patients/${patientId}/notes`, { note });
