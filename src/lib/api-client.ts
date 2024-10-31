@@ -58,6 +58,7 @@ export class ApiClient {
     return response.json();
   }
 
+
   static async post<ReturnType>(
     url: string,
     data: Record<string, unknown> | Array<unknown>,
