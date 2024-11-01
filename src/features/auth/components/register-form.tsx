@@ -85,10 +85,11 @@ export function RegisterForm() {
   const onValid: SubmitHandler<RegisterFormInputs> = async (data) => {
     setSubmitLoading(true);
     try {
-      const res = await ApiClient.post<UserData>('/auth/register/doctor', {
+      const reqData = {
         ...data,
         name: data.firstName,
-      });
+      }
+      const res = await ApiClient.post<UserData>('/auth/register/doctor', reqData);
       login(res);
       navigate('/dashboard');
     } catch (error) {

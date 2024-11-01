@@ -30,6 +30,7 @@ import {
   createPrescriptionExistingPatient,
   createPrescriptionNoPatient,
 } from '../api';
+import { SignatureService } from '@/lib/signature/signature';
 
 const getAge = (date: string) => {
   if (!date) return '';
@@ -131,6 +132,7 @@ const prescriptionSchema = z.object({
 
 export function PrescriptionForm() {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const patientId = searchParams.get('patientId');
   const [availablePresentations, setAvailablePresentations] = useState<
     Presentation[]
@@ -148,6 +150,8 @@ export function PrescriptionForm() {
 
   const isSaved = !!patient;
 
+  const signatureService = new SignatureService();
+
   if (loadingPatient || loadingCompanies || loadingDrugs) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -159,6 +163,35 @@ export function PrescriptionForm() {
   if (!isSaved && patientId) {
     setSearchParams({});
   }
+
+  const handleFormSubmit = async (formData: any) => {
+    if (
+      !formData.insuranceCompanyId ||
+      !formData.medicationId ||
+      !formData.presentationId
+    )
+      return;
+
+    const data = isSaved ? {
+      ...formData,
+      medicationId: formData.medicationId,
+      presentationId: formData.presentationId,
+      patientId: patient.id,
+    } : {
+      ...formData,
+      dni: Number(formData.dni),
+      medicationId: formData.medicationId,
+      presentationId: formData.presentationId,
+      affiliateNumber: Number(formData.affiliateNumber),
+      insuranceCompanyId: formData.insuranceCompanyId,
+    }
+
+    const signature = await signatureService.sign(JSON.stringify({ medicationId: formData.medicationId, presentation: formData.presentationId, diagnosis: formData.diagnosis }));
+
+    const createPrescriptionFn = isSaved ? createPrescriptionExistingPatient : createPrescriptionNoPatient;
+
+    await createPrescriptionFn({ ...data, signature })
+  };
 
   return (
     <Card className="w-full">
@@ -173,46 +206,24 @@ export function PrescriptionForm() {
         <Form
           schema={prescriptionSchema}
           onSubmitValid={async (data) => {
-            if (
-              !data.insuranceCompanyId ||
-              !data.medicationId ||
-              !data.presentationId
-            )
-              return;
-            if (isSaved) {
-              await createPrescriptionExistingPatient({
-                ...data,
-                medicationId: data.medicationId,
-                presentationId: data.presentationId,
-                patientId: patient.id,
-              });
-            } else {
-              await createPrescriptionNoPatient({
-                ...data,
-                dni: Number(data.dni),
-                medicationId: data.medicationId,
-                presentationId: data.presentationId,
-                affiliateNumber: Number(data.affiliateNumber),
-                insuranceCompanyId: data.insuranceCompanyId,
-              });
-            }
+            handleFormSubmit(data);
           }}
           options={{
             defaultValues: {
               ...(patient
                 ? {
-                    ...patient,
-                    insuranceCompanyId: patient.insuranceCompany.id.toString(),
-                  }
+                  ...patient,
+                  insuranceCompanyId: patient.insuranceCompany.id.toString(),
+                }
                 : {
-                    email: '',
-                    dni: '',
-                    name: '',
-                    lastName: '',
-                    birthDate: '',
-                    affiliateNumber: '',
-                    insuranceCompanyId: undefined as string | undefined,
-                  }),
+                  email: '',
+                  dni: '',
+                  name: '',
+                  lastName: '',
+                  birthDate: '',
+                  affiliateNumber: '',
+                  insuranceCompanyId: undefined as string | undefined,
+                }),
               diagnosis: '',
               medicationId: undefined as string | undefined,
               presentationId: undefined as string | undefined,

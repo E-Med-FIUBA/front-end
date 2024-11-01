@@ -9,9 +9,10 @@ interface CreatePrescriptionDto {
   presentationId: string;
   units: string;
   [key: string]: string | number | any;
+  signature: string;
 }
 
-interface CreatePrescriptionNoPatientDto extends CreatePrescriptionDto {
+export interface CreatePrescriptionNoPatientDto extends CreatePrescriptionDto {
   email: string;
   dni: number;
   name: string;
