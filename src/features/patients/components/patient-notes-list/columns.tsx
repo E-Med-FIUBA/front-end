@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { format, parseISO } from 'date-fns';
-import { Edit2, MoreHorizontal, Trash2 } from 'lucide-react';
+import { Edit2, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { SortableHeader } from '@/components/ui/data-table/sortable-header';
@@ -17,6 +17,7 @@ import { PatientNote } from '@/types/api';
 export const createColumns = (
   openEditModal: (note: PatientNote) => void,
   openDeleteModal: (note: PatientNote) => void,
+  openViewModal: (note: PatientNote) => void,
 ): ColumnDef<PatientNote>[] => [
   {
     id: 'createdAt',
@@ -64,6 +65,13 @@ export const createColumns = (
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center gap-2"
+              onClick={() => openViewModal(note)}
+            >
+              <Eye className="size-4" />
+              Ver
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="flex cursor-pointer items-center gap-2"
               onClick={() => openEditModal(note)}

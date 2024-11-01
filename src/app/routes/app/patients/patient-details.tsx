@@ -16,7 +16,13 @@ import { PatientNote } from '@/types/api';
 export function PatientDetailsRoute() {
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
   const [isNoteDeleteModalOpen, setIsNoteDeleteModalOpen] = useState(false);
-  const [selectedNote, setSelectedNote] = useState<PatientNote | null>(null);
+  const [selectedNote, setSelectedNote] = useState<{
+    note: PatientNote | null;
+    readOnly: boolean;
+  }>({
+    note: null,
+    readOnly: false,
+  });
   const { patientId } = useParams();
   if (!patientId) {
     throw new Error('No patient id provided');
@@ -80,13 +86,28 @@ export function PatientDetailsRoute() {
         data={notes ?? []}
         openEditModal={(note) => {
           setPatient(patient);
-          setSelectedNote(note);
+          setSelectedNote({
+            note,
+            readOnly: false,
+          });
           setIsNoteModalOpen(true);
         }}
         openDeleteModal={(note) => {
           setPatient(patient);
-          setSelectedNote(note);
+          setSelectedNote({
+            note,
+            readOnly: true,
+          });
           setIsNoteDeleteModalOpen(true);
+        }}
+        openViewModal={(note) => {
+          setPatient(patient);
+          console.log('view note', note);
+          setSelectedNote({
+            note,
+            readOnly: true,
+          });
+          setIsNoteModalOpen(true);
         }}
       />
 
@@ -107,15 +128,18 @@ export function PatientDetailsRoute() {
         open={isNoteDeleteModalOpen}
         setOpen={setIsNoteDeleteModalOpen}
         onConfirm={async () => {
-          if (!selectedNote) return;
+          if (!selectedNote.note) return;
           try {
-            await deletePatientNote(selectedNote.id);
+            await deletePatientNote(selectedNote.note.id);
             await refreshNotes();
             setIsNoteDeleteModalOpen(false);
           } catch (error) {
             toast.error('Error al eliminar la nota');
           }
-          setSelectedNote(null);
+          setSelectedNote({
+            note: null,
+            readOnly: false,
+          });
           setPatient(null);
         }}
         onCancel={() => setPatient(null)}

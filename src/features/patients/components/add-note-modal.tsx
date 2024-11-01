@@ -39,21 +39,26 @@ export default function AddNoteModal({
 }: {
   patient: Patient | null;
   open: boolean;
-  note: PatientNote | null;
+  note: {
+    note: PatientNote | null;
+    readOnly: boolean;
+  };
   setOpen: (value: boolean) => void;
   setPatient: (value: Patient | null) => void;
-  setNote: (value: PatientNote | null) => void;
+  setNote: (value: { note: PatientNote | null; readOnly: boolean }) => void;
   refreshNotes: () => Promise<void>;
 }) {
+  const { note: noteData, readOnly } = note;
+  const isEdit = !!noteData && !readOnly;
+
   const onOpenChangeWrapper = (value: boolean) => {
     if (!value) {
       setPatient(null);
-      setNote(null);
+      setNote({ note: null, readOnly });
     }
+    console.log('setNote', noteData, readOnly);
     setOpen(value);
   };
-
-  const isEdit = !!note;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChangeWrapper}>
@@ -64,17 +69,20 @@ export default function AddNoteModal({
             {patient?.lastName}
           </DialogTitle>
           <DialogDescription>
-            {isEdit
-              ? 'Ingrese la descripción de la nota que desea editar.'
-              : 'Ingrese la descripción de la nota que desea agregar al paciente.'}
+            {readOnly
+              ? `Esta nota esta asociada al paciente ${patient?.name} ${patient?.lastName}.`
+              : isEdit
+                ? 'Ingrese la descripción de la nota que desea editar.'
+                : 'Ingrese la descripción de la nota que desea agregar al paciente.'}
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="overflow-y-auto" type="always">
           <Form
             onSubmitValid={async (values) => {
+              if (readOnly || !values.description) return;
               try {
                 if (isEdit) {
-                  await editPatientNote(note!.id, values.description);
+                  await editPatientNote(noteData!.id, values.description);
                 } else {
                   await createPatientNote(patient!.id, values.description);
                 }
@@ -83,18 +91,22 @@ export default function AddNoteModal({
                 console.error(error);
                 toast.error('Error al crear la nota');
               }
-              setNote(null);
+              setNote({
+                note: null,
+                readOnly: false,
+              });
               setPatient(null);
               setOpen(false);
             }}
             schema={noteSchema}
             className="mb-4 flex flex-col gap-2 px-2"
             options={{
-              defaultValues: isEdit
-                ? {
-                    description: note?.note,
-                  }
-                : defaultValues,
+              defaultValues:
+                isEdit || readOnly
+                  ? {
+                      description: noteData?.note,
+                    }
+                  : defaultValues,
             }}
           >
             {({ control }) => (
@@ -104,13 +116,16 @@ export default function AddNoteModal({
                   control={control}
                   name={'description'}
                   className="min-h-72"
+                  readOnly={readOnly}
                 />
 
-                <DialogFooter className="mt-2">
-                  <Button type="submit">
-                    {isEdit ? 'Editar' : 'Crear'} nota
-                  </Button>
-                </DialogFooter>
+                {!readOnly && (
+                  <DialogFooter className="mt-2">
+                    <Button type="submit">
+                      {isEdit ? 'Editar' : 'Crear'} nota
+                    </Button>
+                  </DialogFooter>
+                )}
               </>
             )}
           </Form>
