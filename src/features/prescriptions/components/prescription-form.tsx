@@ -1,6 +1,7 @@
 import { isValid, parse, differenceInYears, format } from 'date-fns';
 import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ import { Loader } from '@/components/ui/loader';
 import { useFetch } from '@/hooks/use-fetch';
 import { getDrug, getDrugs } from '@/lib/api/drugs';
 import { getInsuranceCompanies, getPatient } from '@/lib/api/patients';
+import { SignatureService } from '@/lib/signature/signature';
 import { Patient, Presentation } from '@/types/api';
 import { Sex } from '@/types/sex.enum';
 
@@ -30,7 +32,6 @@ import {
   createPrescriptionExistingPatient,
   createPrescriptionNoPatient,
 } from '../api';
-import { SignatureService } from '@/lib/signature/signature';
 
 const getAge = (date: string) => {
   if (!date) return '';
@@ -132,7 +133,7 @@ const prescriptionSchema = z.object({
 
 export function PrescriptionForm() {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const patientId = searchParams.get('patientId');
   const [availablePresentations, setAvailablePresentations] = useState<
     Presentation[]
@@ -172,25 +173,45 @@ export function PrescriptionForm() {
     )
       return;
 
-    const data = isSaved ? {
-      ...formData,
-      medicationId: formData.medicationId,
-      presentationId: formData.presentationId,
-      patientId: patient.id,
-    } : {
-      ...formData,
-      dni: Number(formData.dni),
-      medicationId: formData.medicationId,
-      presentationId: formData.presentationId,
-      affiliateNumber: Number(formData.affiliateNumber),
-      insuranceCompanyId: formData.insuranceCompanyId,
+    setIsSubmitLoading(true);
+    const data = isSaved
+      ? {
+          ...formData,
+          medicationId: formData.medicationId,
+          presentationId: formData.presentationId,
+          patientId: patient.id,
+        }
+      : {
+          ...formData,
+          dni: Number(formData.dni),
+          medicationId: formData.medicationId,
+          presentationId: formData.presentationId,
+          affiliateNumber: Number(formData.affiliateNumber),
+          insuranceCompanyId: formData.insuranceCompanyId,
+        };
+
+    try {
+      const signature = await signatureService.sign(
+        JSON.stringify({
+          medicationId: formData.medicationId,
+          presentation: formData.presentationId,
+          diagnosis: formData.diagnosis,
+        }),
+      );
+
+      const createPrescriptionFn = isSaved
+        ? createPrescriptionExistingPatient
+        : createPrescriptionNoPatient;
+
+      await createPrescriptionFn({ ...data, signature });
+    } catch (error) {
+      console.error(error);
+      toast.error('Ocurrio un error al crear la prescripcion');
+      return;
     }
 
-    const signature = await signatureService.sign(JSON.stringify({ medicationId: formData.medicationId, presentation: formData.presentationId, diagnosis: formData.diagnosis }));
-
-    const createPrescriptionFn = isSaved ? createPrescriptionExistingPatient : createPrescriptionNoPatient;
-
-    await createPrescriptionFn({ ...data, signature })
+    toast.success('Prescripcion creada con exito');
+    setIsSubmitLoading(false);
   };
 
   return (
@@ -212,18 +233,18 @@ export function PrescriptionForm() {
             defaultValues: {
               ...(patient
                 ? {
-                  ...patient,
-                  insuranceCompanyId: patient.insuranceCompany.id.toString(),
-                }
+                    ...patient,
+                    insuranceCompanyId: patient.insuranceCompany.id.toString(),
+                  }
                 : {
-                  email: '',
-                  dni: '',
-                  name: '',
-                  lastName: '',
-                  birthDate: '',
-                  affiliateNumber: '',
-                  insuranceCompanyId: undefined as string | undefined,
-                }),
+                    email: '',
+                    dni: '',
+                    name: '',
+                    lastName: '',
+                    birthDate: '',
+                    affiliateNumber: '',
+                    insuranceCompanyId: undefined as string | undefined,
+                  }),
               diagnosis: '',
               medicationId: undefined as string | undefined,
               presentationId: undefined as string | undefined,
@@ -371,7 +392,11 @@ export function PrescriptionForm() {
                 />
               </div>
 
-              <Button type="submit" className="col-span-1 lg:col-span-3">
+              <Button
+                type="submit"
+                className="col-span-1 lg:col-span-3"
+                loading={isSubmitLoading}
+              >
                 Crear prescripcion
               </Button>
             </>
