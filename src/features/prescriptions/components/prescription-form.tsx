@@ -204,13 +204,12 @@ export function PrescriptionForm() {
         : createPrescriptionNoPatient;
 
       await createPrescriptionFn({ ...data, signature });
+      toast.success('Prescripcion creada con exito');
     } catch (error) {
       console.error(error);
       toast.error('Ocurrio un error al crear la prescripcion');
-      return;
     }
 
-    toast.success('Prescripcion creada con exito');
     setIsSubmitLoading(false);
   };
 

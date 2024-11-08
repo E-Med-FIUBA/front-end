@@ -1,6 +1,7 @@
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, Row } from '@tanstack/react-table';
 import { format, parseISO } from 'date-fns';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, NotepadText, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { SortableHeader } from '@/components/ui/data-table/sortable-header';
@@ -14,7 +15,51 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Prescription } from '@/types/api';
 
-export const columns: ColumnDef<Prescription>[] = [
+const Actions = ({
+  row,
+  openViewModal,
+}: {
+  row: Row<Prescription>;
+  openViewModal: (prescription: Prescription) => void;
+}) => {
+  const navigate = useNavigate();
+  const prescription = row.original;
+
+  return (
+    <DropdownMenu>
+      <div className="text-right">
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="mx-auto size-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="size-4" />
+          </Button>
+        </DropdownMenuTrigger>
+      </div>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="flex cursor-pointer items-center gap-2"
+          onClick={() => openViewModal(prescription)}
+        >
+          <NotepadText className="size-4" />
+          Ver prescripcion
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="flex cursor-pointer items-center gap-2"
+          onClick={() => navigate(`/patients/${prescription.patientId}`)}
+        >
+          <User className="size-4" />
+          Ver paciente
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export const createColumns = (
+  openViewModal: (prescription: Prescription) => void,
+): ColumnDef<Prescription>[] => [
   {
     id: 'date',
     accessorFn: (prescription) => prescription.emitedAt,
@@ -71,32 +116,6 @@ export const columns: ColumnDef<Prescription>[] = [
   {
     id: 'actions',
     enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <div className="text-right">
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="mx-auto size-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-          </div>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <Actions row={row} openViewModal={openViewModal} />,
   },
 ];
