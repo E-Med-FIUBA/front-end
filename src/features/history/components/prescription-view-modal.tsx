@@ -30,7 +30,7 @@ const Section = ({
     <div className="flex items-center gap-2">
       {icon} <span className="text-lg font-semibold">{title}</span>
     </div>
-    <div className="grid grid-cols-[auto,1fr] items-center gap-x-4 gap-y-2 text-sm mt-1">
+    <div className="mt-1 grid grid-cols-[auto,1fr] items-center gap-x-4 gap-y-2 text-sm">
       {items?.map(({ label, value }) => (
         <>
           <span className="align-middle  text-muted-foreground">{label}:</span>
