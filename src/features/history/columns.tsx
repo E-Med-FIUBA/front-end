@@ -58,25 +58,21 @@ const Actions = ({
   );
 };
 
+const startsWithFilterFn = (
+  row: Row<Prescription>,
+  columnId: string,
+  filterValue: number | string, //resolveFilterValue will transform this to a string
+) =>
+  row
+    .getValue<number | string>(columnId)
+    .toString()
+    .toLowerCase()
+    .trim()
+    .startsWith(filterValue.toString()); // toString, toLowerCase, and trim the filter value in `resolveFilterValue`
+
 export const createColumns = (
   openViewModal: (prescription: Prescription) => void,
 ): ColumnDef<Prescription>[] => [
-  // {
-  //   id: 'name',
-  //   accessorFn: (prescription) => prescription.patient.name,
-  //   header: ({ column }) => <SortableHeader column={column} label="Nombre" />,
-  //   cell: ({ row, column }) => (
-  //     <div className="capitalize">{row.getValue(column.id)}</div>
-  //   ),
-  // },
-  // {
-  //   id: 'lastName',
-  //   accessorFn: (prescription) => prescription.patient.lastName,
-  //   header: ({ column }) => <SortableHeader column={column} label="Apellido" />,
-  //   cell: ({ row, column }) => (
-  //     <div className="capitalize">{row.getValue(column.id)}</div>
-  //   ),
-  // },
   {
     id: 'dni',
     accessorFn: (prescription) => prescription.patient.dni,
@@ -84,6 +80,7 @@ export const createColumns = (
     cell: ({ row, column }) => (
       <div className="capitalize">{row.getValue(column.id)}</div>
     ),
+    filterFn: startsWithFilterFn,
   },
   {
     id: 'email',

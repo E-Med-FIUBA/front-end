@@ -56,7 +56,7 @@ const PatientListItem = ({
               <h3 className="text-lg font-semibold">
                 {patient.name} {patient.lastName}
               </h3>
-              <p className="text-sm">DNI: 12345678</p>
+              <p className="text-sm">DNI: {patient.dni}</p>
             </div>
           </NavLink>
         </ContextMenuTrigger>

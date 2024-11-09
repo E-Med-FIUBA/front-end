@@ -1,6 +1,7 @@
 import {
   ColumnFiltersState,
   SortingState,
+  Updater,
   VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -9,7 +10,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -26,10 +27,12 @@ export function DataTable({
   data,
   columns,
   showSelectionCount,
+  filters,
 }: {
   data: any[];
   columns: any[];
   showSelectionCount?: boolean;
+  filters?: Updater<ColumnFiltersState>;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -54,6 +57,11 @@ export function DataTable({
       rowSelection,
     },
   });
+
+  useEffect(() => {
+    if (!filters) return;
+    setColumnFilters(filters);
+  }, [filters]);
 
   return (
     <div className="flex size-full flex-col overflow-hidden rounded-md border">
