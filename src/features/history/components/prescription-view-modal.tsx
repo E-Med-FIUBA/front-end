@@ -2,7 +2,6 @@ import { format, parseISO } from 'date-fns';
 import { Info, Pill, Text, User } from 'lucide-react';
 import { ReactNode } from 'react';
 
-import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogHeader,
@@ -10,8 +9,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { UsedBadge } from '@/components/ui/used-badge';
 import { Prescription } from '@/types/api';
-import { Sex } from '@/types/sex.enum';
+import { parseSex } from '@/utils/parse-sex';
 
 const Section = ({
   title,
@@ -33,7 +33,7 @@ const Section = ({
     <div className="mt-1 grid grid-cols-[auto,1fr] items-center gap-x-4 gap-y-2 text-sm">
       {items?.map(({ label, value }) => (
         <>
-          <span className="align-middle  text-muted-foreground">{label}:</span>
+          <span className="align-middle text-muted-foreground">{label}:</span>
           <span>{value}</span>
         </>
       ))}
@@ -92,12 +92,7 @@ export default function PrescriptionViewModal({
                 },
                 {
                   label: 'Sexo',
-                  value:
-                    patient.sex === Sex.MALE
-                      ? 'Masculino'
-                      : patient.sex === Sex.FEMALE
-                        ? 'Femenino'
-                        : 'Otro',
+                  value: parseSex(patient.sex),
                 },
               ]}
             />
@@ -132,11 +127,7 @@ export default function PrescriptionViewModal({
                 },
                 {
                   label: 'Estado actual',
-                  value: prescription?.used ? (
-                    <Badge variant={'destructive'}>Usada</Badge>
-                  ) : (
-                    <Badge variant={'default'}>No usada</Badge>
-                  ),
+                  value: <UsedBadge used={prescription?.used || false} />,
                 },
               ]}
             />

@@ -3,7 +3,6 @@ import { format, parseISO } from 'date-fns';
 import { MoreHorizontal, NotepadText, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SortableHeader } from '@/components/ui/data-table/sortable-header';
 import {
@@ -14,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
+import { UsedBadge } from '@/components/ui/used-badge';
 import { Prescription } from '@/types/api';
 
 const Actions = ({
@@ -116,11 +116,7 @@ export const createColumns = (
     header: ({ column }) => <SortableHeader column={column} label="Estado" />,
     cell: ({ row, column }) => (
       <div className="flex justify-center">
-        {row.getValue(column.id) ? (
-          <Badge variant={'destructive'}>Usada</Badge>
-        ) : (
-          <Badge variant={'default'}>No usada</Badge>
-        )}
+        <UsedBadge used={row.getValue(column.id)} />
       </div>
     ),
   },
