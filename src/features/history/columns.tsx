@@ -3,6 +3,7 @@ import { format, parseISO } from 'date-fns';
 import { MoreHorizontal, NotepadText, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SortableHeader } from '@/components/ui/data-table/sortable-header';
 import {
@@ -60,29 +61,22 @@ const Actions = ({
 export const createColumns = (
   openViewModal: (prescription: Prescription) => void,
 ): ColumnDef<Prescription>[] => [
-  {
-    id: 'date',
-    accessorFn: (prescription) => prescription.emitedAt,
-    header: ({ column }) => <SortableHeader column={column} label="Fecha" />,
-    cell: ({ row, column }) =>
-      format(parseISO(row.getValue(column.id)), 'dd/MM/yyyy'),
-  },
-  {
-    id: 'name',
-    accessorFn: (prescription) => prescription.patient.name,
-    header: ({ column }) => <SortableHeader column={column} label="Nombre" />,
-    cell: ({ row, column }) => (
-      <div className="capitalize">{row.getValue(column.id)}</div>
-    ),
-  },
-  {
-    id: 'lastName',
-    accessorFn: (prescription) => prescription.patient.lastName,
-    header: ({ column }) => <SortableHeader column={column} label="Apellido" />,
-    cell: ({ row, column }) => (
-      <div className="capitalize">{row.getValue(column.id)}</div>
-    ),
-  },
+  // {
+  //   id: 'name',
+  //   accessorFn: (prescription) => prescription.patient.name,
+  //   header: ({ column }) => <SortableHeader column={column} label="Nombre" />,
+  //   cell: ({ row, column }) => (
+  //     <div className="capitalize">{row.getValue(column.id)}</div>
+  //   ),
+  // },
+  // {
+  //   id: 'lastName',
+  //   accessorFn: (prescription) => prescription.patient.lastName,
+  //   header: ({ column }) => <SortableHeader column={column} label="Apellido" />,
+  //   cell: ({ row, column }) => (
+  //     <div className="capitalize">{row.getValue(column.id)}</div>
+  //   ),
+  // },
   {
     id: 'dni',
     accessorFn: (prescription) => prescription.patient.dni,
@@ -107,6 +101,27 @@ export const createColumns = (
     ),
     cell: ({ row, column }) => (
       <div className="capitalize">{row.getValue(column.id)}</div>
+    ),
+  },
+  {
+    id: 'date',
+    accessorFn: (prescription) => prescription.emitedAt,
+    header: ({ column }) => <SortableHeader column={column} label="Fecha" />,
+    cell: ({ row, column }) =>
+      format(parseISO(row.getValue(column.id)), 'dd/MM/yyyy'),
+  },
+  {
+    id: 'used',
+    accessorFn: (prescription) => prescription.used,
+    header: ({ column }) => <SortableHeader column={column} label="Estado" />,
+    cell: ({ row, column }) => (
+      <div className="flex justify-center">
+        {row.getValue(column.id) ? (
+          <Badge variant={'destructive'}>Usada</Badge>
+        ) : (
+          <Badge variant={'default'}>No usada</Badge>
+        )}
+      </div>
     ),
   },
   {
