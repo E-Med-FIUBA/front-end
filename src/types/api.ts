@@ -64,6 +64,7 @@ export type Prescription = {
   patient: Patient;
   quantity: number;
   emitedAt: string;
+  used: boolean;
 };
 
 export type PatientNote = {
