@@ -6,7 +6,7 @@ export const LandingRoute = () => {
   const { user } = useAuth();
 
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/patients" replace />;
   } else {
     return <Navigate to="/login" replace />;
   }

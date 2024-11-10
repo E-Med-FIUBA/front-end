@@ -88,10 +88,13 @@ export function RegisterForm() {
       const reqData = {
         ...data,
         name: data.firstName,
-      }
-      const res = await ApiClient.post<UserData>('/auth/register/doctor', reqData);
+      };
+      const res = await ApiClient.post<UserData>(
+        '/auth/register/doctor',
+        reqData,
+      );
       login(res);
-      navigate('/dashboard');
+      navigate('/patients');
     } catch (error) {
       setSubmitLoading(false);
       if (error instanceof ApiError) {

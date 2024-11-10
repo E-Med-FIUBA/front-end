@@ -47,13 +47,10 @@ export const createRouter = () =>
       ),
       errorElement: <ErrorPage />,
       children: [
-        {
-          path: '/dashboard',
-          lazy: async () => {
-            const { DashboardRoute } = await import('./app/dashboard');
-            return { Component: DashboardRoute };
-          },
-        },
+        // {
+        //   path: '/dashboard',
+        //   element: <Navigate to={'/patients'} replace />,
+        // },
         {
           path: '/prescriptions',
           lazy: async () => {
@@ -92,8 +89,8 @@ export const createRouter = () =>
         {
           path: '/medicines',
           lazy: async () => {
-            const { PrescriptionsRoute } = await import('./app/prescriptions');
-            return { Component: PrescriptionsRoute };
+            const { MedicinesRoute } = await import('./app/medicines');
+            return { Component: MedicinesRoute };
           },
         },
         {

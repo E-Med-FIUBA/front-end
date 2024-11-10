@@ -38,7 +38,7 @@ export function LoginForm() {
     try {
       const res = await ApiClient.post<UserData>('/auth/login', data);
       login(res);
-      navigate('/dashboard');
+      navigate('/patients');
     } catch (error) {
       console.error(error);
       setIsLoading(false);
