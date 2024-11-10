@@ -37,6 +37,7 @@ export function HistoryRoute() {
           value={dniFilter}
           onChange={(value) => setDniFilter(value)}
           debounce={200}
+          onlyNumbers
         />
       }
     >

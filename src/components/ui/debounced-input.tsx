@@ -6,10 +6,12 @@ export function DebouncedInput({
   value: initialValue,
   onChange,
   debounce = 500,
+  onlyNumbers,
   ...props
 }: {
   value: string;
   onChange: (value: string) => void;
+  onlyNumbers?: boolean;
   debounce?: number;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
   const [value, setValue] = useState(initialValue);
@@ -30,7 +32,11 @@ export function DebouncedInput({
     <Input
       {...props}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => {
+        const newValue = e.target.value;
+        if (onlyNumbers && isNaN(Number(newValue))) return;
+        setValue(newValue);
+      }}
     />
   );
 }
