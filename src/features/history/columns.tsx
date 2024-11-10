@@ -110,7 +110,13 @@ export const createColumns = (
   {
     id: 'used',
     accessorFn: (prescription) => prescription.used,
-    header: ({ column }) => <SortableHeader column={column} label="Estado" />,
+    header: ({ column }) => (
+      <SortableHeader
+        column={column}
+        label="Estado"
+        className="justify-center"
+      />
+    ),
     cell: ({ row, column }) => (
       <div className="flex justify-center">
         <UsedBadge used={row.getValue(column.id)} />
@@ -120,6 +126,9 @@ export const createColumns = (
   {
     accessorKey: 'quantity',
     header: () => <div className="text-right">Amount</div>,
+    cell: ({ row, column }) => (
+      <div className="text-right">{row.getValue(column.id)}</div>
+    ),
   },
   {
     id: 'actions',

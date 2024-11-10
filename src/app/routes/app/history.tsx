@@ -36,7 +36,7 @@ export function HistoryRoute() {
           placeholder="Buscar DNI"
           value={dniFilter}
           onChange={(value) => setDniFilter(value)}
-          debounce={300}
+          debounce={200}
         />
       }
     >
