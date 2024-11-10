@@ -2,7 +2,7 @@ import * as React from 'react';
 
 type ContentLayoutProps = {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   actions?: React.ReactNode;
 };
 
@@ -15,7 +15,9 @@ export const ContentLayout = ({
     <>
       <div className="flex h-full flex-col gap-2 py-6">
         <div className="container mx-auto flex justify-between px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
+          {title && (
+            <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
+          )}
           <div className="flex items-center justify-between gap-4">
             {actions}
           </div>

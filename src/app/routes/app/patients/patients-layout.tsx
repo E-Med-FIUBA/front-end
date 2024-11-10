@@ -180,7 +180,7 @@ export function PatientsLayout() {
 
   return (
     <ContentLayout
-      title="Pacientes"
+      title="Mis Pacientes"
       actions={
         <AddPatientModal
           open={isModalOpen}

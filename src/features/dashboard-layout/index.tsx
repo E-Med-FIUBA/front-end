@@ -14,8 +14,8 @@ import AvatarDropdown from '@/features/dashboard-layout/avatar-dropdown';
 import { cn } from '@/utils/cn';
 
 const navLinks = [
-  { label: 'Pacientes', to: '/patients' },
-  { label: 'Prescripciones', to: '/prescriptions' },
+  { label: 'Mis Pacientes', to: '/patients' },
+  { label: 'Crear Prescripcion', to: '/prescriptions' },
   { label: 'Medicamentos', to: '/medicines' },
   { label: 'Historial', to: '/history' },
 ];

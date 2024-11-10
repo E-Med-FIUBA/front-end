@@ -3,7 +3,7 @@ import { PrescriptionForm } from '@/features/prescriptions/components/prescripti
 
 export function PrescriptionsRoute() {
   return (
-    <ContentLayout title="Prescripciones">
+    <ContentLayout>
       <PrescriptionForm />
     </ContentLayout>
   );
