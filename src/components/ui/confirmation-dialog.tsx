@@ -15,7 +15,9 @@ export const ConfirmationDialog = ({
   title,
   description,
   confirmText,
+  confirmationLoading,
   confirmVariant,
+  cancelDisabled,
   onConfirm,
   onCancel,
   setOpen,
@@ -28,6 +30,8 @@ export const ConfirmationDialog = ({
   description: string;
   confirmText: string;
   confirmVariant?: VariantProps<typeof buttonVariants>['variant'];
+  confirmationLoading?: boolean;
+  cancelDisabled?: boolean;
 }) => {
   const onOpenChangeWrapper = (value: boolean) => {
     if (!value) {
@@ -49,9 +53,10 @@ export const ConfirmationDialog = ({
               onCancel && (await onCancel());
               setOpen(false);
             }}
+            disabled={cancelDisabled}
             variant={'outline'}
           >
-            Cancel
+            Cancelar
           </Button>
           <Button
             onClick={async () => {
@@ -59,6 +64,7 @@ export const ConfirmationDialog = ({
               setOpen(false);
             }}
             variant={confirmVariant}
+            loading={confirmationLoading}
           >
             {confirmText}
           </Button>
