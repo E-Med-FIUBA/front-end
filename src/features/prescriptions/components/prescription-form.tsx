@@ -13,14 +13,6 @@ import {
   CardContent,
 } from '@/components/ui/card';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Form } from '@/components/ui/form';
 import { DisplayInput } from '@/components/ui/form/display-input';
 import { FormCombobox } from '@/components/ui/form/form-combobox';
@@ -30,6 +22,7 @@ import { FormSelect } from '@/components/ui/form/form-select';
 import { FormTextarea } from '@/components/ui/form/form-textarea';
 import { Input } from '@/components/ui/input';
 import { Loader } from '@/components/ui/loader';
+import { SuccessModal } from '@/components/ui/success-modal';
 import { useFetch } from '@/hooks/use-fetch';
 import { getDrug, getDrugs } from '@/lib/api/drugs';
 import { getInsuranceCompanies, getPatient } from '@/lib/api/patients';
@@ -41,33 +34,6 @@ import {
   createPrescriptionExistingPatient,
   createPrescriptionNoPatient,
 } from '../api';
-
-const SuccessDialog = ({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: (value: boolean) => void;
-}) => {
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Operacion exitosa</DialogTitle>
-          <DialogDescription>
-            El paciente recibira la prescripción por correo electronico en los
-            proximos minutos.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cerrar
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};
 
 const getAge = (date: string) => {
   if (!date) return '';
@@ -459,9 +425,11 @@ export function PrescriptionForm() {
         description="Una vez creada la prescripción, no podra ser modificada."
         confirmText="Crear prescripción"
       />
-      <SuccessDialog
+      <SuccessModal
         open={isSuccessModalOpen}
         setOpen={setIsSuccessModalOpen}
+        title="Operacion exitosa"
+        description="El paciente recibira la prescripción por correo electronico en los proximos minutos."
       />
     </>
   );
