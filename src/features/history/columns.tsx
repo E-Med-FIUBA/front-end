@@ -46,13 +46,15 @@ const Actions = ({
           <NotepadText className="size-4" />
           Ver prescripcion
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className="flex cursor-pointer items-center gap-2"
-          onClick={() => navigate(`/patients/${prescription.patientId}`)}
-        >
-          <User className="size-4" />
-          Ver paciente
-        </DropdownMenuItem>
+        {prescription.patient.doctorId && (
+          <DropdownMenuItem
+            className="flex cursor-pointer items-center gap-2"
+            onClick={() => navigate(`/patients/${prescription.patientId}`)}
+          >
+            <User className="size-4" />
+            Ver paciente
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
