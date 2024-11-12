@@ -36,7 +36,7 @@ export function LoginForm() {
   const onValid: SubmitHandler<LoginFormInputs> = async (data) => {
     setIsLoading(true);
     try {
-      const res = await ApiClient.post<UserData>('/auth/login', data);
+      const res = await ApiClient.post<UserData>('/auth/login/doctor', data);
       login(res);
       navigate('/patients');
     } catch (error) {
