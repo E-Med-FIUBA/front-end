@@ -46,6 +46,9 @@ export type Drug = {
   name: string;
   description: string;
   presentations?: Presentation[];
+  form: string;
+  atc: string;
+  administration: string;
 };
 
 export type Presentation = {
