@@ -56,7 +56,6 @@ export default function AddNoteModal({
       setPatient(null);
       setNote({ note: null, readOnly });
     }
-    console.log('setNote', noteData, readOnly);
     setOpen(value);
   };
 

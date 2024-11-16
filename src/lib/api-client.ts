@@ -44,9 +44,14 @@ export class ApiClient {
     return headers;
   }
 
-  static async get<ReturnType>(url: string): Promise<ReturnType> {
+  static async get<ReturnType>(
+    url: string,
+    params: Record<string, string> = {},
+  ): Promise<ReturnType> {
     const fullUrl = this.fullUrl(url);
-    const response = await fetch(fullUrl, {
+    const urlParams = new URLSearchParams(params);
+    const requestUrl = urlParams.size > 0 ? `${fullUrl}?${urlParams}` : fullUrl;
+    const response = await fetch(requestUrl, {
       method: 'GET',
       headers: this.headers(true),
     });

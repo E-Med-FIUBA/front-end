@@ -24,10 +24,10 @@ import { Input } from '@/components/ui/input';
 import { Loader } from '@/components/ui/loader';
 import { SuccessModal } from '@/components/ui/success-modal';
 import { useFetch } from '@/hooks/use-fetch';
-import { getDrug, getDrugs } from '@/lib/api/drugs';
+import { getDrug, searchDrugs } from '@/lib/api/drugs';
 import { getInsuranceCompanies, getPatient } from '@/lib/api/patients';
 import { SignatureService } from '@/lib/signature/signature';
-import { Patient, Presentation } from '@/types/api';
+import { Drug, Patient, Presentation } from '@/types/api';
 import { Sex } from '@/types/sex.enum';
 
 import {
@@ -152,13 +152,13 @@ export function PrescriptionForm() {
   const { data: insuranceCompanies, loading: loadingCompanies } = useFetch(
     getInsuranceCompanies,
   );
-  const { data: drugs, loading: loadingDrugs } = useFetch(getDrugs);
+  const [drugs, setDrugs] = useState<Drug[]>([]);
 
   const isSaved = !!patient;
 
   const signatureService = new SignatureService();
 
-  if (loadingPatient || loadingCompanies || loadingDrugs) {
+  if (loadingPatient || loadingCompanies) {
     return (
       <div className="flex h-full items-center justify-center">
         <Loader size={60} />
@@ -373,13 +373,25 @@ export function PrescriptionForm() {
                       label: drug.name,
                     })) || []
                   }
+                  onSearchChange={async (value) => {
+                    if (!value || value.length < 3) return;
+                    const searchResult = await searchDrugs(value);
+                    setDrugs(searchResult);
+                  }}
                   onChangeCallback={async (value) => {
                     const selectedDrug = drugs?.find(
                       (drug) => drug.id === Number(value),
                     );
                     if (!selectedDrug) return;
-                    const drugData = await getDrug(selectedDrug?.id);
-                    setAvailablePresentations(drugData?.presentations || []);
+                    try {
+                      const drugData = await getDrug(selectedDrug?.id);
+                      setAvailablePresentations(drugData?.presentations || []);
+                    } catch (error) {
+                      console.error(error);
+                      toast.error(
+                        'Ocurrio un error al obtener las presentaciones',
+                      );
+                    }
                   }}
                   placeholder={'Selecciona un medicamento'}
                   emptyMessage={'No se encontraron medicamentos'}

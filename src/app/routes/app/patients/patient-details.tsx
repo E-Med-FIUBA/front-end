@@ -102,7 +102,6 @@ export function PatientDetailsRoute() {
         }}
         openViewModal={(note) => {
           setPatient(patient);
-          console.log('view note', note);
           setSelectedNote({
             note,
             readOnly: true,

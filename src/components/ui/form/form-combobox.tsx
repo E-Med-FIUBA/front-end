@@ -2,6 +2,7 @@ import { ChevronsUpDown, Check } from 'lucide-react';
 import { useState } from 'react';
 import { FieldPath, FieldValues } from 'react-hook-form';
 
+import { useDebouncedCallback } from '@/hooks/use-debounced';
 import { cn } from '@/utils/cn';
 
 import { Button } from '../button';
@@ -39,6 +40,7 @@ export type ComboboxProps = {
   value: string;
   onChange: (value: string) => void;
   onChangeCallback?: (value: string) => void;
+  onSearchChange?: (value: string) => void;
 };
 
 interface FormComboboxProps<
@@ -60,8 +62,15 @@ export const FormCombobox = <
   emptyMessage,
   className,
   onChangeCallback,
+  onSearchChange,
 }: FormComboboxProps<TFieldValues, TName>) => {
   const [open, setOpen] = useState(false);
+
+  const handleOnSearchChange = useDebouncedCallback((e: string) => {
+    if (onSearchChange) {
+      onSearchChange(e);
+    }
+  }, 300);
 
   return (
     <FormField
@@ -91,7 +100,13 @@ export const FormCombobox = <
             </PopoverTrigger>
             <PopoverContent className="popover-content-width-same-as-its-trigger p-0">
               <Command>
-                <CommandInput placeholder={placeholder} />
+                <CommandInput
+                  placeholder={placeholder}
+                  onValueChange={(value) => {
+                    value = value.toLowerCase();
+                    handleOnSearchChange(value);
+                  }}
+                />
                 <CommandList>
                   <CommandEmpty>{emptyMessage}</CommandEmpty>
                   <CommandGroup>
@@ -99,6 +114,7 @@ export const FormCombobox = <
                       <CommandItem
                         key={item.value}
                         value={item.value}
+                        keywords={[item.label]}
                         onSelect={async (currentValue) => {
                           field.onChange(currentValue);
                           if (onChangeCallback)

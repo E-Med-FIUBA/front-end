@@ -9,3 +9,7 @@ export const getDrug = async (id: number) =>
 
 export const getPresentations = async () =>
   ApiClient.get<Presentation[]>('/presentations');
+
+export const searchDrugs = async (query: string) => {
+  return ApiClient.get<Drug[]>('/drugs/search', { query });
+};
