@@ -14,6 +14,7 @@ import {
   CommandGroup,
   CommandItem,
 } from '../command';
+import { Loader } from '../loader';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 
 import { FieldWrapperPassThroughProps } from './form-field-wrapper';
@@ -40,7 +41,7 @@ export type ComboboxProps = {
   value: string;
   onChange: (value: string) => void;
   onChangeCallback?: (value: string) => void;
-  onSearchChange?: (value: string) => void;
+  onSearchChange?: (value: string) => Promise<void>;
 };
 
 interface FormComboboxProps<
@@ -65,11 +66,14 @@ export const FormCombobox = <
   onSearchChange,
 }: FormComboboxProps<TFieldValues, TName>) => {
   const [open, setOpen] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleOnSearchChange = useDebouncedCallback((e: string) => {
+  const handleOnSearchChange = useDebouncedCallback(async (e: string) => {
     if (onSearchChange) {
-      onSearchChange(e);
+      await onSearchChange(e);
     }
+    setIsLoading(false);
   }, 300);
 
   return (
@@ -102,13 +106,23 @@ export const FormCombobox = <
               <Command>
                 <CommandInput
                   placeholder={placeholder}
-                  onValueChange={(value) => {
+                  onValueChange={async (value) => {
                     value = value.toLowerCase();
+                    setIsLoading(true);
                     handleOnSearchChange(value);
+                    setHasSearched(true);
                   }}
                 />
                 <CommandList>
-                  <CommandEmpty>{emptyMessage}</CommandEmpty>
+                  {isLoading ? (
+                    <CommandEmpty>
+                      <Loader size={30} />
+                    </CommandEmpty>
+                  ) : hasSearched ? (
+                    <CommandEmpty>{emptyMessage}</CommandEmpty>
+                  ) : (
+                    <CommandEmpty>Escriba para buscar</CommandEmpty>
+                  )}
                   <CommandGroup>
                     {items.map((item) => (
                       <CommandItem
