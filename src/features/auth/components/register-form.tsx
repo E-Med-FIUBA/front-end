@@ -23,6 +23,9 @@ import { UserData } from '@/lib/auth';
 import { Specialty } from '@/types/api';
 
 import { AuthFormFooter } from './auth-form-footer';
+import { Label } from '@/components/ui/label';
+import { IncompatibleKeyError } from '@/lib/signature/key_management';
+import { Input } from '@/components/ui/input';
 
 const registerSchema = z.object({
   firstName: z
@@ -60,7 +63,12 @@ const registerSchema = z.object({
   specialtyId: z.string({
     message: 'La especialidad es obligatoria',
   }),
+  certificate: z.instanceof(FileList).refine((files) => files.length > 0 && files[0].size > 0, {
+    message: "Clave privada es requerida",
+  }),
+
 });
+
 
 type RegisterFormInputs = z.infer<typeof registerSchema>;
 
@@ -85,15 +93,22 @@ export function RegisterForm() {
   const onValid: SubmitHandler<RegisterFormInputs> = async (data) => {
     setSubmitLoading(true);
     try {
+
+      const certificate = await data.certificate?.[0]?.text();
       const reqData = {
         ...data,
         name: data.firstName,
+        certificate
       };
+
       await ApiClient.post<UserData>('/auth/register/doctor', reqData);
+
       setIsSuccessModalOpen(true);
     } catch (error) {
       setSubmitLoading(false);
       if (error instanceof ApiError) {
+        toast.error(error.message);
+      } else if (error instanceof IncompatibleKeyError) {
         toast.error(error.message);
       } else {
         toast.error(
@@ -119,11 +134,19 @@ export function RegisterForm() {
           </CardHeader>
           <CardContent>
             <Form
-              onSubmitValid={onValid}
+              onSubmitValid={(data) => {
+                console.log('Schema values:', data);
+                onValid(data);
+              }}
+              onSubmitInvalid={(errors, data) => {
+                console.error('Schema validation errors:', errors);
+                console.log('Current schema values:', data);
+                toast.error('Por favor, corrige los errores en el formulario.');
+              }}
               schema={registerSchema}
               className="grid gap-4"
             >
-              {({ control }) => (
+              {({ control, register }) => (
                 <>
                   <div className="grid grid-cols-2 gap-4">
                     <FormInput
@@ -173,6 +196,14 @@ export function RegisterForm() {
                       value: specialty.id.toString(),
                     }))}
                   />
+
+                  <Label>Certificado</Label>
+
+                  <Input
+                    type="file"
+                    placeholder="Clave privada"
+                    {...register('certificate')}
+                  ></Input>
                   <Button
                     type="submit"
                     className="w-full"
