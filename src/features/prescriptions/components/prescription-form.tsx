@@ -1,6 +1,6 @@
 import { isValid, parse, differenceInYears, format } from 'date-fns';
-import { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -34,6 +34,8 @@ import {
   createPrescriptionExistingPatient,
   createPrescriptionNoPatient,
 } from '../api';
+import KeyManager from '@/lib/signature/key_management';
+import { useAuth } from '@/hooks/use-auth';
 
 const getAge = (date: string) => {
   if (!date) return '';
@@ -143,6 +145,27 @@ export function PrescriptionForm() {
   const [availablePresentations, setAvailablePresentations] = useState<
     Presentation[]
   >([]);
+  const { user } = useAuth();
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+
+  useEffect(() => {
+    const checkKey = async () => {
+      const hasKey = await KeyManager.hasKey();
+      if (!hasKey) {
+        handleLogout();
+      }
+    };
+
+    checkKey();
+  }, [navigate]);
   const { data: patient, loading: loadingPatient } = useFetch<Patient | null>(
     useCallback(() => {
       if (!patientId) return Promise.resolve(null);
@@ -186,29 +209,36 @@ export function PrescriptionForm() {
       return;
 
     setIsSubmitLoading(true);
+
+    formData.createdAt = new Date().toISOString();
     const data = isSaved
       ? {
-          ...formData,
-          medicationId: formData.medicationId,
-          presentationId: formData.presentationId,
-          patientId: patient.id,
-        }
+        ...formData,
+        medicationId: formData.medicationId,
+        presentationId: formData.presentationId,
+        patientId: patient.id,
+      }
       : {
-          ...formData,
-          dni: Number(formData.dni),
-          medicationId: formData.medicationId,
-          presentationId: formData.presentationId,
-          affiliateNumber: Number(formData.affiliateNumber),
-          insuranceCompanyId: formData.insuranceCompanyId,
-        };
+        ...formData,
+        dni: Number(formData.dni),
+        medicationId: formData.medicationId,
+        presentationId: formData.presentationId,
+        affiliateNumber: Number(formData.affiliateNumber),
+        insuranceCompanyId: formData.insuranceCompanyId,
+      };
 
     try {
+      const privateKey = await KeyManager.get();
+      const drug = drugs.find((drug) => drug.id === formData.medicationId);
+      const presentation = availablePresentations.find(
+        (presentation) => presentation.id === formData.presentationId,
+      );
+      const insuranceCompany = insuranceCompanies?.find(
+        (company) => company.id === formData.insuranceCompanyId,
+      );
       const signature = await signatureService.sign(
-        JSON.stringify({
-          medicationId: formData.medicationId,
-          presentation: formData.presentationId,
-          diagnosis: formData.diagnosis,
-        }),
+        signatureService.generateDataFromPrescription(formData, user!, insuranceCompany!, drug!, presentation!),
+        privateKey.key
       );
 
       const createPrescriptionFn = isSaved
@@ -247,19 +277,19 @@ export function PrescriptionForm() {
               defaultValues: {
                 ...(patient
                   ? {
-                      ...patient,
-                      insuranceCompanyId:
-                        patient.insuranceCompany.id.toString(),
-                    }
+                    ...patient,
+                    insuranceCompanyId:
+                      patient.insuranceCompany.id.toString(),
+                  }
                   : {
-                      email: '',
-                      dni: '',
-                      name: '',
-                      lastName: '',
-                      birthDate: '',
-                      affiliateNumber: '',
-                      insuranceCompanyId: undefined as string | undefined,
-                    }),
+                    email: '',
+                    dni: '',
+                    name: '',
+                    lastName: '',
+                    birthDate: '',
+                    affiliateNumber: '',
+                    insuranceCompanyId: undefined as string | undefined,
+                  }),
                 diagnosis: '',
                 medicationId: undefined as string | undefined,
                 presentationId: undefined as string | undefined,

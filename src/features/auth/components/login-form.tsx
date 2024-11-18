@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -20,36 +20,66 @@ import { ApiClient, ApiError } from '@/lib/api-client';
 import { UserData } from '@/lib/auth';
 
 import { AuthFormFooter } from './auth-form-footer';
+import KeyManager, { IncompatibleKeyError, InvalidFormatError } from '@/lib/signature/key_management';
+import { Label } from '@/components/ui/label';
 
-const loginSchema = z.object({
-  email: z.string(),
-  password: z.string(),
+const baseSchema = z.object({
+  email: z.string().email({ message: "Correo electronico invalido" }),
+  password: z.string().min(6, { message: "Contraseña debe tener al menos 6 caracteres" }),
 });
 
-type LoginFormInputs = z.infer<typeof loginSchema>;
+const privateKeySchema = baseSchema.extend({
+  privateKey: z.instanceof(FileList).refine((files) => files.length > 0 && files[0].size > 0, {
+    message: "Clave privada es requerida",
+  }),
+});
+
+type LoginFormInputs = z.infer<typeof privateKeySchema>;
 
 export function LoginForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [loginSchema, setLoginSchema] = useState(baseSchema);
+
+  useEffect(() => {
+    const checkKey = async () => {
+      const hasKey = await KeyManager.hasKey();
+      if (!hasKey) {
+        setLoginSchema(privateKeySchema);
+      }
+    };
+
+    checkKey();
+  }, []);
 
   const onValid: SubmitHandler<LoginFormInputs> = async (data) => {
     setIsLoading(true);
     try {
-      const res = await ApiClient.post<UserData>('/auth/login/doctor', data);
-      login(res);
+      const res = await ApiClient.post<UserData>('/auth/login/doctor', { email: data.email, password: data.password });
+
+      const privateKey = await data.privateKey?.[0]?.text();
+      await login({ ...res, privateKey });
       navigate('/patients');
     } catch (error) {
       console.error(error);
       setIsLoading(false);
       if (error instanceof ApiError) {
         toast.error('Credenciales invalidas');
+      } else if (error instanceof IncompatibleKeyError || error instanceof InvalidFormatError) {
+        toast.error(error.message);
+        setLoginSchema(privateKeySchema);
       } else {
         toast.error(
           'El sistema se encuentra temporalmente fuera de servicio, aguarde unos minutos e intente nuevamente',
         );
       }
     }
+  };
+
+  const onError = (errors: any) => {
+    console.error('Schema validation errors:', errors);
+    toast.error('Por favor, corrige los errores en el formulario.');
   };
 
   return (
@@ -68,6 +98,7 @@ export function LoginForm() {
           <Form
             className="grid w-full gap-4"
             onSubmitValid={onValid}
+            onSubmitInvalid={onError}
             schema={loginSchema}
           >
             {({ register }) => (
@@ -82,6 +113,16 @@ export function LoginForm() {
                   placeholder="Contraseña"
                   {...register('password')}
                 />
+                {loginSchema === privateKeySchema && (
+                  <>
+                    <Label>Clave privada</Label>
+                    <Input
+                      type="file"
+                      placeholder="Clave privada"
+                      {...register('privateKey')}
+                    ></Input>
+                  </>
+                )}
                 <Button type="submit" loading={isLoading}>
                   Iniciar sesion
                 </Button>
