@@ -38,7 +38,7 @@ export const columns: ColumnDef<Presentation>[] = [
   },
   {
     id: 'drugForm',
-    accessorFn: (presentation) => presentation.drug?.form || '',
+    accessorFn: (presentation) => presentation.form,
     header: ({ column }) => (
       <SortableHeader column={column} label="Forma Farmaceutica" />
     ),
@@ -49,7 +49,7 @@ export const columns: ColumnDef<Presentation>[] = [
   },
   {
     id: 'atc',
-    accessorFn: (presentation) => presentation.drug?.atc || '',
+    accessorFn: (presentation) => presentation.atc,
     header: ({ column }) => <SortableHeader column={column} label="ATC" />,
     cell: ({ row, column }) => (
       <div className="capitalize">{row.getValue(column.id)}</div>
