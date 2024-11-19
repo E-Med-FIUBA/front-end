@@ -1,3 +1,4 @@
+import { parse } from 'date-fns';
 import {
   md as forgeMd,
   pss as forgePss,
@@ -33,8 +34,6 @@ export class SignatureService {
     drug: Drug,
     presentation: Presentation,
   ): string {
-    const currentDay = new Date().toISOString().split('T')[0];
-
     const data = {
       professional: {
         fullName: `${user?.name} ${user?.lastName}`,
@@ -44,18 +43,22 @@ export class SignatureService {
       patient: {
         fullName: `${formData.name} ${formData.lastName}`,
         insurancePlan: insuranceCompany!.name,
-        birthDate: formData.birthDate,
+        birthDate: parse(
+          formData.birthDate,
+          'dd/MM/yyyy',
+          new Date(),
+        ).toISOString(),
         sex: formData.sex,
         dni: formData.dni,
       },
       prescription: {
         genericName: drug!.name,
-        presentationId: presentation!.name,
+        presentationName: presentation!.name,
         pharmaceuticalForm: presentation!.form,
         unitCount: formData.units,
         diagnosis: formData.diagnosis,
       },
-      date: currentDay,
+      date: formData.emitedAt,
     };
     return JSON.stringify(data);
   }

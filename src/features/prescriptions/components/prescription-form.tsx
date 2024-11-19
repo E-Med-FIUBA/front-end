@@ -23,9 +23,11 @@ import { FormTextarea } from '@/components/ui/form/form-textarea';
 import { Input } from '@/components/ui/input';
 import { Loader } from '@/components/ui/loader';
 import { SuccessModal } from '@/components/ui/success-modal';
+import { useAuth } from '@/hooks/use-auth';
 import { useFetch } from '@/hooks/use-fetch';
 import { getDrug, searchDrugs } from '@/lib/api/drugs';
 import { getInsuranceCompanies, getPatient } from '@/lib/api/patients';
+import KeyManager from '@/lib/signature/key_management';
 import { SignatureService } from '@/lib/signature/signature';
 import { Drug, Patient, Presentation } from '@/types/api';
 import { Sex } from '@/types/sex.enum';
@@ -34,8 +36,6 @@ import {
   createPrescriptionExistingPatient,
   createPrescriptionNoPatient,
 } from '../api';
-import KeyManager from '@/lib/signature/key_management';
-import { useAuth } from '@/hooks/use-auth';
 
 const getAge = (date: string) => {
   if (!date) return '';
@@ -155,7 +155,6 @@ export function PrescriptionForm() {
     navigate('/login');
   };
 
-
   useEffect(() => {
     const checkKey = async () => {
       const hasKey = await KeyManager.hasKey();
@@ -210,22 +209,22 @@ export function PrescriptionForm() {
 
     setIsSubmitLoading(true);
 
-    formData.createdAt = new Date().toISOString();
+    formData.emitedAt = new Date().toISOString();
     const data = isSaved
       ? {
-        ...formData,
-        medicationId: formData.medicationId,
-        presentationId: formData.presentationId,
-        patientId: patient.id,
-      }
+          ...formData,
+          medicationId: formData.medicationId,
+          presentationId: formData.presentationId,
+          patientId: patient.id,
+        }
       : {
-        ...formData,
-        dni: Number(formData.dni),
-        medicationId: formData.medicationId,
-        presentationId: formData.presentationId,
-        affiliateNumber: Number(formData.affiliateNumber),
-        insuranceCompanyId: formData.insuranceCompanyId,
-      };
+          ...formData,
+          dni: Number(formData.dni),
+          medicationId: formData.medicationId,
+          presentationId: formData.presentationId,
+          affiliateNumber: Number(formData.affiliateNumber),
+          insuranceCompanyId: formData.insuranceCompanyId,
+        };
 
     try {
       const privateKey = await KeyManager.get();
@@ -237,8 +236,14 @@ export function PrescriptionForm() {
         (company) => company.id === formData.insuranceCompanyId,
       );
       const signature = await signatureService.sign(
-        signatureService.generateDataFromPrescription(formData, user!, insuranceCompany!, drug!, presentation!),
-        privateKey.key
+        signatureService.generateDataFromPrescription(
+          formData,
+          user!,
+          insuranceCompany!,
+          drug!,
+          presentation!,
+        ),
+        privateKey.key,
       );
 
       const createPrescriptionFn = isSaved
@@ -277,19 +282,19 @@ export function PrescriptionForm() {
               defaultValues: {
                 ...(patient
                   ? {
-                    ...patient,
-                    insuranceCompanyId:
-                      patient.insuranceCompany.id.toString(),
-                  }
+                      ...patient,
+                      insuranceCompanyId:
+                        patient.insuranceCompany.id.toString(),
+                    }
                   : {
-                    email: '',
-                    dni: '',
-                    name: '',
-                    lastName: '',
-                    birthDate: '',
-                    affiliateNumber: '',
-                    insuranceCompanyId: undefined as string | undefined,
-                  }),
+                      email: '',
+                      dni: '',
+                      name: '',
+                      lastName: '',
+                      birthDate: '',
+                      affiliateNumber: '',
+                      insuranceCompanyId: undefined as string | undefined,
+                    }),
                 diagnosis: '',
                 medicationId: undefined as string | undefined,
                 presentationId: undefined as string | undefined,
