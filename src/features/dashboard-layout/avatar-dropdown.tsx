@@ -17,7 +17,7 @@ export default function AvatarDropdown({
 }: {
   dropdownLinks: { label: string; to: string }[];
 }) {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -25,16 +25,20 @@ export default function AvatarDropdown({
     navigate('/login');
   };
 
+  const initials = (
+    user ? `${user.name[0]}${user.lastName[0]}` : ''
+  ).toUpperCase();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="flex cursor-pointer items-center gap-2 rounded-full border p-1">
           <Avatar>
-            <AvatarImage
+            {/* <AvatarImage
               src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg"
               className="object-cover transition-all duration-200 hover:brightness-75"
-            />
-            <AvatarFallback>MS</AvatarFallback>
+            /> */}
+            <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </div>
       </DropdownMenuTrigger>
