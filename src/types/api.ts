@@ -46,6 +46,7 @@ export type Drug = {
   name: string;
   description: string;
   presentations?: Presentation[];
+  atc: string;
 };
 
 export type Presentation = {
@@ -54,7 +55,6 @@ export type Presentation = {
   drugId: number;
   drug?: Drug;
   form: string;
-  atc: string;
   administration: string;
 };
 

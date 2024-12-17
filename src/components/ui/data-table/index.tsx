@@ -28,13 +28,15 @@ export function DataTable({
   columns,
   showSelectionCount,
   filters,
+  defaultSorting,
 }: {
   data: any[];
   columns: any[];
   showSelectionCount?: boolean;
   filters?: Updater<ColumnFiltersState>;
+  defaultSorting?: SortingState;
 }) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>(defaultSorting || []);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
@@ -55,6 +57,11 @@ export function DataTable({
       columnFilters,
       columnVisibility,
       rowSelection,
+    },
+    initialState: {
+      pagination: {
+        pageSize: 25,
+      },
     },
   });
 

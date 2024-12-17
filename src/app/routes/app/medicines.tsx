@@ -10,7 +10,16 @@ export function MedicinesRoute() {
 
   return (
     <ContentLayout title="Medicamentos">
-      <DataTable columns={columns} data={data || []} />
+      <DataTable
+        columns={columns}
+        data={data || []}
+        defaultSorting={[
+          {
+            id: 'drugName',
+            desc: false,
+          },
+        ]}
+      />
     </ContentLayout>
   );
 }

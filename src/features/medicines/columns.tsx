@@ -49,7 +49,7 @@ export const columns: ColumnDef<Presentation>[] = [
   },
   {
     id: 'atc',
-    accessorFn: (presentation) => presentation.atc,
+    accessorFn: (presentation) => presentation.drug?.atc,
     header: ({ column }) => <SortableHeader column={column} label="ATC" />,
     cell: ({ row, column }) => (
       <div className="capitalize">{row.getValue(column.id)}</div>
