@@ -12,6 +12,7 @@ import { useFetch } from '@/hooks/use-fetch';
 import { deletePatientNote } from '@/lib/api/patient-notes';
 import { getPatient } from '@/lib/api/patients';
 import { PatientNote } from '@/types/api';
+import { parseSex } from '@/utils/parse-sex';
 
 export function PatientDetailsRoute() {
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
@@ -68,7 +69,7 @@ export function PatientDetailsRoute() {
           <p className="mt-2 text-sm">
             Fecha de nacimiento: {patient.birthDate}
           </p>
-          <p className="mt-2 text-sm">Sexo: {patient.sex}</p>
+          <p className="mt-2 text-sm">Sexo: {parseSex(patient.sex)}</p>
           <p className="mt-2 text-sm">
             Obra social: {patient.insuranceCompany.name}
           </p>
