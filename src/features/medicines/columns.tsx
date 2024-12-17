@@ -17,20 +17,20 @@ const startsWithFilterFn = (
 
 export const columns: ColumnDef<Presentation>[] = [
   {
-    id: 'presentation',
-    accessorFn: (presentation) => presentation.name,
-    header: ({ column }) => (
-      <SortableHeader column={column} label="Presentacion" />
-    ),
+    id: 'drugName',
+    accessorFn: (presentation) => presentation.drug?.name || '',
+    header: ({ column }) => <SortableHeader column={column} label="Nombre" />,
     cell: ({ row, column }) => (
       <div className="capitalize">{row.getValue(column.id)}</div>
     ),
     filterFn: startsWithFilterFn,
   },
   {
-    id: 'drugName',
-    accessorFn: (presentation) => presentation.drug?.name || '',
-    header: ({ column }) => <SortableHeader column={column} label="Nombre" />,
+    id: 'presentation',
+    accessorFn: (presentation) => presentation.name,
+    header: ({ column }) => (
+      <SortableHeader column={column} label="Presentacion" />
+    ),
     cell: ({ row, column }) => (
       <div className="capitalize">{row.getValue(column.id)}</div>
     ),
