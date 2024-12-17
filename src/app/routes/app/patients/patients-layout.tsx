@@ -42,7 +42,6 @@ const PatientListItem = ({
         <ContextMenuTrigger className="flex items-center justify-center rounded-md">
           <NavLink
             to={`/patients/${patient.id}`}
-            onClick={() => setPatient(patient)}
             className="flex w-full select-none items-center gap-4 p-2 transition-all duration-100 ease-in-out hover:bg-muted/60 active:bg-muted/90 dark:hover:bg-muted/20 dark:active:bg-muted/30"
             draggable={false}
           >
@@ -100,7 +99,7 @@ const PatientList = ({
   isModalOpen,
   setModalOpen,
   selectedPatient,
-  setSelectedPatient: setSelectedPatient,
+  setSelectedPatient,
   refreshPatients,
 }: {
   showPatientsMobile?: boolean;

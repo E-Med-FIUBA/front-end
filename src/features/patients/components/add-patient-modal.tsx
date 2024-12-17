@@ -156,6 +156,7 @@ export default function AddPatientModal({
               }
               await refreshPatients();
               setOpen(false);
+              setPatient(null);
             }}
             schema={patientSchema}
             className="mb-4 flex flex-col gap-2 px-2"
